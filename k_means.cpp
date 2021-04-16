@@ -68,6 +68,11 @@ QVector<k_means::Cluster> k_means::getClusters()
   return m_clusters;
 }
 
+QVector<QVector2D> k_means::getAllPoints()
+{
+  return m_allPoints;
+}
+
 /**
  * @brief k_means::generateRandomPoints
  * This function generates random m_num_points float points between
@@ -122,6 +127,7 @@ void k_means::initializeCenters()
   QSet<int> set;
   for (int i = 0; i < m_k; ++i) {
     int c = rand() % m_num_points;
+    // TODO: FIX: This would cause an infinite loop in case where k > num_points
     while (set.contains(c)) {   // Make sure no two selected points are the same
       c = rand() % m_num_points;
     }
@@ -214,7 +220,7 @@ void k_means::updateCenters()
 void k_means::clusterPoints(int num_iterations)
 {
 
-  // TODO: check for edge cases
+  // TODO: check for edge cases - k=0, k=1, k>num_points
   // TODO: optimize code for better performance
   // Initialize clusters
   initializeCenters();
