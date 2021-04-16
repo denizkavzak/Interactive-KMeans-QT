@@ -1,21 +1,14 @@
-#include <QCoreApplication>
-#include "k_means.h"
-#include <iostream>
-#include <QDebug>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
+#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
-  QCoreApplication a(argc, argv);
 
-  k_means m(20, 2);
+  QApplication a(argc, argv);
 
-  qDebug() << "Clustering started !";
-
-  m.clusterPoints(5);
-
-  qDebug() << "Clustering ended !";
-
-  // Can access clusters by using m.getClusters()
+  MainWindow window;
+  window.show();
 
   return a.exec();
 }

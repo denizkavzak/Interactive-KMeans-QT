@@ -12,6 +12,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         ChartView.cpp \
+        MainWindow.cpp \
         k_means.cpp \
         main.cpp
 
@@ -22,4 +23,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ChartView.h \
+    MainWindow.h \
     k_means.h
+
+FORMS += \
+    MainWindow.ui
