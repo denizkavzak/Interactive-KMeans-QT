@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include "k_means.h"
 #include <iostream>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -8,11 +9,11 @@ int main(int argc, char *argv[])
 
   k_means m(20, 2);
 
-  std::cout << "Clustering started !" << std::endl;
+  qDebug() << "Clustering started !";
 
   m.clusterPoints(5);
 
-  std::cout << "Clustering ended !" << std::endl;
+  qDebug() << "Clustering ended !";
 
   // Can access clusters by using m.getClusters()
 

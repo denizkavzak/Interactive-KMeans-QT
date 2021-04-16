@@ -5,6 +5,7 @@
 #include <QtMath>
 #include <QVector2D>
 #include <QSet>
+#include <QDebug>
 
 constexpr int FLOAT_MIN = 0;
 constexpr int FLOAT_MAX = 100;
@@ -44,15 +45,17 @@ k_means::k_means(QVector<QVector2D> points, int k)
  */
 void k_means::printClusters()
 {
-  std::cout << std::endl;
-  std::cout << "Clusters : " << std::endl;
+  qDebug() << "Clusters : ";
+  int id = 0;
   for (k_means::Cluster cluster : m_clusters) {
-    std::cout << "Cluster : " << cluster.cluster_points.size() << std::endl;
-    std::cout << "Center: " << cluster.center.x() << ", "
-             << cluster.center.y() << std::endl;
+    qDebug() << "Cluster " << id << " - size: " << cluster.cluster_points.size();
+    qDebug() << "Center: " << cluster.center.x() << ", "
+             << cluster.center.y();
     for (QVector2D p : cluster.cluster_points) {
-        std::cout << p.x() << ", " << p.y() << std::endl;
+        qDebug() << p.x() << ", " << p.y();
     }
+    qDebug() << " " ;
+    id += 1;
   }
 }
 
@@ -82,9 +85,11 @@ void k_means::generateRandomPoints()
     m_allPoints += point;
   }
 
+  qDebug() << "Generated Points:" ;
   for (QVector2D p : m_allPoints) {
-      std::cout << p.x() << ", " << p.y() << std::endl;
+      qDebug() << p.x() << ", " << p.y();
   }
+  qDebug() << " " ;
 }
 
 /**
@@ -100,7 +105,6 @@ void k_means::generateNormalDistributionPoints()
 
   for (int i = 0; i < m_num_points; ++i) {
     QVector2D point = QVector2D(distr(eng), distr(eng));
-    //QPoint point = QPoint(rand() % 10, rand() % 10);
     m_allPoints += point;
   }
 }
@@ -215,13 +219,17 @@ void k_means::clusterPoints(int num_iterations)
   // Initialize clusters
   initializeCenters();
 
+  qDebug() << " " ;
+  qDebug() << "Iterations Start!" ;
+  qDebug() << " " ;
+
   // loop in num_iterations
   for (int j = 0; j < num_iterations; ++j) {
 
     // Point assignment
     setPoints();
 
-    std::cout << std::endl << "Iteration : " << j << std::endl;
+    qDebug() << "Iteration : " << j;
     printClusters();
 
     // Cluster center update
@@ -231,7 +239,7 @@ void k_means::clusterPoints(int num_iterations)
 
   // Final Point assignment
   setPoints();
-
-  std::cout << "/------------Final Clusters---------------/: " << std::endl;
+  qDebug() << " " ;
+  qDebug() << "/------------Final Clusters---------------/: ";
   printClusters();
 }
