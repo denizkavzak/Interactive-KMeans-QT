@@ -11,12 +11,15 @@ public:
   k_means(int num_points, int k);
   k_means(QVector<QVector2D> points, int k);
 
+  void printClusters();
+
   struct Cluster{
     QVector2D center;
     QVector<QVector2D> cluster_points;
   };
 
-  QVector<Cluster> clusterPoints(int num_iterations);
+  void clusterPoints(int num_iterations);
+  QVector<Cluster> getClusters();
 
 private:
   void generateRandomPoints();
@@ -25,11 +28,11 @@ private:
   float getDistance(QVector2D p1, QVector2D p2);
   void setPoints();
   void updateCenters();
-  void updatePoints();
 
   QVector<QVector2D> m_allPoints;
   int m_num_points;
   int m_k;
+  QVector<Cluster> m_clusters;
 
 };
 
