@@ -53,7 +53,7 @@ void k_means::printClusters()
     qDebug() << "Center: " << cluster.center.x() << ", "
              << cluster.center.y();
     for (QVector2D p : cluster.cluster_points) {
-        qDebug() << p.x() << ", " << p.y();
+      qDebug() << p.x() << ", " << p.y();
     }
     qDebug() << " " ;
     id += 1;
@@ -89,6 +89,11 @@ void k_means::addCluster(k_means::Cluster cluster)
   m_clusters += cluster;
 }
 
+void k_means::addPoint(QVector2D point)
+{
+  m_allPoints += point;
+}
+
 /**
  * @brief k_means::generateRandomPoints
  * This function generates random m_num_points float points between
@@ -108,7 +113,7 @@ void k_means::generateRandomPoints()
 
   qDebug() << "Generated Points:" ;
   for (QVector2D p : m_allPoints) {
-      qDebug() << p.x() << ", " << p.y();
+    qDebug() << p.x() << ", " << p.y();
   }
   qDebug() << " " ;
 }
@@ -184,18 +189,19 @@ void k_means::updateCenters()
   int ind = 0;
   for (k_means::Cluster cluster : m_clusters) {
     // new center = mean of all points assigned to that cluster
+    if (cluster.cluster_points.size()!=0){ // check if cluster has any points
+      float x = 0;
+      float y = 0;
+      for (QVector2D cluster_point : cluster.cluster_points) {
+        x += cluster_point.x();
+        y += cluster_point.y();
+      }
 
-    float x = 0;
-    float y = 0;
-    for (QVector2D cluster_point : cluster.cluster_points) {
-      x += cluster_point.x();
-      y += cluster_point.y();
+      m_clusters[ind].center = QVector2D(x/cluster.cluster_points.size(),
+                                         y/cluster.cluster_points.size());
+
+      m_clusters[ind].cluster_points.clear();
     }
-
-    m_clusters[ind].center = QVector2D(x/cluster.cluster_points.size(),
-                            y/cluster.cluster_points.size());
-
-    m_clusters[ind].cluster_points.clear();
     ind += 1;
   }
 }
@@ -214,7 +220,9 @@ void k_means::clusterPoints(int num_iterations)
   // TODO: optimize code for better performance
   // Initialize clusters
   initialization in;
-  in.initRandomSample(*this);
+  //in.initRandomSample(*this);
+  in.initRandomReal(*this);
+
   qDebug() << " " ;
   qDebug() << "Iterations Start!" ;
   qDebug() << " " ;

@@ -24,6 +24,7 @@ public:
   int getNumOfPoints();
   int getK();
   void addCluster(Cluster cluster);
+  void addPoint(QVector2D point);
 
 private:
   void generateRandomPoints();

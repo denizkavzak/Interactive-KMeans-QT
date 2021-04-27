@@ -1,9 +1,35 @@
 #include "initialization.h"
 #include <QSet>
+#include <QDebug>
+
+constexpr int FLOAT_MIN = 0;
+constexpr int FLOAT_MAX = 100;
 
 initialization::initialization()
 {
 
+}
+
+/**
+ * @brief initialization::initRandomReal
+ * @param k_means
+ * This function initializes cluster centers
+ * using randomly selected points from the
+ * same space as the points to be clustered
+ */
+void initialization::initRandomReal(k_means &k_means)
+{
+  for (int i = 0; i < k_means.getK(); ++i) {
+    float p1 = FLOAT_MIN + (float)(rand()) /
+        ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));
+    float p2 = FLOAT_MIN + (float)(rand()) /
+        ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));
+    QVector2D center = QVector2D(p1, p2);
+    qDebug() << "CENTER: " << center;
+    k_means::Cluster cluster;
+    cluster.center = center;
+    k_means.addCluster(cluster);
+  }
 }
 
 /**
@@ -25,9 +51,11 @@ void initialization::initRandomSample(k_means &k_means)
     }
     set.insert(c);
     QVector2D center = k_means.getAllPoints().at(c);
+    qDebug() << "CENTER: " << center;
     // Create cluster
     k_means::Cluster cluster;
     cluster.center = center;
     k_means.addCluster(cluster);
   }
 }
+
