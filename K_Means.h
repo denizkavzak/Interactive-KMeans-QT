@@ -21,6 +21,9 @@ public:
   void clusterPoints(int num_iterations);
   QVector<Cluster> getClusters();
   QVector<QVector2D> getAllPoints();
+  int getNumOfPoints();
+  int getK();
+  void addCluster(Cluster cluster);
 
 private:
   void generateRandomPoints();

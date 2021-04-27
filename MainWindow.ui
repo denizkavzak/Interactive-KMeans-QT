@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QChartView" name="graphicsView"/>
+     <widget class="ChartView" name="graphicsView"/>
     </item>
    </layout>
   </widget>
@@ -34,9 +34,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QChartView</class>
+   <class>ChartView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">QChartView.h</header>
+   <header location="global">ChartView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

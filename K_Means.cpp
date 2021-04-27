@@ -6,6 +6,7 @@
 #include <QVector2D>
 #include <QSet>
 #include <QDebug>
+#include <initialization.h>
 
 constexpr int FLOAT_MIN = 0;
 constexpr int FLOAT_MAX = 100;
@@ -73,6 +74,21 @@ QVector<QVector2D> k_means::getAllPoints()
   return m_allPoints;
 }
 
+int k_means::getNumOfPoints()
+{
+  return m_num_points;
+}
+
+int k_means::getK()
+{
+  return m_k;
+}
+
+void k_means::addCluster(k_means::Cluster cluster)
+{
+  m_clusters += cluster;
+}
+
 /**
  * @brief k_means::generateRandomPoints
  * This function generates random m_num_points float points between
@@ -111,32 +127,6 @@ void k_means::generateNormalDistributionPoints()
   for (int i = 0; i < m_num_points; ++i) {
     QVector2D point = QVector2D(distr(eng), distr(eng));
     m_allPoints += point;
-  }
-}
-
-/**
- * @brief k_means::initializeCenters
- * @param clusters
- * This function initializes cluster centers
- * using randomly selected points from the
- * all points for m_k klusters
- */
-void k_means::initializeCenters()
-{
-  // Choose m_k centers randomly
-  QSet<int> set;
-  for (int i = 0; i < m_k; ++i) {
-    int c = rand() % m_num_points;
-    // TODO: FIX: This would cause an infinite loop in case where k > num_points
-    while (set.contains(c)) {   // Make sure no two selected points are the same
-      c = rand() % m_num_points;
-    }
-    set.insert(c);
-    QVector2D center = m_allPoints.at(c);
-    // Create cluster
-    k_means::Cluster cluster;
-    cluster.center = center;
-    m_clusters += cluster;
   }
 }
 
@@ -223,8 +213,8 @@ void k_means::clusterPoints(int num_iterations)
   // TODO: check for edge cases - k=0, k=1, k>num_points
   // TODO: optimize code for better performance
   // Initialize clusters
-  initializeCenters();
-
+  initialization in;
+  in.initRandomSample(*this);
   qDebug() << " " ;
   qDebug() << "Iterations Start!" ;
   qDebug() << " " ;

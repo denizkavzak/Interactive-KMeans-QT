@@ -9,11 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  k_means m(100, 2);
+  k_means m(20, 2);
 
   qDebug() << "Clustering started !";
 
-  m.clusterPoints(5);
+  m.clusterPoints(2);
 
   qDebug() << "Clustering ended !";
 
