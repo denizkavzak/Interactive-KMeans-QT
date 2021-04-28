@@ -21,7 +21,7 @@ constexpr int FLOAT_MAX = 100;
 k_means::k_means(int num_points, int k)
 {
   m_num_points = num_points;
-  m_k = k;
+  m_k = k-1;
   generateRandomPoints();
 }
 
@@ -155,7 +155,7 @@ float k_means::getDistance(QVector2D p1, QVector2D p2)
 void k_means::setPoints()
 {
   // Point assignment
-  for (int i = 0; i < m_num_points ; ++i) {
+  for (int i = 0; i < m_num_points; ++i) {
     // for each point:
     QVector2D point = m_allPoints.at(i);
     float min = FLT_MAX;
@@ -221,7 +221,9 @@ void k_means::clusterPoints(int num_iterations)
   // Initialize clusters
   initialization in;
   //in.initRandomSample(*this);
-  in.initRandomReal(*this);
+  //in.initRandomReal(*this);
+
+  in.initKMeansPp(*this);
 
   qDebug() << " " ;
   qDebug() << "Iterations Start!" ;
