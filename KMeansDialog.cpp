@@ -33,10 +33,11 @@ void KMeansDialog::applyGeneratePoints()
 
 void KMeansDialog::applyClustering()
 {
-  int k = ui->NSpinBox->value();
+  int k = ui->kSpinBox->value()-1;
+  int iter = ui->iterSpinBox->value();
   QString metric = getSelectedMetric();
 
-  emit clusteringParametersChanged(k, metric);
+  emit clusteringParametersChanged(k, metric, iter);
 }
 
 QString KMeansDialog::getSelectedMetric()

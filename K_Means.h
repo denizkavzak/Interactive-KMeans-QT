@@ -8,10 +8,15 @@
 class k_means
 {
 public:
-  k_means(int num_points, int k);
+  k_means();
+  k_means(int num_points);
+  k_means(int num_points, int k, float min, float max);
   k_means(QVector<QVector2D> points, int k);
 
   void printClusters();
+  void setK(int k);
+  void setMetric(QString metric);
+  void setNoOfPoints(int num_points);
 
   struct Cluster{
     QVector2D center;
@@ -25,10 +30,10 @@ public:
   int getK();
   void addCluster(Cluster cluster);
   void addPoint(QVector2D point);
+  void generateRandomPoints(float min, float max);
+  void generateNormalDistributionPoints(float min, float max);
 
 private:
-  void generateRandomPoints();
-  void generateNormalDistributionPoints();
   void initializeCenters();
   float getDistance(QVector2D p1, QVector2D p2);
   void setPoints();
@@ -38,7 +43,7 @@ private:
   int m_num_points;
   int m_k;
   QVector<Cluster> m_clusters;
-
+  QString m_metric;
 };
 
 #endif // KMEANS_H

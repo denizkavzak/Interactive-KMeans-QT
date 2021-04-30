@@ -8,8 +8,23 @@
 #include <QDebug>
 #include <initialization.h>
 
-constexpr int FLOAT_MIN = 0;
-constexpr int FLOAT_MAX = 100;
+/**
+ * @brief k_means::k_means
+ * Default constructor
+ */
+k_means::k_means()
+{
+}
+
+/**
+ * @brief k_means::k_means
+ * @param num_points
+ * Constructor for k-means class
+ * taking only number of points
+ */
+k_means::k_means(int num_points){
+  m_num_points = num_points;
+}
 
 /**
  * @brief k_means::k_means
@@ -18,11 +33,11 @@ constexpr int FLOAT_MAX = 100;
  * Constructor for k-means class
  * Generates random points to fill m_num_points
  */
-k_means::k_means(int num_points, int k)
+k_means::k_means(int num_points, int k, float min, float max)
 {
   m_num_points = num_points;
-  m_k = k-1;
-  generateRandomPoints();
+  m_k = k;
+  generateRandomPoints(min, max);
 }
 
 /**
@@ -58,6 +73,21 @@ void k_means::printClusters()
     qDebug() << " " ;
     id += 1;
   }
+}
+
+void k_means::setK(int k)
+{
+  m_k = k;
+}
+
+void k_means::setMetric(QString metric)
+{
+  m_metric = metric;
+}
+
+void k_means::setNoOfPoints(int num_points)
+{
+  m_num_points = num_points;
 }
 
 /**
@@ -97,16 +127,16 @@ void k_means::addPoint(QVector2D point)
 /**
  * @brief k_means::generateRandomPoints
  * This function generates random m_num_points float points between
- * FLOAT_MIN and FLOAT_MAX
+ * min and max
  */
-void k_means::generateRandomPoints()
+void k_means::generateRandomPoints(float min, float max)
 {
   for (int i = 0; i < m_num_points; ++i) {
     //QPoint point = QPoint(rand() % 10, rand() % 10);
-    float p1 = FLOAT_MIN + (float)(rand()) /
-        ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));
-    float p2 = FLOAT_MIN + (float)(rand()) /
-        ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));
+    float p1 = min + (float)(rand()) /
+        ((float)(RAND_MAX/(max - min)));
+    float p2 = min + (float)(rand()) /
+        ((float)(RAND_MAX/(max - min)));
     QVector2D point = QVector2D(p1, p2);
     m_allPoints += point;
   }
@@ -121,13 +151,13 @@ void k_means::generateRandomPoints()
 /**
  * @brief k_means::generateNormalDistributionPoints
  * This function generates random m_num_points float points between
- * FLOAT_MIN and FLOAT_MAX, with a normal distribution
+ * min and max, with a normal distribution
  */
-void k_means::generateNormalDistributionPoints()
+void k_means::generateNormalDistributionPoints(float min, float max)
 {
   std::random_device rd;
   std::default_random_engine eng(rd());
-  std::uniform_real_distribution<float> distr(FLOAT_MIN, FLOAT_MAX);
+  std::uniform_real_distribution<float> distr(min, max);
 
   for (int i = 0; i < m_num_points; ++i) {
     QVector2D point = QVector2D(distr(eng), distr(eng));
@@ -220,10 +250,10 @@ void k_means::clusterPoints(int num_iterations)
   // TODO: optimize code for better performance
   // Initialize clusters
   initialization in;
-  //in.initRandomSample(*this);
+  in.initRandomSample(*this);
   //in.initRandomReal(*this);
 
-  in.initKMeansPp(*this);
+  //in.initKMeansPp(*this);
 
   qDebug() << " " ;
   qDebug() << "Iterations Start!" ;

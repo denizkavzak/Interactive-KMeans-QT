@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <KMeansDialog.h>
+#include "k_means.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,12 +19,12 @@ public:
 
 public slots:
   void generatePoints(int noOfPoints, float min, float max);
-  void clusterPoints(int k, QString metric);
+  void clusterPoints(int k, QString metric, int iter);
 
 private:
   Ui::MainWindow *ui;
-
   KMeansDialog *m_kMeansDialog;
+  k_means m_k_means;
 };
 
 #endif // MAINWINDOW_H

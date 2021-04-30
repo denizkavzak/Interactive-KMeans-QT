@@ -22,7 +22,7 @@ public slots:
 
 signals:
   void pointsParametersChanged(int, float, float);
-  void clusteringParametersChanged(int, QString);
+  void clusteringParametersChanged(int, QString, int);
 
 private:
   Ui::KMeansDialog *ui;

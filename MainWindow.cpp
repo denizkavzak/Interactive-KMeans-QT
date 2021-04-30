@@ -1,7 +1,9 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "k_means.h"
 #include <QDebug>
+
+//constexpr int FLOAT_MIN = 0;
+//constexpr int FLOAT_MAX = 100;
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -20,18 +22,15 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
           this, &MainWindow::clusterPoints);
 
-
-  k_means m(40, 4);
+  //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
 
   qDebug() << "Clustering started !";
 
-  m.clusterPoints(2);
+  //m.clusterPoints(5);
 
   qDebug() << "Clustering ended !";
 
   // Can access clusters by using m.getClusters()
-
-  ui->graphicsView->paintPoints(m.getAllPoints());
 
 }
 
@@ -42,10 +41,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::generatePoints(int noOfPoints, float min, float max)
 {
-
+  m_k_means.setNoOfPoints(noOfPoints);
+  m_k_means.generateRandomPoints(min, max);
+  ui->graphicsView->paintPoints(m_k_means.getAllPoints());
 }
 
-void MainWindow::clusterPoints(int k, QString metric)
+void MainWindow::clusterPoints(int k, QString metric, int iter)
 {
-
+  // TODO: FIX: k needs to be -1 in the loops
+  m_k_means.setK(k);
+  m_k_means.setMetric(metric);
+  m_k_means.clusterPoints(iter);
 }
