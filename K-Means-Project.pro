@@ -16,7 +16,8 @@ SOURCES += \
         K_Means.cpp \
         MainWindow.cpp \
         initialization.cpp \
-        main.cpp
+        main.cpp \
+        metrics.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -28,7 +29,8 @@ HEADERS += \
     KMeansDialog.h \
     K_Means.h \
     MainWindow.h \
-    initialization.h
+    initialization.h \
+    metrics.h
 
 FORMS += \
     KMeansDialog.ui \

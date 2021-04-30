@@ -14,7 +14,11 @@ KMeansDialog::~KMeansDialog()
   delete ui;
 }
 
-
+/**
+ * @brief KMeansDialog::applyGeneratePoints
+ * Takes the noOfPoints, min and max values
+ * from the ui and generates points
+ */
 void KMeansDialog::applyGeneratePoints()
 {
   int noOfPoints = ui->NSpinBox->value();
@@ -24,6 +28,11 @@ void KMeansDialog::applyGeneratePoints()
   emit pointsParametersChanged(noOfPoints, min, max);
 }
 
+/**
+ * @brief KMeansDialog::applyClustering
+ * Takes the k, iteration and metric values
+ * from ui and clusters the points accordingly
+ */
 void KMeansDialog::applyClustering()
 {
   int k = ui->kSpinBox->value();
@@ -33,6 +42,13 @@ void KMeansDialog::applyClustering()
   emit clusteringParametersChanged(k, metric, iter);
 }
 
+/**
+ * @brief KMeansDialog::getSelectedMetric
+ * Take selected distance metric from ui
+ * and convert it to simpler text and return
+ * as QString
+ * @return selected metric as QString
+ */
 QString KMeansDialog::getSelectedMetric()
 {
   QString metric = ui->metricComboBox->itemText(ui->metricComboBox->currentIndex());

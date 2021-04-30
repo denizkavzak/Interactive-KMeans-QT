@@ -2,6 +2,7 @@
 #include <QSet>
 #include <QDebug>
 #include <QtMath>
+#include "metrics.h"
 
 constexpr int FLOAT_MIN = 0;
 constexpr int FLOAT_MAX = 100;
@@ -11,12 +12,6 @@ initialization::initialization()
 {
 
 }
-
-// lambda function for euclidean distance of 2 2D points
-auto euclidean = [] (QVector2D p1, QVector2D p2) {
-  return sqrt((p1.x()-p2.x())*(p1.x()-p2.x()) +
-              (p1.y()-p2.y())*(p1.y()-p2.y()));
-};
 
 /**
  * @brief initialization::initRandomReal
@@ -128,6 +123,7 @@ QVector<float> initialization::getPairwiseDistances(k_means &k_means,
                                                     QString metric, float &min,
                                                     int &min_ind, float &sum)
 {
+  metrics m;
   // Create an array to store the distances between center and all points
   QVector<float> d(k_means.getNumOfPoints());
   min = FLOAT_MAX;
@@ -137,8 +133,9 @@ QVector<float> initialization::getPairwiseDistances(k_means &k_means,
   for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
     QVector2D point = k_means.getAllPoints().at(i);
 
-    if (metric == "euclidean"){
-      float distance = euclidean(center,point);
+    // These two metrics will return a float value
+    if (metric == "euclidean" || metric == "manhattan"){
+      float distance = m.getDistance(center,point, metric);
       if (distance < min){
         min = distance;
         min_ind = i;

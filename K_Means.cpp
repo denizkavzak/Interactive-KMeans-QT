@@ -7,6 +7,7 @@
 #include <QSet>
 #include <QDebug>
 #include <initialization.h>
+#include <metrics.h>
 
 /**
  * @brief k_means::k_means
@@ -55,18 +56,6 @@ k_means::k_means(QVector<QVector2D> points, int k)
   m_k = k;
   m_metric = "euclidean";
 }
-
-// lambda function for euclidean distance of 2 2D points
-auto euclidean = [] (QVector2D p1, QVector2D p2) {
-  return sqrt((p1.x()-p2.x())*(p1.x()-p2.x()) +
-              (p1.y()-p2.y())*(p1.y()-p2.y()));
-};
-
-// lambda function for manhattan distance of 2 2D points
-auto manhattan = [] (QVector2D p1, QVector2D p2) {
-  return qAbs(p1.x()-p2.x()) +
-              qAbs(p1.y()-p2.y());
-};
 
 /**
  * @brief k_means::printClusters
@@ -186,30 +175,13 @@ void k_means::generateNormalDistributionPoints(float min, float max)
 }
 
 /**
- * @brief k_means::getDistance
- * @param p1
- * @param p2
- * @return euclidean distance between 2D points p1 and p2
- */
-float k_means::getDistance(QVector2D p1, QVector2D p2)
-{
-  if (m_metric == "manhattan") {
-    return manhattan(p1, p2);
-    // TODO: Implement hamming for binary features
-//  } else if (m_metric == "hamming") {
-//    return euclidean(p1, p2);
-  } else { // m_metric == "euclidean"
-    return euclidean(p1, p2);
-  }
-}
-
-/**
  * @brief k_means::setPoints
  * This function assigns points to the corresponding clusters
  * by using the distance and current cluster centers
  */
 void k_means::setPoints()
 {
+  metrics m;
   // Point assignment
   for (int i = 0; i < m_num_points; ++i) {
     // for each point:
@@ -221,7 +193,7 @@ void k_means::setPoints()
     // find the nearest center point
     for (k_means::Cluster cluster : m_clusters) {
       QVector2D center = cluster.center;
-      float distance = getDistance(point,center);
+      float distance = m.getDistance(point,center,m_metric);
       if (distance < min) {
         min = distance;
         min_ind = ind;
