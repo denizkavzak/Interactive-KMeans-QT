@@ -39,6 +39,34 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
+/**
+ * @brief MainWindow::paintClusters
+ * Paints all the points with their respective colors
+ * determined by the cluster they belong to.
+ * Center of clusters are also painted in different
+ * color and shape
+ */
+void MainWindow::paintClusters()
+{
+  ui->graphicsView->paintPoints(m_k_means.getAllPoints());
+
+
+  for (k_means::Cluster cluster : m_k_means.getClusters()) {
+    //ui->graphicsView->paintPoint(cluster.center);
+
+
+  }
+
+
+}
+
+/**
+ * @brief MainWindow::generatePoints
+ * @param noOfPoints
+ * @param min
+ * @param max
+ * Generate points using given parameters
+ */
 void MainWindow::generatePoints(int noOfPoints, float min, float max)
 {
   m_k_means.setNoOfPoints(noOfPoints);
@@ -46,9 +74,17 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
   ui->graphicsView->paintPoints(m_k_means.getAllPoints());
 }
 
+/**
+ * @brief MainWindow::clusterPoints
+ * @param k
+ * @param metric
+ * @param iter
+ * Cluster points using given parameters
+ */
 void MainWindow::clusterPoints(int k, QString metric, int iter)
 {
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
   m_k_means.clusterPoints(iter);
+  ui->graphicsView->paintClusters(m_k_means);
 }

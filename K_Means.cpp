@@ -123,6 +123,15 @@ QString k_means::getMetric()
   return m_metric;
 }
 
+QVector2D k_means::getCenters()
+{
+  QVector2D centers;
+  for (k_means::Cluster cluster : m_clusters) {
+    centers += cluster.center;
+  }
+  return centers;
+}
+
 void k_means::addCluster(k_means::Cluster cluster)
 {
   m_clusters += cluster;

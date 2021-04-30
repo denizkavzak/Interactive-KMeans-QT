@@ -3,6 +3,7 @@
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QScatterSeries>
+#include <k_means.h>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -13,6 +14,7 @@ public:
   explicit ChartView(QWidget *parent = nullptr);
   void paintPoints(QVector<QVector2D> points);
   QScatterSeries* getSeries();
+  void paintClusters(k_means k_m);
 private:
   QScatterSeries *m_series;
 

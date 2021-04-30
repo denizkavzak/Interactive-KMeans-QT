@@ -6,6 +6,25 @@
 #include <QtCore/QtMath>
 #include <QWidget>
 
+struct ClusterColor{
+  ClusterColor() { }
+
+  // TODOO: It has 15 colors currently, update it to be continuous colors
+  QVector<QColor> colorArray = {Qt::red, Qt::blue,
+                                Qt::black, Qt::magenta, Qt::green,
+                               Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
+                               Qt::darkGreen, Qt::darkCyan, Qt::darkYellow,
+                               Qt::darkMagenta, Qt::darkGray, Qt::yellow};
+  // QColor a(255,0,255,0); // Can have random color but will it be distinctive?
+
+
+  QColor operator()(int i){
+    // modulo for making repeated pattern when pattern image is smaller
+    return colorArray[i % colorArray.size()];
+  }
+  QImage m_image;
+};
+
 ChartView::ChartView(QWidget *parent) :
   QChartView(new QChart(), parent)
 {
@@ -32,6 +51,52 @@ void ChartView::paintPoints(QVector<QVector2D> points)
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 
 }
+
+/**
+ * @brief ChartView::paintClusters
+ * @param k_m
+ * Paint cluster points with the same color to distinguish between
+ * different clusters.
+ */
+
+void ChartView::paintClusters(k_means k_m)
+{
+  // TODO: Paint centers with same cluster color but different shape
+  // QVector2D centers = k_m.getCenters();
+  // Clear chart first
+  chart()->removeAllSeries();
+  ClusterColor c;
+  int i = 0;
+
+  for (k_means::Cluster cluster : k_m.getClusters()) {
+    QScatterSeries* clusterSeries = new QScatterSeries();
+
+    clusterSeries->setName(QString("Cluster_%1").arg(i));
+
+    clusterSeries->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+    clusterSeries->setMarkerSize(15.0);
+    clusterSeries->setColor(c.operator()(i));
+
+    for (QVector2D point : cluster.cluster_points) {
+      clusterSeries->append(point.x(),point.y());
+    }
+
+    i ++;
+
+    chart()->addSeries(clusterSeries);
+  }
+
+  setRenderHint(QPainter::Antialiasing);
+  //chart()->addSeries(m_series);
+
+  chart()->setTitle("Points");
+  chart()->createDefaultAxes();
+  chart()->setDropShadowEnabled(false);
+
+  chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
+
+}
+
 
 QScatterSeries *ChartView::getSeries()
 {

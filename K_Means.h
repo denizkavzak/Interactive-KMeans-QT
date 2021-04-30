@@ -29,6 +29,7 @@ public:
   int getNumOfPoints();
   int getK();
   QString getMetric();
+  QVector2D getCenters();
   void addCluster(Cluster cluster);
   void addPoint(QVector2D point);
   void generateRandomPoints(float min, float max);
