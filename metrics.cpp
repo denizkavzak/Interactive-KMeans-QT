@@ -4,8 +4,6 @@
 metrics::metrics()
 {
 
-
-
 }
 
 // lambda function for euclidean distance of 2 2D points
@@ -45,23 +43,48 @@ float metrics::getDistance(QVector2D p1, QVector2D p2, QString metric)
 {
   if (metric == "manhattan") {
     return manhattan(p1, p2);
-    // TODO: Implement hamming for binary features
-//  } else if (m_metric == "hamming") {
-//    return euclidean(p1, p2);
   } else { // m_metric == "euclidean"
     return euclidean(p1, p2);
   }
 }
 
+/**
+ * @brief metrics::getDistance
+ * @param p1
+ * @param p2
+ * @param metric
+ * @return Distance between 3D points p1 and p2
+ * with the metric as m_metric
+ * m_metric can be euclidean or manhattan
+ */
 float metrics::getDistance(QVector3D p1, QVector3D p2, QString metric)
 {
   if (metric == "manhattan") {
     return manhattan3D(p1, p2);
-    // TODO: Implement hamming for binary features
-//  } else if (m_metric == "hamming") {
-//    return euclidean(p1, p2);
   } else { // m_metric == "euclidean"
     return euclidean3D(p1, p2);
   }
+}
+
+/**
+ * @brief metrics::getDistance
+ * @param binary1
+ * @param binary2
+ * @return Distance between two binary points
+ * with Hamming distance metric
+ */
+float metrics::getDistance(QString binary1, QString binary2)
+{
+  float distance = 0;
+  // Cannot get distance if the length of strings are different
+  if (binary1.size() == binary2.size()) {
+    for (int i=0; i<binary1.size() ; i++) {
+      if(binary1[i] != binary2[i]){ // Count not equal characters in same index
+        distance += 1;
+      }
+    }
+    return distance;
+  }
+  return -1;
 }
 

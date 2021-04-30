@@ -11,7 +11,7 @@ public:
 
   float getDistance(QVector2D p1, QVector2D p2, QString metric);
   float getDistance(QVector3D p1, QVector3D p2, QString metric);
-  float getDistance(QString binary1, QString binary2, QString metric);
+  float getDistance(QString binary1, QString binary2);
 
 };
 
