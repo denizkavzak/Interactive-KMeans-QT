@@ -62,6 +62,12 @@ auto euclidean = [] (QVector2D p1, QVector2D p2) {
               (p1.y()-p2.y())*(p1.y()-p2.y()));
 };
 
+// lambda function for manhattan distance of 2 2D points
+auto manhattan = [] (QVector2D p1, QVector2D p2) {
+  return qAbs(p1.x()-p2.x()) +
+              qAbs(p1.y()-p2.y());
+};
+
 /**
  * @brief k_means::printClusters
  * This function prints the clusters by printing the
@@ -187,10 +193,14 @@ void k_means::generateNormalDistributionPoints(float min, float max)
  */
 float k_means::getDistance(QVector2D p1, QVector2D p2)
 {
-  if (m_metric == "euclidean"){
+  if (m_metric == "manhattan") {
+    return manhattan(p1, p2);
+    // TODO: Implement hamming for binary features
+//  } else if (m_metric == "hamming") {
+//    return euclidean(p1, p2);
+  } else { // m_metric == "euclidean"
     return euclidean(p1, p2);
   }
-  return euclidean(p1, p2);
 }
 
 /**
