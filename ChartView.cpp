@@ -56,13 +56,11 @@ void ChartView::paintPoints(QVector<QVector2D> points)
  * @brief ChartView::paintClusters
  * @param k_m
  * Paint cluster points with the same color to distinguish between
- * different clusters.
+ * different clusters. Points are circle, centers are rectangle
  */
 
 void ChartView::paintClusters(k_means k_m)
 {
-  // TODO: Paint centers with same cluster color but different shape
-  // QVector2D centers = k_m.getCenters();
   // Clear chart first
   chart()->removeAllSeries();
   ClusterColor c;
@@ -70,9 +68,11 @@ void ChartView::paintClusters(k_means k_m)
 
   for (k_means::Cluster cluster : k_m.getClusters()) {
     QScatterSeries* clusterSeries = new QScatterSeries();
+    QScatterSeries* clusterCenterSeries = new QScatterSeries();
 
     clusterSeries->setName(QString("Cluster_%1").arg(i));
 
+    // Paint points in the cluster
     clusterSeries->setMarkerShape(QScatterSeries::MarkerShapeCircle);
     clusterSeries->setMarkerSize(15.0);
     clusterSeries->setColor(c.operator()(i));
@@ -81,9 +81,17 @@ void ChartView::paintClusters(k_means k_m)
       clusterSeries->append(point.x(),point.y());
     }
 
+    // Paint center with rectangle and bigger marker
+    clusterCenterSeries->setName(QString("Center_%1").arg(i));
+    clusterCenterSeries->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+    clusterCenterSeries->setMarkerSize(20.0);
+    clusterCenterSeries->setColor(c.operator()(i));
+    clusterCenterSeries->append(cluster.center.x(), cluster.center.y());
+
     i ++;
 
     chart()->addSeries(clusterSeries);
+    chart()->addSeries(clusterCenterSeries);
   }
 
   setRenderHint(QPainter::Antialiasing);
