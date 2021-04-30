@@ -16,6 +16,10 @@ public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
+public slots:
+  void generatePoints(int noOfPoints, float min, float max);
+  void clusterPoints(int k, QString metric);
+
 private:
   Ui::MainWindow *ui;
 

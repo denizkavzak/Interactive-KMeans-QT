@@ -14,6 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->actionK_Means, &QAction::triggered, m_kMeansDialog,
           &KMeansDialog::show);
 
+  connect(m_kMeansDialog, &KMeansDialog::pointsParametersChanged,
+          this, &MainWindow::generatePoints);
+
+  connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
+          this, &MainWindow::clusterPoints);
+
+
   k_means m(40, 4);
 
   qDebug() << "Clustering started !";
@@ -31,4 +38,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
   delete ui;
+}
+
+void MainWindow::generatePoints(int noOfPoints, float min, float max)
+{
+
+}
+
+void MainWindow::clusterPoints(int k, QString metric)
+{
+
 }

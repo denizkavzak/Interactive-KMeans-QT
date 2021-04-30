@@ -18,13 +18,11 @@ public:
 public slots:
   void applyGeneratePoints();
   void applyClustering();
-
-private slots:
   QString getSelectedMetric();
 
 signals:
-  void pointsParametersChanged(int noOfPoints, float min, float max);
-  void clusteringParametersChanged(int k, QString metric);
+  void pointsParametersChanged(int, float, float);
+  void clusteringParametersChanged(int, QString);
 
 private:
   Ui::KMeansDialog *ui;
