@@ -42,5 +42,9 @@ void KMeansDialog::applyClustering()
 
 QString KMeansDialog::getSelectedMetric()
 {
-  return ui->metricComboBox->itemText(ui->metricComboBox->currentIndex());
+  QString metric = ui->metricComboBox->itemText(ui->metricComboBox->currentIndex());
+  if (metric == "Euclidean (L2)") {
+    return QString("euclidean");
+  }
+  return QString("euclidean");
 }

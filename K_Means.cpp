@@ -24,6 +24,7 @@ k_means::k_means()
  */
 k_means::k_means(int num_points){
   m_num_points = num_points;
+  m_metric = "euclidean";
 }
 
 /**
@@ -38,6 +39,7 @@ k_means::k_means(int num_points, int k, float min, float max)
   m_num_points = num_points;
   m_k = k;
   generateRandomPoints(min, max);
+  m_metric = "euclidean";
 }
 
 /**
@@ -51,7 +53,14 @@ k_means::k_means(QVector<QVector2D> points, int k)
   m_allPoints = points;
   m_num_points = m_allPoints.size();
   m_k = k;
+  m_metric = "euclidean";
 }
+
+// lambda function for euclidean distance of 2 2D points
+auto euclidean = [] (QVector2D p1, QVector2D p2) {
+  return sqrt((p1.x()-p2.x())*(p1.x()-p2.x()) +
+              (p1.y()-p2.y())*(p1.y()-p2.y()));
+};
 
 /**
  * @brief k_means::printClusters
@@ -114,6 +123,11 @@ int k_means::getK()
   return m_k;
 }
 
+QString k_means::getMetric()
+{
+  return m_metric;
+}
+
 void k_means::addCluster(k_means::Cluster cluster)
 {
   m_clusters += cluster;
@@ -173,8 +187,10 @@ void k_means::generateNormalDistributionPoints(float min, float max)
  */
 float k_means::getDistance(QVector2D p1, QVector2D p2)
 {
-  return sqrt((p1.x() - p2.x())*(p1.x() - p2.x()) +
-              (p1.y() - p2.y())*(p1.y() - p2.y()));
+  if (m_metric == "euclidean"){
+    return euclidean(p1, p2);
+  }
+  return euclidean(p1, p2);
 }
 
 /**

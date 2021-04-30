@@ -89,7 +89,7 @@ void initialization::initKMeansPp(k_means &k_means)
   float min;
   int min_ind;
   float sum;
-  QVector<float> d = getPairwiseDistances(k_means, center, "euclidean",
+  QVector<float> d = getPairwiseDistances(k_means, center, k_means.getMetric(),
                                           min, min_ind, sum);
   qDebug() << "d is found";
   for (int i = 0; i < k_means.getK(); ++i) {
