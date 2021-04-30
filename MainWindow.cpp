@@ -5,9 +5,14 @@
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::MainWindow)
+  ui(new Ui::MainWindow),
+  m_kMeansDialog(new KMeansDialog(this))
 {
   ui->setupUi(this);
+
+  // Connect Edit > Draw Line... to show dialog
+  connect(ui->actionK_Means, &QAction::triggered, m_kMeansDialog,
+          &KMeansDialog::show);
 
   k_means m(40, 4);
 

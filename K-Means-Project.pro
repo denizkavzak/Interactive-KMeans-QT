@@ -12,6 +12,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         ChartView.cpp \
+        KMeansDialog.cpp \
         K_Means.cpp \
         MainWindow.cpp \
         initialization.cpp \
@@ -24,9 +25,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ChartView.h \
+    KMeansDialog.h \
     K_Means.h \
     MainWindow.h \
     initialization.h
 
 FORMS += \
+    KMeansDialog.ui \
     MainWindow.ui

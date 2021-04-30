@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <KMeansDialog.h>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,8 @@ public:
 
 private:
   Ui::MainWindow *ui;
+
+  KMeansDialog *m_kMeansDialog;
 };
 
 #endif // MAINWINDOW_H

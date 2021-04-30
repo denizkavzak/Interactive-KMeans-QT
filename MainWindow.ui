@@ -29,8 +29,20 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionK_Means"/>
+   </widget>
+   <addaction name="menuEdit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionK_Means">
+   <property name="text">
+    <string>K-Means...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
