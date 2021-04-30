@@ -7,13 +7,6 @@ KMeansDialog::KMeansDialog(QWidget *parent) :
 {
   ui->setupUi(this);
 
-
-  connect(ui->generatePointsButton, &QPushButton::clicked,
-          this, &KMeansDialog::applyGeneratePoints);
-
-  connect(ui->clusterButton, &QPushButton::clicked,
-          this, &KMeansDialog::applyClustering);
-
 }
 
 KMeansDialog::~KMeansDialog()
@@ -33,7 +26,7 @@ void KMeansDialog::applyGeneratePoints()
 
 void KMeansDialog::applyClustering()
 {
-  int k = ui->kSpinBox->value()-1;
+  int k = ui->kSpinBox->value();
   int iter = ui->iterSpinBox->value();
   QString metric = getSelectedMetric();
 

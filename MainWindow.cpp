@@ -48,7 +48,6 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
 
 void MainWindow::clusterPoints(int k, QString metric, int iter)
 {
-  // TODO: FIX: k needs to be -1 in the loops
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
   m_k_means.clusterPoints(iter);
