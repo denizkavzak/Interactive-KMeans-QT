@@ -267,18 +267,21 @@ void k_means::clusterPoints(int num_iterations)
   for (int j = 0; j < num_iterations; ++j) {
     moveOneStep();
   }
-
-  // Final Point assignment
-  setPoints();
-  qDebug() << " " ;
-  qDebug() << "/------------Final Clusters---------------/: ";
-  printClusters();
 }
 
 void k_means::moveOneStep()
 {
   qDebug() << "move one step";
+  // Point assignment
+  setPoints();
 
+  qDebug() << "Iteration : " << m_step;
+  printClusters();
+
+  // Cluster center update
+  // for each cluster center 0...m_k
+  updateCenters();
+  m_step += 1;
   if (m_step == m_iter) {
     // Final Point assignment
     setPoints();
@@ -286,27 +289,7 @@ void k_means::moveOneStep()
     qDebug() << "/------------Final Clusters---------------/: ";
     printClusters();
 
-  } else {
-
-    if (!isInitialized()) {
-      initialization in;
-      in.initRandomSample(*this); // default is random sample
-      // in.initRandomReal(*this);
-      // in.initKMeansPp(*this);
-      m_initialized = true;
-    }
-
-    // Point assignment
-    setPoints();
-
-    qDebug() << "Iteration : " << m_step;
-    printClusters();
-
-    // Cluster center update
-    // for each cluster center 0...m_k
-    updateCenters();
   }
-  m_step += 1;
 }
 
 void k_means::setNumOfIter(int numOfIterations)

@@ -124,7 +124,6 @@ void MainWindow::getNextStep()
 
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
 {
-
   if (m_k_means.getAllPoints().empty()){
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
