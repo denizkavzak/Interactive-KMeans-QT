@@ -37,8 +37,8 @@ ChartView::ChartView(QWidget *parent) :
   //setRubberBand(QChartView::RectangleRubberBand);
   //setDragMode(QChartView::ScrollHandDrag);
   //setDragMode(QChartView::NoDrag);
-//  setRubberBand(QChartView::NoRubberBand);
-//  setDragMode(QChartView::ScrollHandDrag);
+  //  setRubberBand(QChartView::NoRubberBand);
+  //  setDragMode(QChartView::ScrollHandDrag);
 }
 
 void ChartView::paintPoints(QVector<QVector2D> points)
@@ -49,6 +49,35 @@ void ChartView::paintPoints(QVector<QVector2D> points)
 
   setRenderHint(QPainter::Antialiasing);
   chart()->addSeries(m_series);
+
+  chart()->setTitle("Points");
+  chart()->createDefaultAxes();
+  chart()->setDropShadowEnabled(false);
+
+  chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
+
+}
+
+void ChartView::paintCenters(k_means k_m)
+{
+  ClusterColor c;
+  int i = 0;
+  QScatterSeries* clusterCenterSeries;
+  for (k_means::Cluster cluster : k_m.getClusters()) {
+    clusterCenterSeries = new QScatterSeries();
+    // Paint center with rectangle and bigger marker
+    clusterCenterSeries->setName(QString("Center_%1").arg(i));
+    clusterCenterSeries->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+    clusterCenterSeries->setMarkerSize(20.0);
+    clusterCenterSeries->setColor(c.operator()(i));
+    clusterCenterSeries->append(cluster.center.x(), cluster.center.y());
+    i ++;
+
+    chart()->addSeries(clusterCenterSeries);
+  }
+
+  setRenderHint(QPainter::Antialiasing);
+  //chart()->addSeries(m_series);
 
   chart()->setTitle("Points");
   chart()->createDefaultAxes();
@@ -70,6 +99,7 @@ void ChartView::paintPoints(QVector<QVector2D> points)
  */
 void ChartView::paintClusters(k_means k_m)
 {
+  qDebug() << "IN PAINTING";
   // Clear chart first
   chart()->removeAllSeries();
   ClusterColor c;

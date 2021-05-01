@@ -51,8 +51,8 @@ private:
   int m_k;
   QVector<Cluster> m_clusters;
   QString m_metric;
-  int m_step;
-  int m_iter;
+  int m_step = 0;
+  int m_iter = 0;
   bool m_initialized = false;
 };
 

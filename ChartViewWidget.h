@@ -21,6 +21,7 @@ public:
 
   void paintPoints(QVector<QVector2D> points);
   void paintClusters(k_means k_m);
+  void paintCenters(k_means k_m);
 
 public slots:
   void zoomIn();

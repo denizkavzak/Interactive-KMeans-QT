@@ -26,7 +26,6 @@ k_means::k_means()
 k_means::k_means(int num_points){
   m_num_points = num_points;
   m_metric = "euclidean";
-  m_step = 0;
 }
 
 /**
@@ -42,7 +41,6 @@ k_means::k_means(int num_points, int k, float min, float max)
   m_k = k;
   generateRandomPoints(min, max);
   m_metric = "euclidean";
-  m_step = 0;
 }
 
 /**
@@ -57,7 +55,6 @@ k_means::k_means(QVector<QVector2D> points, int k)
   m_num_points = m_allPoints.size();
   m_k = k;
   m_metric = "euclidean";
-  m_step = 0;
 }
 
 /**

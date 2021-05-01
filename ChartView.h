@@ -16,6 +16,7 @@ public:
   void paintPoints(QVector<QVector2D> points);
   QScatterSeries* getSeries();
   void paintClusters(k_means k_m);
+  void paintCenters(k_means k_m);
 
 public slots:
   void updateRange();

@@ -96,6 +96,7 @@ void MainWindow::clusterPoints(int k, QString metric, int iter)
       m_step = m_k_means.getNumOfIter();
       m_kMeansDialog->updateIterationStepLabel(m_step);
       ui->chartViewWidget->paintClusters(m_k_means);
+      ui->chartViewWidget->update();
     }
   }
 }
@@ -148,6 +149,8 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
         in.initKMeansPp(m_k_means);
       }
       m_k_means.setInitialized(true);
+      ui->chartViewWidget->paintCenters(m_k_means);
+      ui->chartViewWidget->update();
     }
   }
 }

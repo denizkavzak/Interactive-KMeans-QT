@@ -37,8 +37,13 @@ void ChartViewWidget::paintPoints(QVector<QVector2D> points)
 
 void ChartViewWidget::paintClusters(k_means k_m)
 {
-  ui->chartView->paintClusters(k_m);
   qDebug() << "PAINT";
+  ui->chartView->paintClusters(k_m);
+}
+
+void ChartViewWidget::paintCenters(k_means k_m)
+{
+  ui->chartView->paintCenters(k_m);
 }
 
 void ChartViewWidget::zoomIn()
@@ -67,6 +72,7 @@ void ChartViewWidget::zoomActualSize()
 
 void ChartViewWidget::getNextStep(k_means k_m)
 {
+  qDebug() << " getNextStep in chartview widget" ;
   m_step += 1;
   ui->chartView->paintClusters(k_m);
 }
