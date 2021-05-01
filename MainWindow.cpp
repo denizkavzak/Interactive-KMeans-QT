@@ -40,27 +40,6 @@ MainWindow::~MainWindow()
 }
 
 /**
- * @brief MainWindow::paintClusters
- * Paints all the points with their respective colors
- * determined by the cluster they belong to.
- * Center of clusters are also painted in different
- * color and shape
- */
-void MainWindow::paintClusters()
-{
-  ui->graphicsView->paintPoints(m_k_means.getAllPoints());
-
-
-  for (k_means::Cluster cluster : m_k_means.getClusters()) {
-    //ui->graphicsView->paintPoint(cluster.center);
-
-
-  }
-
-
-}
-
-/**
  * @brief MainWindow::generatePoints
  * @param noOfPoints
  * @param min
@@ -71,7 +50,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
 {
   m_k_means.setNoOfPoints(noOfPoints);
   m_k_means.generateRandomPoints(min, max);
-  ui->graphicsView->paintPoints(m_k_means.getAllPoints());
+  //ui->chartViewWidget->chartView()->paintPoints(m_k_means.getAllPoints());
 }
 
 /**
@@ -86,5 +65,31 @@ void MainWindow::clusterPoints(int k, QString metric, int iter)
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
   m_k_means.clusterPoints(iter);
-  ui->graphicsView->paintClusters(m_k_means);
+ // ui->chartViewWidget->chartView()->paintClusters(m_k_means);
+}
+
+void MainWindow::zoomIn()
+{
+  qDebug() << "Zoomed in";
+  setZoom(ui->chartViewWidget->zoom() * 2);
+}
+
+void MainWindow::zoomOut()
+{
+  qDebug() << "Zoomed out";
+  setZoom(ui->chartViewWidget->zoom() * 0.5f);
+}
+
+void MainWindow::zoomActualSize()
+{
+  qDebug() << "Zoom actual size";
+  setZoom(1);
+}
+
+void MainWindow::setZoom(int zoom)
+{
+ // ui->chartViewWidget->setZoom(zoom);
+
+  //ui->actionActual_Size->setEnabled(ui->pixelWidget->zoom() != 1);
+  //ui->actionZoom_Out->setEnabled(ui->pixelWidget->zoom() != 1);
 }

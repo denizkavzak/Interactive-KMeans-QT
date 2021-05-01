@@ -56,7 +56,11 @@ void ChartView::paintPoints(QVector<QVector2D> points)
  * @brief ChartView::paintClusters
  * @param k_m
  * Paint cluster points with the same color to distinguish between
- * different clusters. Points are circle, centers are rectangle
+ * different clusters.
+ * Paints all the points with their respective colors
+ * determined by the cluster they belong to.
+ * Center of clusters are also painted in different
+ * color and shape. Points are circle, centers are rectangle
  */
 
 void ChartView::paintClusters(k_means k_m)
