@@ -1,11 +1,15 @@
 #include "ChartViewWidget.h"
 #include "ui_ChartViewWidget.h"
+#include <QDebug>
 
 ChartViewWidget::ChartViewWidget(QWidget *parent) :
   QWidget(parent), m_zoom(1),
   ui(new Ui::ChartViewWidget)
 {
   ui->setupUi(this);
+
+  m_ChartView = (new ChartView(this));
+
 }
 
 ChartViewWidget::~ChartViewWidget()
@@ -33,23 +37,26 @@ void ChartViewWidget::paintClusters(k_means k_m)
   ui->chartView->paintClusters(k_m);
 }
 
-/**
- * @brief ChartViewWidget::setZoom
- * @param zoom
- * A public slot used to change the zoom level of the pixel buffer
- */
-void ChartViewWidget::setZoom(int zoom)
+void ChartViewWidget::zoomIn()
 {
-  // Only update on change
-  if(m_zoom != zoom)
-  {
-    // Ensure zoom is 1 or greater
-    m_zoom = qMax(1, zoom);
+  m_zoom = m_zoom *2;
+  updateGeometry();
+  adjustSize();
+  ui->chartView->chart()->zoomIn();
+}
 
-    // Notify layouts that size has changed
-    updateGeometry();
+void ChartViewWidget::zoomOut()
+{
+  m_zoom = m_zoom *0.5;
+  updateGeometry();
+  adjustSize();
+  ui->chartView->chart()->zoomOut();
+}
 
-    // Force widget to re-evaluate size
-    adjustSize();
-  }
+void ChartViewWidget::zoomActualSize()
+{
+  m_zoom = 1;
+  updateGeometry();
+  adjustSize();
+  ui->chartView->chart()->zoomReset();
 }

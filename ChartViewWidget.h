@@ -22,13 +22,20 @@ public:
   void paintClusters(k_means k_m);
 
 public slots:
-  void setZoom(int zoom);
+  void zoomIn();
+  void zoomOut();
+  void zoomActualSize();
+
+signals:
+  void zoomChanged(int);
 
 private:
 
   int m_zoom;
 
   Ui::ChartViewWidget *ui;
+
+  ChartView* m_ChartView;
 
 };
 

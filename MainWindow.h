@@ -25,8 +25,6 @@ public slots:
   void zoomOut();
   void zoomActualSize();
 
-  void setZoom(int zoom);
-
 private:
   Ui::MainWindow *ui;
   KMeansDialog *m_kMeansDialog;

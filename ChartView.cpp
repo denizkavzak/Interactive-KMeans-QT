@@ -5,6 +5,7 @@
 #include <QtGui/QPainter>
 #include <QtCore/QtMath>
 #include <QWidget>
+#include <QDebug>
 
 struct ClusterColor{
   ClusterColor() { }
@@ -12,9 +13,9 @@ struct ClusterColor{
   // TODOO: It has 15 colors currently, update it to be continuous colors
   QVector<QColor> colorArray = {Qt::red, Qt::blue,
                                 Qt::black, Qt::magenta, Qt::green,
-                               Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
-                               Qt::darkGreen, Qt::darkCyan, Qt::darkYellow,
-                               Qt::darkMagenta, Qt::darkGray, Qt::yellow};
+                                Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
+                                Qt::darkGreen, Qt::darkCyan, Qt::darkYellow,
+                                Qt::darkMagenta, Qt::darkGray, Qt::yellow};
   // QColor a(255,0,255,0); // Can have random color but will it be distinctive?
 
 
@@ -31,6 +32,8 @@ ChartView::ChartView(QWidget *parent) :
   m_series->setName("points");
   m_series->setMarkerShape(QScatterSeries::MarkerShapeCircle);
   m_series->setMarkerSize(15.0);
+
+  //chart()->zoomIn();
 
 }
 
@@ -107,7 +110,6 @@ void ChartView::paintClusters(k_means k_m)
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 
 }
-
 
 QScatterSeries *ChartView::getSeries()
 {

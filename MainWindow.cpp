@@ -71,25 +71,21 @@ void MainWindow::clusterPoints(int k, QString metric, int iter)
 void MainWindow::zoomIn()
 {
   qDebug() << "Zoomed in";
-  setZoom(ui->chartViewWidget->zoom() * 2);
+  ui->chartViewWidget->zoomIn();
+  //setZoom(ui->chartViewWidget->zoom() * 2);
 }
 
 void MainWindow::zoomOut()
 {
   qDebug() << "Zoomed out";
-  setZoom(ui->chartViewWidget->zoom() * 0.5f);
+    ui->chartViewWidget->zoomOut();
+  //setZoom(ui->chartViewWidget->zoom() * 0.5f);
 }
 
 void MainWindow::zoomActualSize()
 {
   qDebug() << "Zoom actual size";
-  setZoom(1);
+  ui->chartViewWidget->zoomActualSize();
+  //setZoom(1);
 }
 
-void MainWindow::setZoom(int zoom)
-{
-  ui->chartViewWidget->setZoom(zoom);
-
-  //ui->actionActual_Size->setEnabled(ui->pixelWidget->zoom() != 1);
-  //ui->actionZoom_Out->setEnabled(ui->pixelWidget->zoom() != 1);
-}
