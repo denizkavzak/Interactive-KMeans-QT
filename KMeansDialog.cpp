@@ -1,9 +1,10 @@
 #include "KMeansDialog.h"
 #include "ui_KMeansDialog.h"
+#include <QDebug>
 
 KMeansDialog::KMeansDialog(QWidget *parent) :
   QDialog(parent),
-  ui(new Ui::KMeansDialog)
+  ui(new Ui::KMeansDialog), m_step(0)
 {
   ui->setupUi(this);
 
@@ -59,4 +60,20 @@ QString KMeansDialog::getSelectedMetric()
   } else {
     return QString("euclidean"); // default is "Euclidean (L2)"
   }
+}
+
+void KMeansDialog::getNextStep()
+{
+  qDebug() << "getNextStep in dialog";
+  m_step += 1;
+  emit stepUpdated();
+}
+
+void KMeansDialog::initializeClustering()
+{
+  int k = ui->kSpinBox->value();
+  int iter = ui->iterSpinBox->value();
+  QString metric = getSelectedMetric();
+  QString q = ui->initComboBox->itemText(ui->initComboBox->currentIndex());
+  emit initializationSelected(k, metric, iter, q);
 }

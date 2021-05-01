@@ -34,6 +34,11 @@ public:
   void addPoint(QVector2D point);
   void generateRandomPoints(float min, float max);
   void generateNormalDistributionPoints(float min, float max);
+  void moveOneStep();
+  void setNumOfIter(int numOfIterations);
+  int getNumOfIter();
+  void setInitialized(bool);
+  bool isInitialized();
 
 private:
   void initializeCenters();
@@ -46,6 +51,9 @@ private:
   int m_k;
   QVector<Cluster> m_clusters;
   QString m_metric;
+  int m_step;
+  int m_iter;
+  bool m_initialized = false;
 };
 
 #endif // KMEANS_H

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "ChartView.h"
+#include "k_means.h"
 
 namespace Ui {
 class ChartViewWidget;
@@ -26,16 +27,24 @@ public slots:
   void zoomOut();
   void zoomActualSize();
 
+  void getNextStep(k_means k_m);
+
+  void setScrolling(bool scroll);
+  void on_rangeChanged(qreal horizontalMin, qreal horizontal_max);
+
 signals:
   void zoomChanged(int);
 
 private:
 
   int m_zoom;
+  bool m_scrolling;
 
   Ui::ChartViewWidget *ui;
 
-  ChartView* m_ChartView;
+  int m_step;
+
+  //ChartView* m_ChartView;
 
 };
 

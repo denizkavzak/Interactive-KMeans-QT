@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
+#include "initialization.h"
 
 //constexpr int FLOAT_MIN = 0;
 //constexpr int FLOAT_MAX = 100;
@@ -8,7 +9,7 @@
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
-  m_kMeansDialog(new KMeansDialog(this))
+  m_kMeansDialog(new KMeansDialog(this)), m_step(0)
 {
   ui->setupUi(this);
 
@@ -21,6 +22,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
           this, &MainWindow::clusterPoints);
+
+  connect(m_kMeansDialog, &KMeansDialog::stepUpdated,
+          this, &MainWindow::getNextStep);
+
+  connect(m_kMeansDialog, &KMeansDialog::initializationSelected,
+          this, &MainWindow::initializeClustering);
+
+//  connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
+//          this, &MainWindow::getNextStep);
 
   //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
 
@@ -62,10 +72,37 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
  */
 void MainWindow::clusterPoints(int k, QString metric, int iter)
 {
+  m_k_means.setNumOfIter(iter);
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
   m_k_means.clusterPoints(iter);
   ui->chartViewWidget->paintClusters(m_k_means);
+}
+
+void MainWindow::getNextStep()
+{
+  qDebug() << "getNextStep in mainwindow";
+  m_k_means.moveOneStep();
+  m_step += 1;
+  ui->chartViewWidget->getNextStep(m_k_means);
+}
+
+void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
+{
+  initialization in;
+  m_k_means.setNumOfIter(iter);
+  m_k_means.setK(k);
+  m_k_means.setMetric(metric);
+
+  if (initMethod == "Random Sample") {
+    in.initRandomSample(m_k_means);
+  } else if (initMethod == "Random Real") {
+    in.initRandomReal(m_k_means);
+  } else { // kmeans++
+    in.initKMeansPp(m_k_means);
+  }
+
+  m_k_means.setInitialized(true);
 }
 
 void MainWindow::zoomIn()

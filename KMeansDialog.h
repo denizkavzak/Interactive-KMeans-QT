@@ -19,13 +19,18 @@ public slots:
   void applyGeneratePoints();
   void applyClustering();
   QString getSelectedMetric();
+  void getNextStep();
+  void initializeClustering();
 
 signals:
   void pointsParametersChanged(int, float, float);
   void clusteringParametersChanged(int, QString, int);
+  void stepUpdated();
+  void initializationSelected(int, QString, int, QString);
 
 private:
   Ui::KMeansDialog *ui;
+  int m_step;
 };
 
 #endif // KMEANSDIALOG_H

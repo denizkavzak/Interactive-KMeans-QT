@@ -34,7 +34,11 @@ ChartView::ChartView(QWidget *parent) :
   m_series->setMarkerSize(15.0);
 
   //chart()->zoomIn();
-
+  //setRubberBand(QChartView::RectangleRubberBand);
+  //setDragMode(QChartView::ScrollHandDrag);
+  //setDragMode(QChartView::NoDrag);
+//  setRubberBand(QChartView::NoRubberBand);
+//  setDragMode(QChartView::ScrollHandDrag);
 }
 
 void ChartView::paintPoints(QVector<QVector2D> points)
@@ -64,7 +68,6 @@ void ChartView::paintPoints(QVector<QVector2D> points)
  * Center of clusters are also painted in different
  * color and shape. Points are circle, centers are rectangle
  */
-
 void ChartView::paintClusters(k_means k_m)
 {
   // Clear chart first
@@ -109,6 +112,14 @@ void ChartView::paintClusters(k_means k_m)
 
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 
+}
+
+void ChartView::updateRange()
+{
+  m_minSize = chart()->minimumSize();
+  m_maxSize = chart()->maximumSize();
+
+  emit rangeChanged(m_minSize.width(), m_maxSize.width());
 }
 
 QScatterSeries *ChartView::getSeries()

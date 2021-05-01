@@ -17,8 +17,16 @@ public:
   QScatterSeries* getSeries();
   void paintClusters(k_means k_m);
 
+public slots:
+  void updateRange();
+
+signals:
+  void rangeChanged(qreal, qreal);
+
 private:
   QScatterSeries *m_series;
+  QSizeF m_minSize;
+  QSizeF m_maxSize;
 
 };
 

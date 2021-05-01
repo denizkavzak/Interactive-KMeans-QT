@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>483</width>
-    <height>300</height>
+    <width>639</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -113,53 +113,10 @@
    <item>
     <widget class="QGroupBox" name="kmeansGroupBox">
      <property name="title">
-      <string>K - Means</string>
+      <string>Initialization</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QGroupBox" name="kGroupBox">
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="kLabel">
-           <property name="text">
-            <string>k</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="kSpinBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="value">
-            <number>3</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="iterSpinBox">
-           <property name="value">
-            <number>2</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="iterLabel">
-           <property name="text">
-            <string>Iter</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="0">
        <widget class="QGroupBox" name="metricGroupBox">
         <property name="title">
          <string>Metric</string>
@@ -199,11 +156,140 @@
         </layout>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="kGroupBox">
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="kLabel">
+           <property name="text">
+            <string>k</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="kSpinBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="value">
+            <number>3</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="iterLabel">
+           <property name="text">
+            <string>Iter</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="iterSpinBox">
+           <property name="value">
+            <number>2</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QGroupBox" name="initCenterGroupBox">
+        <property name="title">
+         <string>Initialize Centers</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout_8">
+         <item row="0" column="0">
+          <widget class="QComboBox" name="initComboBox">
+           <item>
+            <property name="text">
+             <string>Random Sample</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Random Real</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>KMeans++</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="initializeButton">
+           <property name="text">
+            <string>Initialize</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Cluster</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QPushButton" name="clusterButton">
         <property name="text">
-         <string>Cluster</string>
+         <string>Cluster All at Once</string>
         </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="clusterStepGroupBox">
+        <property name="title">
+         <string>Cluster Step by step</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout_3">
+         <item row="1" column="0">
+          <widget class="QPushButton" name="clusterStepButton">
+           <property name="text">
+            <string>Cluster Step</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="currentStepLabel">
+           <property name="text">
+            <string>Current Step:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="visualizationGroupBox">
+        <property name="title">
+         <string>Visualization</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout_7">
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="pointSizeSpinBox"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="pointSizeLabel">
+           <property name="text">
+            <string>Point Size</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -287,10 +373,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>clusterStepButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>getNextStep()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>initializeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>initializeClustering()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>clicked()</signal>
   <slot>applyGeneratePoints()</slot>
   <slot>applyClustering()</slot>
+  <slot>getNextStep()</slot>
+  <slot>initializeClustering()</slot>
  </slots>
 </ui>

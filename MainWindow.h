@@ -20,6 +20,8 @@ public:
 public slots:
   void generatePoints(int noOfPoints, float min, float max);
   void clusterPoints(int k, QString metric, int iter);
+  void getNextStep();
+  void initializeClustering(int k, QString, int, QString);
 
   void zoomIn();
   void zoomOut();
@@ -29,6 +31,7 @@ private:
   Ui::MainWindow *ui;
   KMeansDialog *m_kMeansDialog;
   k_means m_k_means;
+  int m_step;
 };
 
 #endif // MAINWINDOW_H
