@@ -35,6 +35,7 @@ public:
   void generateRandomPoints(float min, float max);
   void generateNormalDistributionPoints(float min, float max);
   void moveOneStep();
+  void finalizeOneStep();
   void setNumOfIter(int numOfIterations);
   int getNumOfIter();
   void setInitialized(bool);

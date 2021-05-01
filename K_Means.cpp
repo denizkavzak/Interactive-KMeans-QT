@@ -263,9 +263,14 @@ void k_means::clusterPoints(int num_iterations)
   // loop in num_iterations
   for (int j = 0; j < num_iterations; ++j) {
     moveOneStep();
+    finalizeOneStep();
   }
 }
 
+/**
+ * @brief k_means::moveOneStep
+ * One step of setting points to their current clusters
+ */
 void k_means::moveOneStep()
 {
   qDebug() << "move one step";
@@ -274,18 +279,22 @@ void k_means::moveOneStep()
 
   qDebug() << "Iteration : " << m_step;
   printClusters();
+}
 
+/**
+ * @brief k_means::finalizeOneStep
+ * Final part of one step where centers are updated
+ */
+void k_means::finalizeOneStep()
+{
   // Cluster center update
   // for each cluster center 0...m_k
   updateCenters();
   m_step += 1;
   if (m_step == m_iter) {
     // Final Point assignment
-    setPoints();
-    qDebug() << " " ;
     qDebug() << "/------------Final Clusters---------------/: ";
-    printClusters();
-
+    moveOneStep();
   }
 }
 

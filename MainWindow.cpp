@@ -119,6 +119,7 @@ void MainWindow::getNextStep()
       m_step += 1;
       m_kMeansDialog->updateIterationStepLabel(m_step);
       ui->chartViewWidget->getNextStep(m_k_means);
+      m_k_means.finalizeOneStep();
     }
   }
 }
