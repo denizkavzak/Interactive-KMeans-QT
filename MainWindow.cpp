@@ -50,7 +50,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
 {
   m_k_means.setNoOfPoints(noOfPoints);
   m_k_means.generateRandomPoints(min, max);
-  //ui->chartViewWidget->chartView()->paintPoints(m_k_means.getAllPoints());
+  ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
 }
 
 /**
@@ -65,7 +65,7 @@ void MainWindow::clusterPoints(int k, QString metric, int iter)
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
   m_k_means.clusterPoints(iter);
- // ui->chartViewWidget->chartView()->paintClusters(m_k_means);
+  ui->chartViewWidget->paintClusters(m_k_means);
 }
 
 void MainWindow::zoomIn()
@@ -88,7 +88,7 @@ void MainWindow::zoomActualSize()
 
 void MainWindow::setZoom(int zoom)
 {
- // ui->chartViewWidget->setZoom(zoom);
+  ui->chartViewWidget->setZoom(zoom);
 
   //ui->actionActual_Size->setEnabled(ui->pixelWidget->zoom() != 1);
   //ui->actionZoom_Out->setEnabled(ui->pixelWidget->zoom() != 1);

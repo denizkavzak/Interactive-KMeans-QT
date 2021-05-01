@@ -23,6 +23,16 @@ int ChartViewWidget::zoom() const
   return m_zoom;
 }
 
+void ChartViewWidget::paintPoints(QVector<QVector2D> points)
+{
+  ui->chartView->paintPoints(points);
+}
+
+void ChartViewWidget::paintClusters(k_means k_m)
+{
+  ui->chartView->paintClusters(k_m);
+}
+
 /**
  * @brief ChartViewWidget::setZoom
  * @param zoom

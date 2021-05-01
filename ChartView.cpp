@@ -22,7 +22,6 @@ struct ClusterColor{
     // modulo for making repeated pattern when pattern image is smaller
     return colorArray[i % colorArray.size()];
   }
-  QImage m_image;
 };
 
 ChartView::ChartView(QWidget *parent) :

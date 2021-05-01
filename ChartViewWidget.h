@@ -18,8 +18,8 @@ public:
 
   int zoom() const;
 
-  //ZoomableChart *chart() const;
-  ChartView *chartView() const;
+  void paintPoints(QVector<QVector2D> points);
+  void paintClusters(k_means k_m);
 
 public slots:
   void setZoom(int zoom);
