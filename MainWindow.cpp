@@ -59,9 +59,15 @@ MainWindow::~MainWindow()
  */
 void MainWindow::generatePoints(int noOfPoints, float min, float max)
 {
-  m_k_means.setNoOfPoints(noOfPoints);
-  m_k_means.generateRandomPoints(min, max);
-  ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+  if (!m_k_means.getAllPoints().empty()){
+    QMessageBox msgBox;
+    msgBox.setText("Points are already generated, open a new instance!");
+    msgBox.exec();
+  } else {
+    m_k_means.setNoOfPoints(noOfPoints);
+    m_k_means.generateRandomPoints(min, max);
+    ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+  }
 }
 
 /**
@@ -94,7 +100,8 @@ void MainWindow::getNextStep()
     msgBox.setText("Initialize clustering first!");
     msgBox.exec();
   }
-  else {m_k_means.moveOneStep();
+  else {
+    m_k_means.moveOneStep();
     m_step += 1;
     ui->chartViewWidget->getNextStep(m_k_means);
   }
@@ -102,20 +109,26 @@ void MainWindow::getNextStep()
 
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
 {
-  initialization in;
-  m_k_means.setNumOfIter(iter);
-  m_k_means.setK(k);
-  m_k_means.setMetric(metric);
 
-  if (initMethod == "Random Sample") {
-    in.initRandomSample(m_k_means);
-  } else if (initMethod == "Random Real") {
-    in.initRandomReal(m_k_means);
-  } else { // kmeans++
-    in.initKMeansPp(m_k_means);
+  if (m_k_means.getAllPoints().empty()){
+    QMessageBox msgBox;
+    msgBox.setText("Generate points first!");
+    msgBox.exec();
+  } else {
+    initialization in;
+    m_k_means.setNumOfIter(iter);
+    m_k_means.setK(k);
+    m_k_means.setMetric(metric);
+
+    if (initMethod == "Random Sample") {
+      in.initRandomSample(m_k_means);
+    } else if (initMethod == "Random Real") {
+      in.initRandomReal(m_k_means);
+    } else { // kmeans++
+      in.initKMeansPp(m_k_means);
+    }
+    m_k_means.setInitialized(true);
   }
-
-  m_k_means.setInitialized(true);
 }
 
 void MainWindow::zoomIn()
