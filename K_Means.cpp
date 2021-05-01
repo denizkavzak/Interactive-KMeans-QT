@@ -257,15 +257,6 @@ void k_means::clusterPoints(int num_iterations)
 {
   // TODO: check for edge cases - k=0, k=1, k>num_points
   // TODO: optimize code for better performance
-
-  // Initialize clusters if not initialized already
-  if (!isInitialized()) {
-    initialization in;
-    in.initRandomSample(*this); // default is random sample
-    // in.initRandomReal(*this);
-    // in.initKMeansPp(*this);
-  }
-
   qDebug() << "num iter: " << num_iterations;
   qDebug() << " " ;
   qDebug() << "Iterations Start!" ;
@@ -287,30 +278,35 @@ void k_means::clusterPoints(int num_iterations)
 void k_means::moveOneStep()
 {
   qDebug() << "move one step";
-  // If this is first step, first initialize the centers
-//  if (m_step == 0) {
-//    initialization in;
-//    in.initRandomSample(*this);
-//  }
 
-  // Point assignment
-  setPoints();
+  if (m_step == m_iter) {
+    // Final Point assignment
+    setPoints();
+    qDebug() << " " ;
+    qDebug() << "/------------Final Clusters---------------/: ";
+    printClusters();
 
-  qDebug() << "Iteration : " << m_step;
-  printClusters();
+  } else {
 
-  // Cluster center update
-  // for each cluster center 0...m_k
-  updateCenters();
+    if (!isInitialized()) {
+      initialization in;
+      in.initRandomSample(*this); // default is random sample
+      // in.initRandomReal(*this);
+      // in.initKMeansPp(*this);
+      m_initialized = true;
+    }
 
-//  if (m_step == m_iter) {
-//    // Final Point assignment
-//    setPoints();
-//    qDebug() << " " ;
-//    qDebug() << "/------------Final Clusters---------------/: ";
-//    printClusters();
-//  }
-    m_step += 1;
+    // Point assignment
+    setPoints();
+
+    qDebug() << "Iteration : " << m_step;
+    printClusters();
+
+    // Cluster center update
+    // for each cluster center 0...m_k
+    updateCenters();
+  }
+  m_step += 1;
 }
 
 void k_means::setNumOfIter(int numOfIterations)

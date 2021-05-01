@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
+    <width>650</width>
     <height>338</height>
    </rect>
   </property>
@@ -256,18 +256,34 @@
          <string>Cluster Step by step</string>
         </property>
         <layout class="QFormLayout" name="formLayout_3">
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QPushButton" name="clusterStepButton">
            <property name="text">
             <string>Cluster Step</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="currentStepLabel">
-           <property name="text">
-            <string>Current Step:</string>
+         <item row="0" column="0" colspan="2">
+          <widget class="QGroupBox" name="stepInfoGroupBox">
+           <property name="title">
+            <string/>
            </property>
+           <layout class="QFormLayout" name="formLayout_9">
+            <item row="1" column="1">
+             <widget class="QLabel" name="stepNoLabel">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="currentStepLabel">
+              <property name="text">
+               <string>Current Step:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -279,15 +295,15 @@
          <string>Visualization</string>
         </property>
         <layout class="QFormLayout" name="formLayout_7">
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="pointSizeSpinBox"/>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="pointSizeLabel">
            <property name="text">
             <string>Point Size</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="pointSizeSpinBox"/>
          </item>
         </layout>
        </widget>

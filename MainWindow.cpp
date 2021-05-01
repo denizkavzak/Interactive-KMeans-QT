@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include <QDebug>
 #include "initialization.h"
+#include <QMessageBox>
 
 //constexpr int FLOAT_MIN = 0;
 //constexpr int FLOAT_MAX = 100;
@@ -29,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::initializationSelected,
           this, &MainWindow::initializeClustering);
 
-//  connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
-//          this, &MainWindow::getNextStep);
+  //  connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
+  //          this, &MainWindow::getNextStep);
 
   //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
 
@@ -72,19 +73,31 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
  */
 void MainWindow::clusterPoints(int k, QString metric, int iter)
 {
-  m_k_means.setNumOfIter(iter);
-  m_k_means.setK(k);
-  m_k_means.setMetric(metric);
-  m_k_means.clusterPoints(iter);
-  ui->chartViewWidget->paintClusters(m_k_means);
+  if (!m_k_means.isInitialized()) {
+    QMessageBox msgBox;
+    msgBox.setText("Initialize clustering first!");
+    msgBox.exec();
+  } else {
+    m_k_means.setNumOfIter(iter);
+    m_k_means.setK(k);
+    m_k_means.setMetric(metric);
+    m_k_means.clusterPoints(iter);
+    ui->chartViewWidget->paintClusters(m_k_means);
+  }
 }
 
 void MainWindow::getNextStep()
 {
   qDebug() << "getNextStep in mainwindow";
-  m_k_means.moveOneStep();
-  m_step += 1;
-  ui->chartViewWidget->getNextStep(m_k_means);
+  if (!m_k_means.isInitialized()){
+    QMessageBox msgBox;
+    msgBox.setText("Initialize clustering first!");
+    msgBox.exec();
+  }
+  else {m_k_means.moveOneStep();
+    m_step += 1;
+    ui->chartViewWidget->getNextStep(m_k_means);
+  }
 }
 
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
@@ -115,7 +128,7 @@ void MainWindow::zoomIn()
 void MainWindow::zoomOut()
 {
   qDebug() << "Zoomed out";
-    ui->chartViewWidget->zoomOut();
+  ui->chartViewWidget->zoomOut();
   //setZoom(ui->chartViewWidget->zoom() * 0.5f);
 }
 

@@ -66,6 +66,8 @@ void KMeansDialog::getNextStep()
 {
   qDebug() << "getNextStep in dialog";
   m_step += 1;
+  // Show it after increment, index starts from 1 in user's side
+  ui->stepNoLabel->setText(QString("%1").arg(m_step));
   emit stepUpdated();
 }
 
