@@ -21,6 +21,7 @@ public slots:
   QString getSelectedMetric();
   void getNextStep();
   void initializeClustering();
+  void updateIterationStepLabel(int newStep);
 
 signals:
   void pointsParametersChanged(int, float, float);

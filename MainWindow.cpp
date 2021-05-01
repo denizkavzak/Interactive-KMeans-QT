@@ -84,11 +84,19 @@ void MainWindow::clusterPoints(int k, QString metric, int iter)
     msgBox.setText("Initialize clustering first!");
     msgBox.exec();
   } else {
-    m_k_means.setNumOfIter(iter);
-    m_k_means.setK(k);
-    m_k_means.setMetric(metric);
-    m_k_means.clusterPoints(iter);
-    ui->chartViewWidget->paintClusters(m_k_means);
+    if (m_step == m_k_means.getNumOfIter()){
+      QMessageBox msgBox;
+      msgBox.setText("Clustering is finalized!");
+      msgBox.exec();
+    } else {
+      m_k_means.setNumOfIter(iter);
+      m_k_means.setK(k);
+      m_k_means.setMetric(metric);
+      m_k_means.clusterPoints(iter);
+      m_step = m_k_means.getNumOfIter();
+      m_kMeansDialog->updateIterationStepLabel(m_step);
+      ui->chartViewWidget->paintClusters(m_k_means);
+    }
   }
 }
 
@@ -101,9 +109,16 @@ void MainWindow::getNextStep()
     msgBox.exec();
   }
   else {
-    m_k_means.moveOneStep();
-    m_step += 1;
-    ui->chartViewWidget->getNextStep(m_k_means);
+    if (m_step == m_k_means.getNumOfIter()){
+      QMessageBox msgBox;
+      msgBox.setText("Clustering is finalized!");
+      msgBox.exec();
+    } else{
+      m_k_means.moveOneStep();
+      m_step += 1;
+      m_kMeansDialog->updateIterationStepLabel(m_step);
+      ui->chartViewWidget->getNextStep(m_k_means);
+    }
   }
 }
 
@@ -115,19 +130,26 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
     msgBox.setText("Generate points first!");
     msgBox.exec();
   } else {
-    initialization in;
-    m_k_means.setNumOfIter(iter);
-    m_k_means.setK(k);
-    m_k_means.setMetric(metric);
 
-    if (initMethod == "Random Sample") {
-      in.initRandomSample(m_k_means);
-    } else if (initMethod == "Random Real") {
-      in.initRandomReal(m_k_means);
-    } else { // kmeans++
-      in.initKMeansPp(m_k_means);
+    if (m_k_means.isInitialized()) {
+      QMessageBox msgBox;
+      msgBox.setText("Clustering is already initialized!");
+      msgBox.exec();
+    }else {
+      initialization in;
+      m_k_means.setNumOfIter(iter);
+      m_k_means.setK(k);
+      m_k_means.setMetric(metric);
+
+      if (initMethod == "Random Sample") {
+        in.initRandomSample(m_k_means);
+      } else if (initMethod == "Random Real") {
+        in.initRandomReal(m_k_means);
+      } else { // kmeans++
+        in.initKMeansPp(m_k_means);
+      }
+      m_k_means.setInitialized(true);
     }
-    m_k_means.setInitialized(true);
   }
 }
 
