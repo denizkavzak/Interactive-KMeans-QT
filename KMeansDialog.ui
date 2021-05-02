@@ -303,7 +303,18 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="pointSizeSpinBox"/>
+          <widget class="QSpinBox" name="pointSizeSpinBox">
+           <property name="value">
+            <number>15</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QPushButton" name="updateChartButton">
+           <property name="text">
+            <string>Update Chart</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -421,6 +432,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>updateChartButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>updatePointSize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>393</x>
+     <y>293</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>clicked()</signal>
@@ -428,5 +455,6 @@
   <slot>applyClustering()</slot>
   <slot>getNextStep()</slot>
   <slot>initializeClustering()</slot>
+  <slot>updatePointSize()</slot>
  </slots>
 </ui>

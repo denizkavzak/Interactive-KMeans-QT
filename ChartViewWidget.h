@@ -22,6 +22,7 @@ public:
   void paintPoints(QVector<QVector2D> points);
   void paintClusters(k_means k_m);
   void paintCenters(k_means k_m);
+  void updatePointSize(int pointSize);
 
 public slots:
   void zoomIn();
@@ -29,12 +30,6 @@ public slots:
   void zoomActualSize();
 
   void getNextStep(k_means k_m);
-
-  void setScrolling(bool scroll);
-  void on_rangeChanged(qreal horizontalMin, qreal horizontal_max);
-
-signals:
-  void zoomChanged(int);
 
 private:
 
@@ -45,7 +40,7 @@ private:
 
   int m_step;
 
-  //ChartView* m_ChartView;
+  int m_pointSize;
 
 };
 

@@ -22,12 +22,14 @@ public slots:
   void getNextStep();
   void initializeClustering();
   void updateIterationStepLabel(int newStep);
+  void updatePointSize();
 
 signals:
   void pointsParametersChanged(int, float, float);
   void clusteringParametersChanged(int, QString, int);
   void stepUpdated();
   void initializationSelected(int, QString, int, QString);
+  void pointSizeUpdated(int);
 
 private:
   Ui::KMeansDialog *ui;

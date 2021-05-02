@@ -30,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::initializationSelected,
           this, &MainWindow::initializeClustering);
 
-  //  connect(m_kMeansDialog, &KMeansDialog::clusteringParametersChanged,
-  //          this, &MainWindow::getNextStep);
+  connect(m_kMeansDialog, &KMeansDialog::pointSizeUpdated,
+          this, &MainWindow::updatePointSize);
 
   //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
 
@@ -156,24 +156,32 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
   }
 }
 
+void MainWindow::updatePointSize(int pointSize)
+{
+  if (m_k_means.getAllPoints().isEmpty()) {
+    QMessageBox msgBox;
+    msgBox.setText("Generate points first!");
+    msgBox.exec();
+  } else {
+    ui->chartViewWidget->updatePointSize(pointSize);
+  }
+}
+
 void MainWindow::zoomIn()
 {
   qDebug() << "Zoomed in";
   ui->chartViewWidget->zoomIn();
-  //setZoom(ui->chartViewWidget->zoom() * 2);
 }
 
 void MainWindow::zoomOut()
 {
   qDebug() << "Zoomed out";
   ui->chartViewWidget->zoomOut();
-  //setZoom(ui->chartViewWidget->zoom() * 0.5f);
 }
 
 void MainWindow::zoomActualSize()
 {
   qDebug() << "Zoom actual size";
   ui->chartViewWidget->zoomActualSize();
-  //setZoom(1);
 }
 

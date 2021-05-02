@@ -17,17 +17,24 @@ public:
   QScatterSeries* getSeries();
   void paintClusters(k_means k_m);
   void paintCenters(k_means k_m);
+  void setPointSize(int pointSize, int step);
 
-public slots:
-  void updateRange();
+//public slots:
+//  void updateRange();
 
-signals:
-  void rangeChanged(qreal, qreal);
+//signals:
+  //void rangeChanged(qreal, qreal);
 
 private:
+
+  //void clearSeries();
+
   QScatterSeries *m_series;
+  QVector<QScatterSeries*> m_clusterSeries;
+  QVector<QScatterSeries*> m_clusterCenterSeries;
   QSizeF m_minSize;
   QSizeF m_maxSize;
+  int m_pointSize;
 
 };
 

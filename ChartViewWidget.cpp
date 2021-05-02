@@ -1,10 +1,11 @@
 #include "ChartViewWidget.h"
 #include "ui_ChartViewWidget.h"
 #include <QDebug>
+#include <QMessageBox>
 
 ChartViewWidget::ChartViewWidget(QWidget *parent) :
   QWidget(parent), m_zoom(1), m_scrolling(false),
-  ui(new Ui::ChartViewWidget), m_step(0)
+  ui(new Ui::ChartViewWidget), m_step(0), m_pointSize(15.0)
 {
   ui->setupUi(this);
 
@@ -38,6 +39,7 @@ void ChartViewWidget::paintPoints(QVector<QVector2D> points)
 void ChartViewWidget::paintClusters(k_means k_m)
 {
   qDebug() << "PAINT";
+  m_step = k_m.getNumOfIter();
   ui->chartView->paintClusters(k_m);
 }
 
@@ -77,107 +79,25 @@ void ChartViewWidget::getNextStep(k_means k_m)
   ui->chartView->paintClusters(k_m);
 }
 
-void ChartViewWidget::setScrolling(bool scrolling)
+/**
+ * @brief ChartViewWidget::updatePointSize
+ * @param k_m
+ * @param pointSize
+ * Called when user wants to change the point size in the chart
+ */
+void ChartViewWidget::updatePointSize(int pointSize)
 {
-  m_scrolling = scrolling;
+  // Currently resizing will work before clustering starts
+  if (m_step == 0) {
+    // Only attempt to draw if size is different than current size
+    if (pointSize != m_pointSize) {
+      m_pointSize = pointSize;
+      ui->chartView->setPointSize(pointSize, m_step);
+    }
+  } else {
+    QMessageBox msgBox;
+    msgBox.setText("Currently point size can only be changed "
+                   "before clustering starts!");
+    msgBox.exec();
+  }
 }
-
-void ChartViewWidget::on_rangeChanged(qreal min, qreal max)
-{
-//  if (m_scrolling) return;
-//  QChart          *c = ui->chartView->chart( );
-//  QAbstractAxis   *x = c->axisX( );
-//  qreal            avg = (min + max) / 2.0;
-//  bool             range_fixed = false;
-
-
-//  //    /*
-//  //     * Make sure the new range is sane; fix if not.
-//  //     */
-//  //    if ((max - min) < 0.1) {    // Avoid overzooming
-//  //        min = avg - 0.05;
-//  //        max = avg + 0.05;
-//  //        range_fixed = true;
-//  //    }
-
-//      if (min < 0.0) { min = 0.0; range_fixed = true; }
-
-//      if (max > 4.0) { max = 4.0; range_fixed = true; }
-
-//      if (range_fixed) {
-//          x->setRange( min, max );    // will re-signal with the fixed range
-//          return;
-//      }
-
-//      qreal    vis_width = c->plotArea( ).width( );
-//      qreal    all_width = vis_width * (4.0 - 0.0) / (max - min);
-
-  //    cerr << "range " << min << " ... " << max << " in " << vis_width << " pixels" << endl;
-  //    cerr << "full width requires " << all_width << " pixels" << endl;;
-
-//      if (max - min < 4.0) {
-//  //        cerr << "set scroll parameters" << endl;
-//          m_scrolling = true;
-//          ui->chartScroll->setMaximum( all_width - vis_width );
-//          qreal sv = min / (4.0 - 0.0) * all_width;
-//          ui->chartScroll->setValue( sv );
-//          m_scrolling = false;
-//      } else {
-//  //        cerr << "disable scroll bar" << endl;
-//          m_scrolling = true;
-//          ui->chartScroll->setMaximum( 0 );
-//          ui->chartScroll->setValue( sv );
-//          m_scrolling = false;
-//      }
-
-}
-
-//void ChartViewWidget::on_rangeChanged( qreal min, qreal max )
-//{
-//    if (m_scrolling) return;  // Scrolling causes range changes, but we don't have to do anything.
-
-//    QChart          *c = ui->chartView->chart( );
-//    QAbstractAxis   *x = c->axisX( );
-//    qreal            avg = (min + max) / 2.0;
-//    bool             range_fixed = false;
-
-//    /*
-//     * Make sure the new range is sane; fix if not.
-//     */
-//    if ((max - min) < 0.1) {    // Avoid overzooming
-//        min = avg - 0.05;
-//        max = avg + 0.05;
-//        range_fixed = true;
-//    }
-
-//    if (min < 0.0) { min = 0.0; range_fixed = true; }
-
-//    if (max > 4.0) { max = 4.0; range_fixed = true; }
-
-//    if (range_fixed) {
-//        x->setRange( min, max );    // will re-signal with the fixed range
-//        return;
-//    }
-
-//    qreal    vis_width = c->plotArea( ).width( );
-//    qreal    all_width = vis_width * (4.0 - 0.0) / (max - min);
-
-////    cerr << "range " << min << " ... " << max << " in " << vis_width << " pixels" << endl;
-////    cerr << "full width requires " << all_width << " pixels" << endl;;
-
-//    if (max - min < 4.0) {
-////        cerr << "set scroll parameters" << endl;
-//        m_scrolling = true;
-//        ui->chartScroll->setMaximum( all_width - vis_width );
-//        sv = min / (4.0 - 0.0) * all_width;
-//        ui->chartScroll->setValue( sv );
-//        m_scrolling = false;
-//    } else {
-////        cerr << "disable scroll bar" << endl;
-//        m_scrolling = true;
-//        ui->chartScroll->setMaximum( 0 );
-//        ui->chartScroll->setValue( sv );
-//        m_scrolling = false;
-//    }
-//}
-

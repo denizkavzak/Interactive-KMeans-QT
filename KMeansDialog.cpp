@@ -82,3 +82,9 @@ void KMeansDialog::updateIterationStepLabel(int newStep)
   m_step = newStep;
   ui->stepNoLabel->setText(QString("%1").arg(m_step));
 }
+
+void KMeansDialog::updatePointSize()
+{
+  int pointSize = ui->pointSizeSpinBox->value();
+  emit pointSizeUpdated(pointSize);
+}

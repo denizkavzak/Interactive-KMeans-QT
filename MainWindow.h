@@ -22,6 +22,7 @@ public slots:
   void clusterPoints(int k, QString metric, int iter);
   void getNextStep();
   void initializeClustering(int k, QString, int, QString);
+  void updatePointSize(int pointSize);
 
   void zoomIn();
   void zoomOut();

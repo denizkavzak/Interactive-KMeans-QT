@@ -28,10 +28,11 @@ struct ClusterColor{
 ChartView::ChartView(QWidget *parent) :
   QChartView(new QChart(), parent)
 {
+  m_pointSize = 15;
   m_series = new QScatterSeries();
   m_series->setName("points");
   m_series->setMarkerShape(QScatterSeries::MarkerShapeCircle);
-  m_series->setMarkerSize(15.0);
+  m_series->setMarkerSize(m_pointSize);
 
   //chart()->zoomIn();
   //setRubberBand(QChartView::RectangleRubberBand);
@@ -55,11 +56,11 @@ void ChartView::paintPoints(QVector<QVector2D> points)
   chart()->setDropShadowEnabled(false);
 
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
-
 }
 
 void ChartView::paintCenters(k_means k_m)
 {
+  m_clusterCenterSeries.clear();
   ClusterColor c;
   int i = 0;
   QScatterSeries* clusterCenterSeries;
@@ -68,11 +69,12 @@ void ChartView::paintCenters(k_means k_m)
     // Paint center with rectangle and bigger marker
     clusterCenterSeries->setName(QString("Center_%1").arg(i));
     clusterCenterSeries->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
-    clusterCenterSeries->setMarkerSize(20.0);
+    clusterCenterSeries->setMarkerSize(m_pointSize + 10.0);
     clusterCenterSeries->setColor(c.operator()(i));
     clusterCenterSeries->append(cluster.center.x(), cluster.center.y());
     i ++;
 
+    m_clusterCenterSeries += clusterCenterSeries;
     chart()->addSeries(clusterCenterSeries);
   }
 
@@ -86,6 +88,31 @@ void ChartView::paintCenters(k_means k_m)
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 
 }
+
+void ChartView::setPointSize(int pointSize, int step)
+{
+  qDebug() << " check points " ;
+  m_pointSize = pointSize;
+  if (step == 0) {
+    qDebug() << " in points " ;
+    m_series->setMarkerSize(m_pointSize);
+  }
+  qDebug() << " check centers " ;
+  if (!m_clusterCenterSeries.empty()) {
+    qDebug() << " in centers " ;
+    for (int i = 0; i<m_clusterCenterSeries.size(); i++) {
+      m_clusterCenterSeries[i]->setMarkerSize(m_pointSize);
+    }
+  }
+  qDebug() << " check clusters " ;
+  if (!m_clusterSeries.empty()) {
+    qDebug() << " in clusters " ;
+    for (int i = 0; i<m_clusterSeries.size(); i++) {
+      m_clusterSeries[i]->setMarkerSize(m_pointSize);
+    }
+  }
+}
+
 
 /**
  * @brief ChartView::paintClusters
@@ -99,7 +126,9 @@ void ChartView::paintCenters(k_means k_m)
  */
 void ChartView::paintClusters(k_means k_m)
 {
-  qDebug() << "IN PAINTING";
+  m_clusterCenterSeries.clear();
+  m_clusterSeries.clear();
+  //qDebug() << "IN PAINTING";
   // Clear chart first
   chart()->removeAllSeries();
   ClusterColor c;
@@ -113,7 +142,7 @@ void ChartView::paintClusters(k_means k_m)
 
     // Paint points in the cluster
     clusterSeries->setMarkerShape(QScatterSeries::MarkerShapeCircle);
-    clusterSeries->setMarkerSize(15.0);
+    clusterSeries->setMarkerSize(m_pointSize);
     clusterSeries->setColor(c.operator()(i));
 
     for (QVector2D point : cluster.cluster_points) {
@@ -123,7 +152,7 @@ void ChartView::paintClusters(k_means k_m)
     // Paint center with rectangle and bigger marker
     clusterCenterSeries->setName(QString("Center_%1").arg(i));
     clusterCenterSeries->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
-    clusterCenterSeries->setMarkerSize(20.0);
+    clusterCenterSeries->setMarkerSize(m_pointSize + 10.0);
     clusterCenterSeries->setColor(c.operator()(i));
     clusterCenterSeries->append(cluster.center.x(), cluster.center.y());
 
@@ -131,6 +160,8 @@ void ChartView::paintClusters(k_means k_m)
 
     chart()->addSeries(clusterSeries);
     chart()->addSeries(clusterCenterSeries);
+    m_clusterSeries += clusterSeries;
+    m_clusterCenterSeries += clusterCenterSeries;
   }
 
   setRenderHint(QPainter::Antialiasing);
@@ -144,13 +175,13 @@ void ChartView::paintClusters(k_means k_m)
 
 }
 
-void ChartView::updateRange()
-{
-  m_minSize = chart()->minimumSize();
-  m_maxSize = chart()->maximumSize();
+//void ChartView::updateRange()
+//{
+//  m_minSize = chart()->minimumSize();
+//  m_maxSize = chart()->maximumSize();
 
-  emit rangeChanged(m_minSize.width(), m_maxSize.width());
-}
+//  emit rangeChanged(m_minSize.width(), m_maxSize.width());
+//}
 
 QScatterSeries *ChartView::getSeries()
 {
