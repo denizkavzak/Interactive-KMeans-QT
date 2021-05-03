@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <limits>
 
 //constexpr int FLOAT_MIN = 0;
 //constexpr int FLOAT_MAX = 100;
@@ -274,6 +275,10 @@ void MainWindow::importPoints()
       m_k_means.setDimension(dimension);
       qDebug() << " Dimension " << dimension;
 
+      // Find min and max just to update the spinboxes in ui
+      float min = FLT_MAX;
+      float max = FLT_MIN;
+
       // Rest: each line is a point vector in given dimension
       while (!in.atEnd()) {
         QVector<float> * p = new QVector<float>();
@@ -282,6 +287,12 @@ void MainWindow::importPoints()
         QStringList point = line.split(" ");
         for (QString s : point){
           p->append(s.toFloat());
+          if (s.toFloat() < min) {
+            min = s.toFloat();
+          }
+          if (s.toFloat() > max){
+            max = s.toFloat();
+          }
         }
         if (dimension == 2) {
           QVector2D *v = new QVector2D();
@@ -295,8 +306,9 @@ void MainWindow::importPoints()
       if (dimension == 2) {
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
       }
-      qDebug() << m_k_means.getAllPoints();
       m_kMeansDialog->updatePointInfoLabel("Points Imported");
+      m_kMeansDialog->updateImportedPointParameters(numOfPoints, dimension,
+                                                         min, max);
     }
   }
 }
