@@ -15,7 +15,7 @@ auto euclidean = [] (QVector2D p1, QVector2D p2) {
 // lambda function for manhattan distance of 2 2D points
 auto manhattan = [] (QVector2D p1, QVector2D p2) {
   return qAbs(p1.x()-p2.x()) +
-              qAbs(p1.y()-p2.y());
+      qAbs(p1.y()-p2.y());
 };
 
 // lambda function for euclidean distance of 2 2D points
@@ -28,8 +28,34 @@ auto euclidean3D = [] (QVector3D p1, QVector3D p2) {
 // lambda function for manhattan distance of 2 2D points
 auto manhattan3D = [] (QVector3D p1, QVector3D p2) {
   return qAbs(p1.x()-p2.x()) +
-              qAbs(p1.y()-p2.y()) + qAbs(p1.z()-p2.z());
+      qAbs(p1.y()-p2.y()) + qAbs(p1.z()-p2.z());
 };
+
+// lambda function for euclidean distance of 2 2D points
+auto euclideanND = [] (QVector<float> p1, QVector<float> p2) {
+
+  float result = 0;
+
+  // for each dimension
+  for (int i = 0; i < p1.size(); i++) {
+    result += (p1[i] - p2[i])*(p1[i] - p2[i]);
+  }
+
+  return sqrt(result);
+};
+
+// lambda function for manhattan distance of 2 2D points
+auto manhattanND = [] (QVector<float> p1, QVector<float> p2) {
+  float result = 0;
+
+  // for each dimension
+  for (int i = 0; i < p1.size(); i++) {
+    result += qAbs(p1[i] - p2[i]);
+  }
+
+  return result;
+};
+
 
 /**
  * @brief metrics::getDistance
@@ -87,4 +113,15 @@ float metrics::getDistance(QString binary1, QString binary2)
   }
   return -1;
 }
+
+float metrics::getDistance(QVector<float> p1, QVector<float> p2, QString metric)
+{
+  if (metric == "manhattan") {
+    return manhattanND(p1, p2);
+  } else { // m_metric == "euclidean"
+    return euclideanND(p1, p2);
+  }
+}
+
+
 
