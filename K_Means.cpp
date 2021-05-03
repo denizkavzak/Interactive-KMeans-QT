@@ -204,7 +204,7 @@ void k_means::updateCenters()
       }
 
       m_clusters[ind]->center = QVector2D(x/cluster->cluster_points.size(),
-                                         y/cluster->cluster_points.size());
+                                          y/cluster->cluster_points.size());
 
       m_clusters[ind]->cluster_points.clear();
     }
@@ -331,18 +331,20 @@ void k_means::clearClusterPoints()
     cluster->cluster_points.clear();
     qDebug() << "AFTER CLUSTER CLEAR:" << cluster->cluster_points.size();
   }
-
 }
-
-void k_means::addPointND(QVector<float> *point)
-{
-  m_allPointsND += point;
-}
-
 
 int k_means::getDimension()
 {
   return m_dim;
+}
+
+//
+// ND Functions
+//
+
+void k_means::addPointND(QVector<float> *point)
+{
+  m_allPointsND += point;
 }
 
 QVector<QVector<float> *> k_means::getAllPointsND()
@@ -350,5 +352,157 @@ QVector<QVector<float> *> k_means::getAllPointsND()
   return m_allPointsND;
 }
 
+void k_means::printClustersND()
+{
+  qDebug() << "Clusters : ";
+  int id = 0;
+  for (k_means::ClusterND* cluster : m_clustersND) {
+    qDebug() << "Cluster " << id << " - size: " << cluster->cluster_points.size();
+    qDebug() << "Center: " << cluster->center;
+    for (QVector<float> p : cluster->cluster_points) {
+      qDebug() << p;
+    }
+    qDebug() << " " ;
+    id += 1;
+  }
+}
 
+QVector<k_means::ClusterND*> k_means::getClustersND()
+{
+  return m_clustersND;
+}
 
+void k_means::clusterPointsND(int num_iterations)
+{
+  // TODO: check for edge cases - k=0, k=1, k>num_points
+  // TODO: optimize code for better performance
+  qDebug() << "num iter: " << num_iterations;
+  qDebug() << " " ;
+  qDebug() << "Iterations Start!" ;
+  qDebug() << " " ;
+
+  //m_step = 0;
+  // loop in num_iterations
+  for (int j = m_step; j < num_iterations; ++j) {
+    moveOneStepND();
+    finalizeOneStepND();
+  }
+}
+
+void k_means::moveOneStepND()
+{
+  qDebug() << "move one step";
+  // Point assignment
+  setPointsND();
+
+  qDebug() << "Iteration : " << m_step;
+  printClustersND();
+}
+
+void k_means::finalizeOneStepND()
+{
+  updatePrevClusterCentersND();
+  // Cluster center update
+  // for each cluster center 0...m_k
+  updateCentersND();
+  m_step += 1;
+  if (m_step == m_iter) {
+    // Final Point assignment
+    qDebug() << "/------------Final Clusters---------------/: ";
+    moveOneStepND();
+  }
+}
+
+void k_means::setClusterCentersToPrevND()
+{
+  m_step -= 1;
+  for (int i = 0; i < m_clustersND.size(); i++) {
+    qDebug() << "PREV: " << m_clustersND[i]->center;
+
+    QVector<float> *p = m_previousCentersND.at(i);
+    m_clustersND[i]->center = *p;
+    qDebug() << "AFTER: " << m_clustersND[i]->center;
+  }
+
+}
+
+void k_means::setPointsND()
+{
+  clearClusterPointsND();
+  metrics m;
+  // Point assignment
+  for (int i = 0; i < m_num_points; ++i) {
+    // for each point:
+    QVector<float>* point = m_allPointsND.at(i);
+    float min = FLT_MAX;
+    int min_ind = 0;
+    int ind = 0;
+
+    // find the nearest center point
+    for (k_means::ClusterND* cluster : m_clustersND) {
+      QVector<float> center = cluster->center;
+      float distance = m.getDistance(*point,center,m_metric);
+      if (distance < min) {
+        min = distance;
+        min_ind = ind;
+      }
+      ind += 1;
+    }
+    // assign the point to that cluster
+    m_clustersND[min_ind]->cluster_points += *point;
+  }
+
+}
+
+void k_means::clearClusterPointsND()
+{
+  for (k_means::ClusterND* cluster : m_clustersND) {
+    qDebug() << "PREV CLUSTER CLEAR:" << cluster->cluster_points.size();
+    cluster->cluster_points.clear();
+    qDebug() << "AFTER CLUSTER CLEAR:" << cluster->cluster_points.size();
+  }
+}
+
+void k_means::addClusterND(k_means::ClusterND *cluster)
+{
+  m_clustersND += cluster;
+}
+
+void k_means::updatePrevClusterCentersND()
+{
+  qDebug() << "Setting up prev : ";
+  qDebug() << m_previousCentersND;
+  m_previousCentersND.clear();
+  for (int i = 0; i < m_clustersND.size(); i++) {
+    QVector<float> *p = new QVector<float>(m_clustersND.at(i)->center);
+    m_previousCentersND += p;
+  }
+  qDebug() << "AFTER prev";
+  qDebug() << m_previousCentersND;
+}
+
+void k_means::updateCentersND()
+{
+  // Cluster center update
+  // for each cluster center 0...m_k
+  int ind = 0;
+  for (k_means::ClusterND* cluster : m_clustersND) {
+    // new center = mean of all points assigned to that cluster
+    if (cluster->cluster_points.size()!=0){ // check if cluster has any points
+      QVector<float> p(m_dim, 0.0);
+      for (QVector<float> cluster_point : cluster->cluster_points) {
+        for (int i = 0; i < m_dim; i++) {
+          p[i] += cluster_point[i];
+        }
+      }
+
+      for (int i = 0; i < m_dim; i++) {
+        p[i] = p[i] / cluster->cluster_points.size();
+      }
+
+      m_clustersND[ind]->center = p;
+      m_clustersND[ind]->cluster_points.clear();
+    }
+    ind += 1;
+  }
+}

@@ -15,11 +15,6 @@ public:
 
   k_means(QVector<QVector<float>*> points, int k); // for ND
 
-  void printClusters();
-  void setK(int k);
-  void setMetric(QString metric);
-  void setNoOfPoints(int num_points);
-
   struct Cluster{
     QVector2D center;
     QVector<QVector2D> cluster_points;
@@ -30,37 +25,73 @@ public:
     QVector<QVector<float>> cluster_points;
   };
 
-  void clusterPoints(int num_iterations);
-  QVector<Cluster*> getClusters();
-  QVector<QVector2D*> getAllPoints();
+  // common getters
   int getNumOfPoints();
   int getK();
   QString getMetric();
+  int getNumOfIter();
+  bool isInitialized();
+
+  // common setters
+  void setNumOfIter(int numOfIterations);
+  void setInitialized(bool);
+  void setStep(int step);
+  void setK(int k);
+  void setMetric(QString metric);
+  void setNoOfPoints(int num_points);
+
+  //
+  // 2D functions
+  //
+
+  // getters
+  QVector<Cluster*> getClusters();
+  QVector<QVector2D*> getAllPoints();
   QVector2D getCenters();
-  void addCluster(Cluster* cluster);
-  void addPoint(QVector2D* point);
+  QVector<QVector2D*> getPrevClusterCenters();
+
+  // kmeans functions
+  void clusterPoints(int num_iterations);
   void moveOneStep();
   void finalizeOneStep();
-  void setNumOfIter(int numOfIterations);
-  int getNumOfIter();
-  void setInitialized(bool);
-  bool isInitialized();
-  QVector<QVector2D*> getPrevClusterCenters();
-  void updatePrevClusterCenters();
-  void setClusterCentersToPrev();
-  void setStep(int step);
-  void clearClusterPoints();
 
+  // helper functions
+  void setClusterCentersToPrev();
+  void clearClusterPoints();
+  void addCluster(Cluster* cluster);
+  void addPoint(QVector2D* point);
+  void updatePrevClusterCenters();
+  void printClusters();
+
+  //
   // functions for ND
-  void addPointND(QVector<float>* point); // for ND
+  //
+
+  // getters
   int getDimension();
   QVector<QVector<float>*> getAllPointsND();
+  QVector<ClusterND*> getClustersND();
+
+  // kmeans functions
+  void clusterPointsND(int num_iterations);
+  void moveOneStepND();
+  void finalizeOneStepND();
+
+  // helper functions
+  void setClusterCentersToPrevND();
+  void clearClusterPointsND();
+  void addClusterND(ClusterND* cluster);
+  void addPointND(QVector<float>* point);
+  void updatePrevClusterCentersND();
+  void printClustersND();
 
 private:
-  void initializeCenters();
-
   void setPoints();
   void updateCenters();
+
+  // for ND
+  void setPointsND();
+  void updateCentersND();
 
   QVector<QVector2D*> m_allPoints;
   int m_num_points;
@@ -69,7 +100,10 @@ private:
   QVector<Cluster*> m_PreviousClusters;
   QVector<QVector2D*> m_previousCenters;
 
-  QVector<QVector<float>*> m_allPointsND; // for ND
+  // for ND
+  QVector<QVector<float>*> m_allPointsND;
+  QVector<ClusterND*> m_clustersND;
+  QVector<QVector<float>*> m_previousCentersND;
 
   QString m_metric;
   int m_step = 0;
