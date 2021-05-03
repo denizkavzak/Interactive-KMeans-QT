@@ -4,6 +4,7 @@
 #include <QtMath>
 #include "metrics.h"
 #include <k_means.h>
+#include <random>
 
 constexpr int FLOAT_MIN = 0;
 constexpr int FLOAT_MAX = 100;
@@ -104,6 +105,96 @@ void initialization::initKMeansPp(k_means &k_means)
                                             min, min_ind, sum);
 
     d = choseMin(d, d2); // select the min (worse) distances for next iteration
+  }
+}
+
+/**
+ * @brief initialization::generateRandomPoints
+ * @param min
+ * @param max
+ * @param k_means
+ * Generate points and initialize the points
+ * in k_means object. Currently only supports
+ * random number generation with normal distribution
+ * m_num_points float points between
+ * min and max
+ */
+void initialization::generateRandomPoints(float min, float max,
+                                          k_means& k_means)
+{
+  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
+    float p1 = min + (float)(rand()) /
+        ((float)(RAND_MAX/(max - min)));
+    float p2 = min + (float)(rand()) /
+        ((float)(RAND_MAX/(max - min)));
+    QVector2D* point = new QVector2D(p1, p2);
+    k_means.addPoint(point);
+  }
+
+  qDebug() << "Generated Points:" ;
+  for (QVector2D* p : k_means.getAllPoints()) {
+    qDebug() << p->x() << ", " << p->y();
+  }
+  qDebug() << " " ;
+}
+
+/**
+ * @brief initialization::generateNormalDistributionPoints
+ * @param min
+ * @param max
+ * @param k_means
+ * This function generates random m_num_points float points between
+ * min and max, with a normal distribution
+ */
+void initialization::generateNormalDistributionPoints(float min, float max,
+                                                      k_means& k_means)
+{
+  std::random_device rd;
+  std::default_random_engine eng(rd());
+  std::uniform_real_distribution<float> distr(min, max);
+
+  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
+    QVector2D* point = new QVector2D(distr(eng), distr(eng));
+    k_means.addPoint(point);
+  }
+}
+
+void initialization::generateRandomPointsND(float min, float max,
+                                            k_means& k_means)
+{
+  // for each point
+  for (int i = 0; i < k_means.getNumOfPoints(); i++) {
+    QVector<float>* point = new QVector<float>(k_means.getDimension());
+    // each dimension
+    for (int i = 0; i < k_means.getDimension(); i++) {
+      float p = min + (float)(rand()) /
+          ((float)(RAND_MAX/(max - min)));
+      point->append(p);
+    }
+    k_means.addPointND(point);
+  }
+
+  qDebug() << "Generated Points:" ;
+  for (QVector<float>* p : k_means.getAllPointsND()) {
+    qDebug() << p;
+  }
+  qDebug() << " " ;
+}
+
+void initialization::generateNormalDistributionPointsND(float min, float max,
+                                                        k_means& k_means)
+{
+  std::random_device rd;
+  std::default_random_engine eng(rd());
+  std::uniform_real_distribution<float> distr(min, max);
+  // for each point
+  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
+    QVector<float>* point = new QVector<float>(k_means.getDimension());
+    // for each dimension
+    for (int j = 0; j < k_means.getDimension(); j++){
+      point->append(distr(eng));
+    }
+    k_means.addPointND(point);
   }
 }
 

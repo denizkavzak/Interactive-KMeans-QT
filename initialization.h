@@ -2,6 +2,7 @@
 #define INITIALIZATION_H
 
 #include <k_means.h>
+#include <QVector>
 
 class initialization
 {
@@ -21,6 +22,11 @@ public:
   void initRandomSample(k_means& k_means);
   void initKMeansPp(k_means& k_means);
 
+  void generateRandomPoints(float min, float max, k_means& k_means);
+  void generateNormalDistributionPoints(float min, float max, k_means& k_means);
+
+  void generateRandomPointsND(float min, float max, k_means& k_means);
+  void generateNormalDistributionPointsND(float min, float max, k_means& k_means);
 
 };
 

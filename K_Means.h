@@ -39,8 +39,6 @@ public:
   QVector2D getCenters();
   void addCluster(Cluster* cluster);
   void addPoint(QVector2D* point);
-  void generateRandomPoints(float min, float max);
-  void generateNormalDistributionPoints(float min, float max);
   void moveOneStep();
   void finalizeOneStep();
   void setNumOfIter(int numOfIterations);
@@ -54,10 +52,9 @@ public:
   void clearClusterPoints();
 
   // functions for ND
-  void addPointND(QVector<float*> point); // for ND
-  void generateRandomPointsND(float min, float max);
-  void generateNormalDistributionPointsND(float min, float max);
-
+  void addPointND(QVector<float>* point); // for ND
+  int getDimension();
+  QVector<QVector<float>*> getAllPointsND();
 
 private:
   void initializeCenters();

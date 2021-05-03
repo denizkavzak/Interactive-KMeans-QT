@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <KMeansDialog.h>
 #include "k_means.h"
+#include <initialization.h>
 
 namespace Ui {
 class MainWindow;

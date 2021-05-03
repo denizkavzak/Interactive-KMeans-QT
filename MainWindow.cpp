@@ -1,7 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
-#include "initialization.h"
 #include <QMessageBox>
 
 //constexpr int FLOAT_MIN = 0;
@@ -68,7 +67,8 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
     msgBox.exec();
   } else {
     m_k_means.setNoOfPoints(noOfPoints);
-    m_k_means.generateRandomPoints(min, max);
+    initialization in;
+    in.generateRandomPoints(min, max, m_k_means);
     ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
   }
 }
