@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::stepPrevUpdated,
           this, &MainWindow::getPrevStep);
 
+  connect(m_kMeansDialog, &KMeansDialog::importFileSelected,
+          this, &MainWindow::importPoints);
+
   //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
 
   qDebug() << "Clustering started !";
@@ -227,5 +230,10 @@ void MainWindow::zoomActualSize()
 {
   qDebug() << "Zoom actual size";
   ui->chartViewWidget->zoomActualSize();
+}
+
+void MainWindow::importPoints()
+{
+
 }
 

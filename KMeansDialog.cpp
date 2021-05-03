@@ -95,3 +95,8 @@ void KMeansDialog::getPrevStep()
   qDebug() << "getPrevStep in dialog";
   emit stepPrevUpdated();
 }
+
+void KMeansDialog::importPoints()
+{
+  emit importFileSelected();
+}

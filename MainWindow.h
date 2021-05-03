@@ -29,6 +29,7 @@ public slots:
   void zoomIn();
   void zoomOut();
   void zoomActualSize();
+  void importPoints();
 
 private:
   Ui::MainWindow *ui;

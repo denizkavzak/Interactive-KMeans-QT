@@ -24,6 +24,7 @@ public slots:
   void updateIterationStepLabel(int newStep);
   void updatePointSize();
   void getPrevStep();
+  void importPoints();
 
 signals:
   void pointsParametersChanged(int, float, float, int);
@@ -32,6 +33,7 @@ signals:
   void stepPrevUpdated();
   void initializationSelected(int, QString, int, QString);
   void pointSizeUpdated(int);
+  void importFileSelected();
 
 private:
   Ui::KMeansDialog *ui;

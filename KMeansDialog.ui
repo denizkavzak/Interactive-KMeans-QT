@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
+    <width>674</width>
     <height>389</height>
    </rect>
   </property>
@@ -497,6 +497,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>importPointsButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>importPoints()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>356</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>clicked()</signal>
@@ -506,5 +522,6 @@
   <slot>initializeClustering()</slot>
   <slot>updatePointSize()</slot>
   <slot>getPrevStep()</slot>
+  <slot>importPoints()</slot>
  </slots>
 </ui>
