@@ -16,6 +16,10 @@ private:
   int choseWithProb(QVector<float> prob);
   QVector<float> choseMin(QVector<float> d, QVector<float> d2);
 
+  // helper functions
+  QVector<float> getPairwiseDistancesND(k_means &k_means, QVector<float> center,
+                               QString metric, float &min, int &min_ind,
+                              float &sum);
 public:
   initialization();
 
@@ -31,11 +35,6 @@ public:
   //
   // ND functions
   //
-
-  // helper functions
-  QVector<float> getPairwiseDistancesND(k_means &k_means, QVector<float> center,
-                               QString metric, float &min, int &min_ind,
-                              float &sum);
 
   // Center initialization
   void initRandomRealND(k_means& k_means);

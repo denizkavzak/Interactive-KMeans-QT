@@ -101,7 +101,8 @@ void initialization::initKMeansPp(k_means &k_means)
     k_means.addCluster(cluster);
 
     // Get distances between all points and the new center
-    QVector<float> d2 = getPairwiseDistances(k_means, *center, "euclidean",
+    QVector<float> d2 = getPairwiseDistances(k_means, *center,
+                                             k_means.getMetric(),
                                             min, min_ind, sum);
 
     d = choseMin(d, d2); // select the min (worse) distances for next iteration
@@ -373,7 +374,8 @@ void initialization::initKMeansPpND(k_means &k_means)
   float min;
   int min_ind;
   float sum;
-  QVector<float> d = getPairwiseDistancesND(k_means, *center, k_means.getMetric(),
+  QVector<float> d = getPairwiseDistancesND(k_means, *center,
+                                            k_means.getMetric(),
                                           min, min_ind, sum);
   qDebug() << "d is found";
   for (int i = 0; i < k_means.getK(); ++i) {
@@ -388,10 +390,40 @@ void initialization::initKMeansPpND(k_means &k_means)
     k_means.addClusterND(cluster);
 
     // Get distances between all points and the new center
-    QVector<float> d2 = getPairwiseDistancesND(k_means, *center, "euclidean",
+    QVector<float> d2 = getPairwiseDistancesND(k_means, *center,
+                                               k_means.getMetric(),
                                             min, min_ind, sum);
 
     d = choseMin(d, d2); // select the min (worse) distances for next iteration
   }
 }
+
+QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
+                                 QVector<float> center, QString metric,
+                                     float &min, int &min_ind, float &sum)
+{
+  metrics m;
+  // Create an array to store the distances between center and all points
+  QVector<float> d(k_means.getNumOfPoints());
+  min = FLOAT_MAX;
+  min_ind = 0;
+  sum = 0;
+
+  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
+    QVector<float>* point = k_means.getAllPointsND().at(i);
+
+    // These two metrics will return a float value
+    if (metric == "euclidean" || metric == "manhattan"){
+      float distance = m.getDistance(center, *point, metric);
+      if (distance < min){
+        min = distance;
+        min_ind = i;
+      }
+      d[i] = distance;
+      sum += distance*distance;
+    }
+  }
+  return d;
+}
+
 
