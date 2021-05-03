@@ -343,11 +343,6 @@ void k_means::clearClusterPoints()
   }
 }
 
-int k_means::getDimension()
-{
-  return m_dim;
-}
-
 //
 // ND Functions
 //

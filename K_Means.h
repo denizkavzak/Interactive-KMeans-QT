@@ -70,7 +70,6 @@ public:
   //
 
   // getters
-  int getDimension();
   QVector<QVector<float>*> getAllPointsND();
   QVector<ClusterND*> getClustersND();
 
