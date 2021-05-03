@@ -13,6 +13,8 @@ public:
   k_means(int num_points, int k, float min, float max);
   k_means(QVector<QVector2D*> points, int k);
 
+  k_means(QVector<QVector<float>*> points, int k); // for ND
+
   void printClusters();
   void setK(int k);
   void setMetric(QString metric);
@@ -21,6 +23,11 @@ public:
   struct Cluster{
     QVector2D center;
     QVector<QVector2D> cluster_points;
+  };
+
+  struct ClusterND{
+    QVector<float> center;
+    QVector<QVector<float>> cluster_points;
   };
 
   void clusterPoints(int num_iterations);
@@ -44,11 +51,17 @@ public:
   void updatePrevClusterCenters();
   void setClusterCentersToPrev();
   void setStep(int step);
-
   void clearClusterPoints();
+
+  // functions for ND
+  void addPointND(QVector<float*> point); // for ND
+  void generateRandomPointsND(float min, float max);
+  void generateNormalDistributionPointsND(float min, float max);
+
+
 private:
   void initializeCenters();
-  float getDistance(QVector2D p1, QVector2D p2);
+
   void setPoints();
   void updateCenters();
 
@@ -58,10 +71,14 @@ private:
   QVector<Cluster*> m_clusters;
   QVector<Cluster*> m_PreviousClusters;
   QVector<QVector2D*> m_previousCenters;
+
+  QVector<QVector<float>*> m_allPointsND; // for ND
+
   QString m_metric;
   int m_step = 0;
   int m_iter = 0;
   bool m_initialized = false;
+  int m_dim = 2;
 };
 
 #endif // KMEANS_H

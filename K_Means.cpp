@@ -57,6 +57,14 @@ k_means::k_means(QVector<QVector2D*> points, int k)
   m_metric = "euclidean";
 }
 
+k_means::k_means(QVector<QVector<float> *> points, int k)
+{
+  m_allPointsND = points;
+  m_num_points = m_allPointsND.size();
+  m_k = k;
+  m_metric = "euclidean";
+}
+
 /**
  * @brief k_means::printClusters
  * This function prints the clusters by printing the
@@ -364,6 +372,43 @@ void k_means::clearClusterPoints()
     qDebug() << "AFTER CLUSTER CLEAR:" << cluster->cluster_points.size();
   }
 
+}
+
+void k_means::generateRandomPointsND(float min, float max)
+{
+  // for each point
+  for (int i = 0; i < m_num_points; i++) {
+    QVector<float>* point = new QVector<float>(m_dim);
+    // each dimension
+    for (int i = 0; i < m_dim; i++) {
+      float p = min + (float)(rand()) /
+          ((float)(RAND_MAX/(max - min)));
+      point->append(p);
+    }
+    m_allPointsND += point;
+  }
+
+  qDebug() << "Generated Points:" ;
+  for (QVector<float>* p : m_allPointsND) {
+    qDebug() << p;
+  }
+  qDebug() << " " ;
+}
+
+void k_means::generateNormalDistributionPointsND(float min, float max)
+{
+  std::random_device rd;
+  std::default_random_engine eng(rd());
+  std::uniform_real_distribution<float> distr(min, max);
+  // for each point
+  for (int i = 0; i < m_num_points; ++i) {
+    QVector<float>* point = new QVector<float>(m_dim);
+    // for each dimension
+    for (int j = 0; j < m_dim; j++){
+      point->append(distr(eng));
+    }
+    m_allPointsND += point;
+  }
 }
 
 
