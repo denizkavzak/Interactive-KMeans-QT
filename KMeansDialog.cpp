@@ -27,6 +27,8 @@ void KMeansDialog::applyGeneratePoints()
   float max = ui->maxDoubleSpinBox->value();
   int dim = ui->dimensionSpinBox->value();
 
+  //ui->pointsInfoLabel->setText("Points Generated");
+
   emit pointsParametersChanged(noOfPoints, min, max, dim);
 }
 
@@ -98,5 +100,16 @@ void KMeansDialog::getPrevStep()
 
 void KMeansDialog::importPoints()
 {
+  //ui->pointsInfoLabel->setText("Points Imported");
   emit importFileSelected();
+}
+
+void KMeansDialog::updateImportedPointParameters(int numOfPoint, int dimension, int min, int max)
+{
+
+}
+
+void KMeansDialog::updatePointInfoLabel(QString s)
+{
+  ui->pointsInfoLabel->setText(s);
 }

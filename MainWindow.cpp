@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include <QDebug>
 #include <QMessageBox>
+#include <QFileDialog>
 
 //constexpr int FLOAT_MIN = 0;
 //constexpr int FLOAT_MAX = 100;
@@ -75,6 +76,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
     // Try using generateRandomPointsND
     in.generateRandomPoints(min, max, m_k_means);
     ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+    m_kMeansDialog->updatePointInfoLabel("Points Generated");
   }
 }
 
@@ -234,6 +236,68 @@ void MainWindow::zoomActualSize()
 
 void MainWindow::importPoints()
 {
+  if (!m_k_means.getAllPoints().empty()){
+    QMessageBox msgBox;
+    msgBox.setText("Points are already generated, open a new instance!");
+    msgBox.exec();
+    return;
+  } else {
+    QString fileName = QFileDialog::getOpenFileName(this,
+                    tr("Import points"), "./", tr("Text Files (*.txt)"));
+    if (fileName.isEmpty()) {
+      // No file was selected
+      QMessageBox msgBox;
+      msgBox.setText("No file selected!");
+      msgBox.exec();
+    } else {
+      // Read the file with fileName and parse point
+      QFile file(fileName);
 
+      if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox msgBox;
+        msgBox.setText("Problem with file read!");
+        msgBox.exec();
+        return;
+      }
+      QTextStream in(&file);
+      qDebug() << " File is read, parsing";
+      // Read first two lines
+      // First line is numOfPoints
+      QString line = in.readLine();
+      int numOfPoints = line.toInt();
+      m_k_means.setNoOfPoints(numOfPoints);
+      qDebug() << " Num of Points " << numOfPoints;
+
+      // Second line is dimension
+      line = in.readLine();
+      int dimension = line.toInt();
+      m_k_means.setDimension(dimension);
+      qDebug() << " Dimension " << dimension;
+
+      // Rest: each line is a point vector in given dimension
+      while (!in.atEnd()) {
+        QVector<float> * p = new QVector<float>();
+        line = in.readLine();
+        // parse line by splitting for values in each dimension of points
+        QStringList point = line.split(" ");
+        for (QString s : point){
+          p->append(s.toFloat());
+        }
+        if (dimension == 2) {
+          QVector2D *v = new QVector2D();
+          v->setX(p->at(0));
+          v->setY(p->at(1));
+          m_k_means.addPoint(v);
+        } else {
+          m_k_means.addPointND(p);
+        }
+      }
+      if (dimension == 2) {
+        ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+      }
+      qDebug() << m_k_means.getAllPoints();
+      m_kMeansDialog->updatePointInfoLabel("Points Imported");
+    }
+  }
 }
 

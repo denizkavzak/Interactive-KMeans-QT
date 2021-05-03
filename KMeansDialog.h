@@ -25,6 +25,9 @@ public slots:
   void updatePointSize();
   void getPrevStep();
   void importPoints();
+  void updateImportedPointParameters(int numOfPoint, int dimension,
+                                     int min, int max);
+  void updatePointInfoLabel(QString s);
 
 signals:
   void pointsParametersChanged(int, float, float, int);

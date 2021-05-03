@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>674</width>
-    <height>389</height>
+    <height>409</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,7 +114,11 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="dimensionSpinBox"/>
+          <widget class="QSpinBox" name="dimensionSpinBox">
+           <property name="value">
+            <number>2</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -130,6 +134,13 @@
        <widget class="QPushButton" name="importPointsButton">
         <property name="text">
          <string>Import Points</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="pointsInfoLabel">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
