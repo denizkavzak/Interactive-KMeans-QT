@@ -86,7 +86,7 @@
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="ScatterWidget3D" name="scatterWidget">
+      <widget class="QWidget" name="scatterWidget">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -169,12 +169,6 @@
    <class>ChartViewWidget</class>
    <extends>QWidget</extends>
    <header>ChartViewWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ScatterWidget3D</class>
-   <extends>QWidget</extends>
-   <header location="global">ScatterWidget3D.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
