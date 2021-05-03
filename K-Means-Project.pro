@@ -16,6 +16,7 @@ SOURCES += \
         KMeansDialog.cpp \
         K_Means.cpp \
         MainWindow.cpp \
+        Scatter3DVis.cpp \
         ScatterWidget3D.cpp \
         initialization.cpp \
         main.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     KMeansDialog.h \
     K_Means.h \
     MainWindow.h \
+    Scatter3DVis.h \
     ScatterWidget3D.h \
     initialization.h \
     metrics.h
