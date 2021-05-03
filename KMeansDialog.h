@@ -26,7 +26,7 @@ public slots:
   void getPrevStep();
 
 signals:
-  void pointsParametersChanged(int, float, float);
+  void pointsParametersChanged(int, float, float, int);
   void clusteringParametersChanged();
   void stepUpdated();
   void stepPrevUpdated();

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>665</width>
-    <height>343</height>
+    <width>670</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,9 +101,35 @@
        </widget>
       </item>
       <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QFormLayout" name="formLayout_10">
+         <item row="0" column="0">
+          <widget class="QLabel" name="dimensionLabel">
+           <property name="text">
+            <string>Dimension</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="dimensionSpinBox"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="generatePointsButton">
         <property name="text">
          <string>Generate Points</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="importPointsButton">
+        <property name="text">
+         <string>Import Points</string>
         </property>
        </widget>
       </item>

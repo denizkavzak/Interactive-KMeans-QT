@@ -31,6 +31,7 @@ public:
   QString getMetric();
   int getNumOfIter();
   bool isInitialized();
+  int getDimension();
 
   // common setters
   void setNumOfIter(int numOfIterations);
@@ -39,6 +40,7 @@ public:
   void setK(int k);
   void setMetric(QString metric);
   void setNoOfPoints(int num_points);
+  void setDimension(int dim);
 
   //
   // 2D functions

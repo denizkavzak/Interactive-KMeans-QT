@@ -103,6 +103,16 @@ void k_means::setNoOfPoints(int num_points)
   m_num_points = num_points;
 }
 
+void k_means::setDimension(int dim)
+{
+  m_dim = dim;
+}
+
+int k_means::getDimension()
+{
+  return m_dim;
+}
+
 /**
  * @brief k_means::getClusters
  * @return clusters

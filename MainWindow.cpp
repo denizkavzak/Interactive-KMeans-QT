@@ -59,7 +59,7 @@ MainWindow::~MainWindow()
  * @param max
  * Generate points using given parameters
  */
-void MainWindow::generatePoints(int noOfPoints, float min, float max)
+void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
 {
   if (!m_k_means.getAllPoints().empty()){
     QMessageBox msgBox;
@@ -67,7 +67,9 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
     msgBox.exec();
   } else {
     m_k_means.setNoOfPoints(noOfPoints);
+    m_k_means.setDimension(dim);
     initialization in;
+    // Try using generateRandomPointsND
     in.generateRandomPoints(min, max, m_k_means);
     ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
   }

@@ -25,8 +25,9 @@ void KMeansDialog::applyGeneratePoints()
   int noOfPoints = ui->NSpinBox->value();
   float min = ui->minDoubleSpinBox->value();
   float max = ui->maxDoubleSpinBox->value();
+  int dim = ui->dimensionSpinBox->value();
 
-  emit pointsParametersChanged(noOfPoints, min, max);
+  emit pointsParametersChanged(noOfPoints, min, max, dim);
 }
 
 /**

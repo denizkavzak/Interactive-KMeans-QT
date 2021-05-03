@@ -19,7 +19,7 @@ public:
   ~MainWindow();
 
 public slots:
-  void generatePoints(int noOfPoints, float min, float max);
+  void generatePoints(int noOfPoints, float min, float max, int dim);
   void clusterPoints();
   void getNextStep();
   void initializeClustering(int k, QString, int, QString);
