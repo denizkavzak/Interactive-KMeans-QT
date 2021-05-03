@@ -19,7 +19,7 @@ public:
 
   int zoom() const;
 
-  void paintPoints(QVector<QVector2D> points);
+  void paintPoints(QVector<QVector2D*> points);
   void paintClusters(k_means k_m);
   void paintCenters(k_means k_m);
   void updatePointSize(int pointSize);
@@ -29,7 +29,8 @@ public slots:
   void zoomOut();
   void zoomActualSize();
 
-  void getNextStep(k_means k_m);
+  void getNextStep(k_means &k_m);
+  void getPrevStep(k_means &k_m);
 
 private:
 

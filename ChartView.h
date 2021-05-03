@@ -13,9 +13,9 @@ class ChartView : public QChartView
 
 public:
   explicit ChartView(QWidget *parent = nullptr);
-  void paintPoints(QVector<QVector2D> points);
+  void paintPoints(QVector<QVector2D*> points);
   QScatterSeries* getSeries();
-  void paintClusters(k_means k_m);
+  void paintClusters(QVector<k_means::Cluster*> clusters);
   void paintCenters(k_means k_m);
   void setPointSize(int pointSize, int step);
 

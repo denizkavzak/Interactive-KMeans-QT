@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>338</height>
+    <width>665</width>
+    <height>343</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -259,7 +259,7 @@
          <item row="2" column="0">
           <widget class="QPushButton" name="clusterStepButton">
            <property name="text">
-            <string>Cluster Step</string>
+            <string>Cluster Step Forward</string>
            </property>
           </widget>
          </item>
@@ -284,6 +284,13 @@
              </widget>
             </item>
            </layout>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QPushButton" name="clusterStepBackButton">
+           <property name="text">
+            <string>Cluster Step Backward</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -448,6 +455,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>clusterStepBackButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>getPrevStep()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>401</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>332</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>clicked()</signal>
@@ -456,5 +479,6 @@
   <slot>getNextStep()</slot>
   <slot>initializeClustering()</slot>
   <slot>updatePointSize()</slot>
+  <slot>getPrevStep()</slot>
  </slots>
 </ui>

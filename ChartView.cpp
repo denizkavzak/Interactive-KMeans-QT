@@ -42,10 +42,10 @@ ChartView::ChartView(QWidget *parent) :
   //  setDragMode(QChartView::ScrollHandDrag);
 }
 
-void ChartView::paintPoints(QVector<QVector2D> points)
+void ChartView::paintPoints(QVector<QVector2D*> points)
 {
-  for (QVector2D point : points) {
-    m_series->append(point.x(),point.y());
+  for (QVector2D* point : points) {
+    m_series->append(point->x(),point->y());
   }
 
   setRenderHint(QPainter::Antialiasing);
@@ -64,14 +64,14 @@ void ChartView::paintCenters(k_means k_m)
   ClusterColor c;
   int i = 0;
   QScatterSeries* clusterCenterSeries;
-  for (k_means::Cluster cluster : k_m.getClusters()) {
+  for (k_means::Cluster* cluster : k_m.getClusters()) {
     clusterCenterSeries = new QScatterSeries();
     // Paint center with rectangle and bigger marker
     clusterCenterSeries->setName(QString("Center_%1").arg(i));
     clusterCenterSeries->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
     clusterCenterSeries->setMarkerSize(m_pointSize + 10.0);
     clusterCenterSeries->setColor(c.operator()(i));
-    clusterCenterSeries->append(cluster.center.x(), cluster.center.y());
+    clusterCenterSeries->append(cluster->center.x(), cluster->center.y());
     i ++;
 
     m_clusterCenterSeries += clusterCenterSeries;
@@ -113,7 +113,6 @@ void ChartView::setPointSize(int pointSize, int step)
   }
 }
 
-
 /**
  * @brief ChartView::paintClusters
  * @param k_m
@@ -124,7 +123,7 @@ void ChartView::setPointSize(int pointSize, int step)
  * Center of clusters are also painted in different
  * color and shape. Points are circle, centers are rectangle
  */
-void ChartView::paintClusters(k_means k_m)
+void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
 {
   m_clusterCenterSeries.clear();
   m_clusterSeries.clear();
@@ -134,7 +133,7 @@ void ChartView::paintClusters(k_means k_m)
   ClusterColor c;
   int i = 0;
 
-  for (k_means::Cluster cluster : k_m.getClusters()) {
+  for (k_means::Cluster* cluster : clusters) {
     QScatterSeries* clusterSeries = new QScatterSeries();
     QScatterSeries* clusterCenterSeries = new QScatterSeries();
 
@@ -145,7 +144,7 @@ void ChartView::paintClusters(k_means k_m)
     clusterSeries->setMarkerSize(m_pointSize);
     clusterSeries->setColor(c.operator()(i));
 
-    for (QVector2D point : cluster.cluster_points) {
+    for (QVector2D point : cluster->cluster_points) {
       clusterSeries->append(point.x(),point.y());
     }
 
@@ -154,7 +153,7 @@ void ChartView::paintClusters(k_means k_m)
     clusterCenterSeries->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
     clusterCenterSeries->setMarkerSize(m_pointSize + 10.0);
     clusterCenterSeries->setColor(c.operator()(i));
-    clusterCenterSeries->append(cluster.center.x(), cluster.center.y());
+    clusterCenterSeries->append(cluster->center.x(), cluster->center.y());
 
     i ++;
 

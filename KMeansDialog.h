@@ -23,11 +23,13 @@ public slots:
   void initializeClustering();
   void updateIterationStepLabel(int newStep);
   void updatePointSize();
+  void getPrevStep();
 
 signals:
   void pointsParametersChanged(int, float, float);
-  void clusteringParametersChanged(int, QString, int);
+  void clusteringParametersChanged();
   void stepUpdated();
+  void stepPrevUpdated();
   void initializationSelected(int, QString, int, QString);
   void pointSizeUpdated(int);
 

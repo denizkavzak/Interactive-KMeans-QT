@@ -31,7 +31,7 @@ int ChartViewWidget::zoom() const
   return m_zoom;
 }
 
-void ChartViewWidget::paintPoints(QVector<QVector2D> points)
+void ChartViewWidget::paintPoints(QVector<QVector2D*> points)
 {
   ui->chartView->paintPoints(points);
 }
@@ -40,7 +40,7 @@ void ChartViewWidget::paintClusters(k_means k_m)
 {
   qDebug() << "PAINT";
   m_step = k_m.getNumOfIter();
-  ui->chartView->paintClusters(k_m);
+  ui->chartView->paintClusters(k_m.getClusters());
 }
 
 void ChartViewWidget::paintCenters(k_means k_m)
@@ -72,11 +72,18 @@ void ChartViewWidget::zoomActualSize()
   ui->chartView->chart()->zoomReset();
 }
 
-void ChartViewWidget::getNextStep(k_means k_m)
+void ChartViewWidget::getNextStep(k_means &k_m)
 {
   qDebug() << " getNextStep in chartview widget" ;
   m_step += 1;
-  ui->chartView->paintClusters(k_m);
+  ui->chartView->paintClusters(k_m.getClusters());
+}
+
+void ChartViewWidget::getPrevStep(k_means &k_m)
+{
+  //qDebug() << k_m.getPrevClusters().size();
+  m_step -= 1;
+  ui->chartView->paintClusters(k_m.getClusters());
 }
 
 /**

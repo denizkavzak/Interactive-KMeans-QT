@@ -36,11 +36,11 @@ void KMeansDialog::applyGeneratePoints()
  */
 void KMeansDialog::applyClustering()
 {
-  int k = ui->kSpinBox->value();
-  int iter = ui->iterSpinBox->value();
-  QString metric = getSelectedMetric();
+//  int k = ui->kSpinBox->value();
+//  int iter = ui->iterSpinBox->value();
+//  QString metric = getSelectedMetric();
 
-  emit clusteringParametersChanged(k, metric, iter);
+  emit clusteringParametersChanged();
 }
 
 /**
@@ -87,4 +87,10 @@ void KMeansDialog::updatePointSize()
 {
   int pointSize = ui->pointSizeSpinBox->value();
   emit pointSizeUpdated(pointSize);
+}
+
+void KMeansDialog::getPrevStep()
+{
+  qDebug() << "getPrevStep in dialog";
+  emit stepPrevUpdated();
 }

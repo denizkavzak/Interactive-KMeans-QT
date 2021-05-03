@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QtMath>
 #include "metrics.h"
+#include <k_means.h>
 
 constexpr int FLOAT_MIN = 0;
 constexpr int FLOAT_MAX = 100;
@@ -29,8 +30,8 @@ void initialization::initRandomReal(k_means &k_means)
         ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));
     QVector2D center = QVector2D(p1, p2);
     qDebug() << "CENTER: " << center;
-    k_means::Cluster cluster;
-    cluster.center = center;
+    k_means::Cluster* cluster = new k_means::Cluster();
+    cluster->center = center;
     k_means.addCluster(cluster);
   }
 }
@@ -53,11 +54,11 @@ void initialization::initRandomSample(k_means &k_means)
       c = rand() % k_means.getNumOfPoints();
     }
     set.insert(c);
-    QVector2D center = k_means.getAllPoints().at(c);
+    QVector2D* center = k_means.getAllPoints().at(c);
     qDebug() << "CENTER: " << center;
     // Create cluster
-    k_means::Cluster cluster;
-    cluster.center = center;
+    k_means::Cluster* cluster = new k_means::Cluster();
+    cluster->center = *center;
     k_means.addCluster(cluster);
   }
 }
@@ -72,19 +73,19 @@ void initialization::initRandomSample(k_means &k_means)
 void initialization::initKMeansPp(k_means &k_means)
 {
   int c = rand() % k_means.getNumOfPoints();
-  QVector2D center = k_means.getAllPoints().at(c);
+  QVector2D* center = k_means.getAllPoints().at(c);
 
   qDebug() << "CENTER: " << center;
   // Create cluster
-  k_means::Cluster cluster;
-  cluster.center = center;
+  k_means::Cluster* cluster = new k_means::Cluster();
+  cluster->center = *center;
   k_means.addCluster(cluster);
 
   // for each point get distance between center and that point:
   float min;
   int min_ind;
   float sum;
-  QVector<float> d = getPairwiseDistances(k_means, center, k_means.getMetric(),
+  QVector<float> d = getPairwiseDistances(k_means, *center, k_means.getMetric(),
                                           min, min_ind, sum);
   qDebug() << "d is found";
   for (int i = 0; i < k_means.getK(); ++i) {
@@ -94,12 +95,12 @@ void initialization::initKMeansPp(k_means &k_means)
     qDebug() << "selected ind: " << ind;
     // Get new center point
     center = k_means.getAllPoints().at(ind);
-    k_means::Cluster cluster; // TODO: create constructor taking center
-    cluster.center = center;
+    k_means::Cluster* cluster = new k_means::Cluster();
+    cluster->center = *center;
     k_means.addCluster(cluster);
 
     // Get distances between all points and the new center
-    QVector<float> d2 = getPairwiseDistances(k_means, center, "euclidean",
+    QVector<float> d2 = getPairwiseDistances(k_means, *center, "euclidean",
                                             min, min_ind, sum);
 
     d = choseMin(d, d2); // select the min (worse) distances for next iteration
@@ -131,11 +132,11 @@ QVector<float> initialization::getPairwiseDistances(k_means &k_means,
   sum = 0;
 
   for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
-    QVector2D point = k_means.getAllPoints().at(i);
+    QVector2D* point = k_means.getAllPoints().at(i);
 
     // These two metrics will return a float value
     if (metric == "euclidean" || metric == "manhattan"){
-      float distance = m.getDistance(center,point, metric);
+      float distance = m.getDistance(center, *point, metric);
       if (distance < min){
         min = distance;
         min_ind = i;

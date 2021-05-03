@@ -33,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::pointSizeUpdated,
           this, &MainWindow::updatePointSize);
 
+  connect(m_kMeansDialog, &KMeansDialog::stepPrevUpdated,
+          this, &MainWindow::getPrevStep);
+
   //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
 
   qDebug() << "Clustering started !";
@@ -77,7 +80,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max)
  * @param iter
  * Cluster points using given parameters
  */
-void MainWindow::clusterPoints(int k, QString metric, int iter)
+void MainWindow::clusterPoints()
 {
   if (!m_k_means.isInitialized()) {
     QMessageBox msgBox;
@@ -89,10 +92,8 @@ void MainWindow::clusterPoints(int k, QString metric, int iter)
       msgBox.setText("Clustering is finalized!");
       msgBox.exec();
     } else {
-      m_k_means.setNumOfIter(iter);
-      m_k_means.setK(k);
-      m_k_means.setMetric(metric);
-      m_k_means.clusterPoints(iter);
+      back_clicked = false;
+      m_k_means.clusterPoints(m_k_means.getNumOfIter());
       m_step = m_k_means.getNumOfIter();
       m_kMeansDialog->updateIterationStepLabel(m_step);
       ui->chartViewWidget->paintClusters(m_k_means);
@@ -115,11 +116,13 @@ void MainWindow::getNextStep()
       msgBox.setText("Clustering is finalized!");
       msgBox.exec();
     } else{
+      back_clicked = false;
       m_k_means.moveOneStep();
-      m_step += 1;
-      m_kMeansDialog->updateIterationStepLabel(m_step);
+      // If this is the first step, assign prev clusters before update
       ui->chartViewWidget->getNextStep(m_k_means);
       m_k_means.finalizeOneStep();
+      m_step += 1;
+      m_kMeansDialog->updateIterationStepLabel(m_step);
     }
   }
 }
@@ -165,6 +168,45 @@ void MainWindow::updatePointSize(int pointSize)
   } else {
     ui->chartViewWidget->updatePointSize(pointSize);
   }
+}
+
+void MainWindow::getPrevStep()
+{
+  QMessageBox msgBox;
+  msgBox.setText("Not working properly yet!");
+  msgBox.exec();
+//  qDebug() << "getPrevStep in main window";
+//  if (!m_k_means.isInitialized()){
+//    QMessageBox msgBox;
+//    msgBox.setText("Initialize clustering first!");
+//    msgBox.exec();
+//  }
+//  else {
+//    if (m_step == 0){
+//      QMessageBox msgBox;
+//      msgBox.setText("Clustering has not started yet, cannot go back!");
+//      msgBox.exec();
+//    } else if (m_step == 1){
+//      QMessageBox msgBox;
+//      msgBox.setText("Only one step is done, cannot go back!");
+//      msgBox.exec();
+//    } else{
+//      if (!back_clicked){
+//        //m_k_means.getPrevClusters();
+//        back_clicked = true;
+//        m_step -= 1;
+//        m_k_means.setStep(m_step);
+//        m_kMeansDialog->updateIterationStepLabel(m_step);
+//        m_k_means.setClusterCentersToPrev();
+//        m_k_means.moveOneStep();
+//        ui->chartViewWidget->getPrevStep(m_k_means);
+//      }else {
+//        QMessageBox msgBox;
+//        msgBox.setText("Already moved one back, cannot go more!");
+//        msgBox.exec();
+//      }
+//    }
+//  }
 }
 
 void MainWindow::zoomIn()
