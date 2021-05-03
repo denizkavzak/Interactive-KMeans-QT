@@ -8,6 +8,7 @@ class initialization
 {
 
 private:
+  // Helper functions
   QVector<float> getPairwiseDistances(k_means &k_means, QVector2D center,
                                QString metric, float &min, int &min_ind,
                               float &sum);
@@ -18,13 +19,30 @@ private:
 public:
   initialization();
 
+  // Center initialization
   void initRandomReal(k_means& k_means);
   void initRandomSample(k_means& k_means);
   void initKMeansPp(k_means& k_means);
 
+  // Point generation and initialization
   void generateRandomPoints(float min, float max, k_means& k_means);
   void generateNormalDistributionPoints(float min, float max, k_means& k_means);
 
+  //
+  // ND functions
+  //
+
+  // helper functions
+  QVector<float> getPairwiseDistancesND(k_means &k_means, QVector<float> center,
+                               QString metric, float &min, int &min_ind,
+                              float &sum);
+
+  // Center initialization
+  void initRandomRealND(k_means& k_means);
+  void initRandomSampleND(k_means& k_means);
+  void initKMeansPpND(k_means& k_means);
+
+  // Point generation and initialization
   void generateRandomPointsND(float min, float max, k_means& k_means);
   void generateNormalDistributionPointsND(float min, float max, k_means& k_means);
 
