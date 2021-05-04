@@ -86,15 +86,16 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       in.generateRandomPointsND(min, max, m_k_means);
       ui->ndViewWidget->addPoints(&m_k_means);
       m_kMeansDialog->updatePointInfoLabel("Points Generated");
-      Q3DScatter* graph = new Q3DScatter();
-      if (!graph->hasContext()) {
+      m_graph = new Q3DScatter();
+      if (!m_graph->hasContext()) {
         QMessageBox msgBox;
         msgBox.setText("Couldn't initialize the OpenGL context.");
         msgBox.exec();
       } else {
         qDebug() << " Scatter graph is created ";
       }
-      ui->scatter3DWidget->createContainer(*graph);
+      ui->scatter3DWidget->createContainer(*m_graph);
+      ui->scatter3DWidget->paintPoints(m_k_means);
     }
 
   }
@@ -171,17 +172,31 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
       m_k_means.setNumOfIter(iter);
       m_k_means.setK(k);
       m_k_means.setMetric(metric);
-
-      if (initMethod == "Random Sample") {
-        in.initRandomSample(m_k_means);
-      } else if (initMethod == "Random Real") {
-        in.initRandomReal(m_k_means);
-      } else { // kmeans++
-        in.initKMeansPp(m_k_means);
+      bool flag = (m_k_means.getDimension()>=3);
+      if (flag) {
+        if (initMethod == "Random Sample") {
+          in.initRandomSampleND(m_k_means);
+        } else if (initMethod == "Random Real") {
+          in.initRandomRealND(m_k_means);
+        } else { // kmeans++
+          in.initKMeansPpND(m_k_means);
+        }
+        m_k_means.setInitialized(true);
+        // WILL BE REPLACED WITH ui->scatter3DWidget->paintCenters(m_k_means);
+        //ui->chartViewWidget->paintCenters(m_k_means);
+        //ui->chartViewWidget->update();
+      } else {
+        if (initMethod == "Random Sample") {
+          in.initRandomSample(m_k_means);
+        } else if (initMethod == "Random Real") {
+          in.initRandomReal(m_k_means);
+        } else { // kmeans++
+          in.initKMeansPp(m_k_means);
+        }
+        m_k_means.setInitialized(true);
+        ui->chartViewWidget->paintCenters(m_k_means);
+        ui->chartViewWidget->update();
       }
-      m_k_means.setInitialized(true);
-      ui->chartViewWidget->paintCenters(m_k_means);
-      ui->chartViewWidget->update();
     }
   }
 }

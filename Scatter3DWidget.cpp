@@ -22,10 +22,10 @@ Scatter3DWidget::~Scatter3DWidget()
   delete ui;
 }
 
-void Scatter3DWidget::paintPoints()
+void Scatter3DWidget::paintPoints(k_means &k_m)
 {
   qDebug() << "inside scatter3Dwidget paint points";
-  m_scatter3Dvis->getGraph()->show();
+  m_scatter3Dvis->addData(k_m);
 }
 
 void Scatter3DWidget::createContainer(Q3DScatter& graph)
@@ -47,4 +47,9 @@ void Scatter3DWidget::createContainer(Q3DScatter& graph)
   m_scatter3Dvis = new Scatter3DVis(&graph);
   //paintPoints();
   widget->show();
+}
+
+void Scatter3DWidget::paintCenters()
+{
+
 }

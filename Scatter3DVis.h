@@ -4,6 +4,7 @@
 #include <QtDataVisualization/Q3DScatter>
 #include <QtMath>
 #include <QDebug>
+#include "k_means.h"
 
 using namespace QtDataVisualization;
 
@@ -14,6 +15,7 @@ public:
 
   void addData();
   Q3DScatter* getGraph();
+  void addData(k_means &k_m);
 
 private:
   Q3DScatter *m_graph;

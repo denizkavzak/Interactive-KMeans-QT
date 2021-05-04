@@ -22,7 +22,7 @@ Scatter3DVis::Scatter3DVis(Q3DScatter *scatter) :
   //! [2]
 
   //! [3]
-  addData();
+  //addData();
   //! [3]
 
 }
@@ -72,4 +72,24 @@ void Scatter3DVis::addData()
 Q3DScatter *Scatter3DVis::getGraph()
 {
   return m_graph;
+}
+
+void Scatter3DVis::addData(k_means &k_m)
+{
+  // Configure the axes according to the data
+  m_graph->axisX()->setTitle("X");
+  m_graph->axisY()->setTitle("Y");
+  m_graph->axisZ()->setTitle("Z");
+
+  QScatterDataArray *dataArray = new QScatterDataArray;
+  dataArray->resize(m_numOfPoints);
+  QScatterDataItem *ptrToDataArray = &dataArray->first();
+
+  for (QVector<float> * point : k_m.getAllPointsND()){
+    ptrToDataArray->setPosition(QVector3D(point->at(0), point->at(1),
+                                          point->at(2)));
+    ptrToDataArray++;
+  }
+
+  m_graph->seriesList().at(0)->dataProxy()->resetArray(dataArray);
 }
