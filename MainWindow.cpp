@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
   qDebug() << "Clustering ended !";
 
+  //ui->ndViewWidget->paintPoints();
+
   // Can access clusters by using m.getClusters()
 
 }
@@ -75,9 +77,16 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
     m_k_means.setDimension(dim);
     initialization in;
     // Try using generateRandomPointsND
-    in.generateRandomPoints(min, max, m_k_means);
-    ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
-    m_kMeansDialog->updatePointInfoLabel("Points Generated");
+    if (dim == 2) {
+      in.generateRandomPoints(min, max, m_k_means);
+      ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+      m_kMeansDialog->updatePointInfoLabel("Points Generated");
+    } else if (dim  == 3) {
+      in.generateRandomPointsND(min, max, m_k_means);
+      ui->ndViewWidget->addPoints(&m_k_means);
+      m_kMeansDialog->updatePointInfoLabel("Points Generated");
+    }
+
   }
 }
 

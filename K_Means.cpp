@@ -15,6 +15,10 @@
  */
 k_means::k_means()
 {
+  m_num_points = 1000;
+  m_metric = "euclidean";
+  m_k = 3;
+  m_dim = 3;
 }
 
 /**

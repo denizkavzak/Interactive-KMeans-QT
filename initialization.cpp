@@ -275,7 +275,7 @@ void initialization::generateRandomPointsND(float min, float max,
 {
   // for each point
   for (int i = 0; i < k_means.getNumOfPoints(); i++) {
-    QVector<float>* point = new QVector<float>(k_means.getDimension());
+    QVector<float>* point = new QVector<float>();
     // each dimension
     for (int i = 0; i < k_means.getDimension(); i++) {
       float p = min + (float)(rand()) /
@@ -287,7 +287,7 @@ void initialization::generateRandomPointsND(float min, float max,
 
   qDebug() << "Generated Points:" ;
   for (QVector<float>* p : k_means.getAllPointsND()) {
-    qDebug() << p;
+    qDebug() << *p;
   }
   qDebug() << " " ;
 }
@@ -300,7 +300,7 @@ void initialization::generateNormalDistributionPointsND(float min, float max,
   std::uniform_real_distribution<float> distr(min, max);
   // for each point
   for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
-    QVector<float>* point = new QVector<float>(k_means.getDimension());
+    QVector<float>* point = new QVector<float>();
     // for each dimension
     for (int j = 0; j < k_means.getDimension(); j++){
       point->append(distr(eng));
@@ -318,7 +318,7 @@ void initialization::initRandomRealND(k_means &k_means)
 {
   QVector<float> * center;
   for (int i = 0; i < k_means.getK(); ++i) {
-    center = new QVector<float>(k_means.getDimension());
+    center = new QVector<float>();
     for (int j = 0; j< k_means.getDimension(); j++){
       float p = FLOAT_MIN + (float)(rand()) /
           ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));

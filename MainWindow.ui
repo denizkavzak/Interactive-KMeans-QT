@@ -34,7 +34,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="chartViewScrollArea">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -43,8 +43,8 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>400</width>
-        <height>300</height>
+        <width>0</width>
+        <height>0</height>
        </size>
       </property>
       <property name="widgetResizable">
@@ -55,8 +55,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>766</width>
-         <height>300</height>
+         <width>780</width>
+         <height>298</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -67,8 +67,8 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>400</width>
-         <height>300</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -76,31 +76,26 @@
      </widget>
     </item>
     <item>
-     <widget class="QScrollArea" name="scrollArea_2">
+     <widget class="QScrollArea" name="scatter3DScrollArea">
       <property name="minimumSize">
        <size>
-        <width>400</width>
-        <height>300</height>
+        <width>0</width>
+        <height>0</height>
        </size>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="scatterWidget">
+      <widget class="NDViewWidget" name="ndViewWidget">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>766</width>
-         <height>300</height>
+         <width>780</width>
+         <height>298</height>
         </rect>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>400</width>
-         <height>300</height>
-        </size>
-       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3"/>
       </widget>
      </widget>
     </item>
@@ -169,6 +164,12 @@
    <class>ChartViewWidget</class>
    <extends>QWidget</extends>
    <header>ChartViewWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NDViewWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">NDViewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

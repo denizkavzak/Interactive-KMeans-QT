@@ -1,5 +1,6 @@
 QT -= gui
 QT += charts
+QT += datavisualization
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,6 +17,7 @@ SOURCES += \
         KMeansDialog.cpp \
         K_Means.cpp \
         MainWindow.cpp \
+        NDViewWidget.cpp \
         initialization.cpp \
         main.cpp \
         metrics.cpp
@@ -31,10 +33,12 @@ HEADERS += \
     KMeansDialog.h \
     K_Means.h \
     MainWindow.h \
+    NDViewWidget.h \
     initialization.h \
     metrics.h
 
 FORMS += \
     ChartViewWidget.ui \
     KMeansDialog.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    NDViewWidget.ui \

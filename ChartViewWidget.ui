@@ -36,7 +36,7 @@
   <customwidget>
    <class>ChartView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">ChartView.h</header>
+   <header>ChartView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
