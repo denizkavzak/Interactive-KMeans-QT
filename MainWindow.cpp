@@ -339,6 +339,10 @@ void MainWindow::importPoints()
       }
       if (dimension == 2) {
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+      } else if (dimension == 3) {
+        m_graph = new Q3DScatter();
+        ui->scatter3DWidget->createContainer(*m_graph);
+        ui->scatter3DWidget->paintPoints(m_k_means);
       }
       m_kMeansDialog->updatePointInfoLabel("Points Imported");
       m_kMeansDialog->updateImportedPointParameters(numOfPoints, dimension,
