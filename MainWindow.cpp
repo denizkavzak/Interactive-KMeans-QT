@@ -3,7 +3,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <limits>
+
+using namespace QtDataVisualization;
 
 //constexpr int FLOAT_MIN = 0;
 //constexpr int FLOAT_MAX = 100;
@@ -85,6 +86,15 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       in.generateRandomPointsND(min, max, m_k_means);
       ui->ndViewWidget->addPoints(&m_k_means);
       m_kMeansDialog->updatePointInfoLabel("Points Generated");
+      Q3DScatter* graph = new Q3DScatter();
+      if (!graph->hasContext()) {
+        QMessageBox msgBox;
+        msgBox.setText("Couldn't initialize the OpenGL context.");
+        msgBox.exec();
+      } else {
+        qDebug() << " Scatter graph is created ";
+      }
+      ui->scatter3DWidget->createContainer(*graph);
     }
 
   }

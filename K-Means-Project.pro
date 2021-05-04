@@ -18,6 +18,8 @@ SOURCES += \
         K_Means.cpp \
         MainWindow.cpp \
         NDViewWidget.cpp \
+        Scatter3DVis.cpp \
+        Scatter3DWidget.cpp \
         initialization.cpp \
         main.cpp \
         metrics.cpp
@@ -34,6 +36,8 @@ HEADERS += \
     K_Means.h \
     MainWindow.h \
     NDViewWidget.h \
+    Scatter3DVis.h \
+    Scatter3DWidget.h \
     initialization.h \
     metrics.h
 
@@ -42,3 +46,4 @@ FORMS += \
     KMeansDialog.ui \
     MainWindow.ui \
     NDViewWidget.ui \
+    Scatter3DWidget.ui

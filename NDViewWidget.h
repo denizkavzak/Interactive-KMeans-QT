@@ -16,7 +16,7 @@ class NDViewWidget : public QOpenGLWidget, protected QOpenGLFunctions
   Q_OBJECT
 
 public:
-  explicit NDViewWidget(QWidget *parent = nullptr, k_means* k_m = new k_means());
+  explicit NDViewWidget(QWidget *parent = nullptr);
   ~NDViewWidget();
 
   void setPoints(QVector<float> points);

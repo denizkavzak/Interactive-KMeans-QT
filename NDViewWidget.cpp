@@ -11,74 +11,28 @@
 
 using namespace QtDataVisualization;
 
-NDViewWidget::NDViewWidget(QWidget *parent, k_means* k_m) :
+NDViewWidget::NDViewWidget(QWidget *parent) :
   QOpenGLWidget(parent),
-  ui(new Ui::NDViewWidget), m_kmeans(k_m)
+  ui(new Ui::NDViewWidget)
 {
   ui->setupUi(this);
-//  Q3DScatter *graph = new Q3DScatter();
-
-//  if (!graph->hasContext()) {
-//      QMessageBox msgBox;
-//      msgBox.setText("Couldn't initialize the OpenGL context.");
-//      msgBox.exec();
-//  }
-
-  //addPoints();
 
   initialization in;
-  in.generateRandomPointsND(0, 1, *m_kmeans);
+  k_means* k_m = new k_means();
+  in.generateRandomPointsND(0, 1, *k_m);
 
-  for (int i = 0; i<  m_kmeans->getAllPointsND().size(); i++) {
-     QVector<float> *p = m_kmeans->getAllPointsND().at(i);
-     m_points.append({p->at(0), p->at(1), p->at(2)});
-     qDebug() << "added point 1" << *p;
+//  for (int i = 0; i<  k_m->getAllPointsND().size(); i++) {
+//     QVector<float> *p = k_m->getAllPointsND().at(i);
+//     m_points.append({p->at(0), p->at(1), p->at(2)});
+//     //qDebug() << "added point 1" << *p;
 
-     // Re-map positions to [0, 1] and use as color
-     float r = (p->at(0) + 1.0f)/2.0;
-     float g = (p->at(1) + 1.0f)/2.0;
-     float b = (p->at(2) + 1.0f)/2.0;
+//     // Re-map positions to [0, 1] and use as color
+//     float r = (p->at(0) + 1.0f)/2.0;
+//     float g = (p->at(1) + 1.0f)/2.0;
+//     float b = (p->at(2) + 1.0f)/2.0;
 
-     m_colors.append({r, g, b});
-  }
-
-//  // Create random 3D points
-//  int samples = 1000;
-
-//  // Get seed from clock
-//  long seed = std::chrono::system_clock::now().time_since_epoch().count();
-
-//  // Seed engine and set random distribution to [-1, 1]
-//  std::default_random_engine engine(seed);
-//  std::uniform_real_distribution<float> distribution(-1.0, 1.0);
-
-//  // Create points inside a sphere
-//  int count = 0;
-//  while(count < samples)
-//  {
-//    // Uniformly sample cube
-//    float x = distribution(engine);
-//    float y = distribution(engine);
-//    float z = distribution(engine);
-
-//    // Reject all points outside the sphere
-//    if(std::sqrt(x*x + y*y + z*z) <= 1.0)
-//    {
-//      QVector<float> p = {x, y, z};
-//      m_points.append({x, y, z});
-//      qDebug() << "added point 2" << p;
-
-//      // Re-map positions to [0, 1] and use as color
-//      float r = (x + 1.0f)/2.0;
-//      float g = (y + 1.0f)/2.0;
-//      float b = (z + 1.0f)/2.0;
-
-//      m_colors.append({r, g, b});
-
-//      count++;
-//    }
+//     m_colors.append({r, g, b});
 //  }
-
 }
 
 NDViewWidget::~NDViewWidget()

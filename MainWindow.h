@@ -5,6 +5,8 @@
 #include <KMeansDialog.h>
 #include "k_means.h"
 #include <initialization.h>
+#include <limits>
+#include <QtDataVisualization/Q3DScatter>
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +39,7 @@ private:
   k_means m_k_means;
   int m_step;
   bool back_clicked = false;
+  QtDataVisualization::Q3DScatter* m_graph;
 };
 
 #endif // MAINWINDOW_H

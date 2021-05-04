@@ -23,6 +23,7 @@ public:
   struct ClusterND{
     QVector<float> center;
     QVector<QVector<float>> cluster_points;
+    QColor* color;
   };
 
   // common getters
