@@ -49,7 +49,7 @@ void Scatter3DWidget::createContainer(Q3DScatter& graph)
   widget->show();
 }
 
-void Scatter3DWidget::paintCenters()
+void Scatter3DWidget::paintCenters(k_means &k_m)
 {
-
+  m_scatter3Dvis->addDataCenters(k_m);
 }

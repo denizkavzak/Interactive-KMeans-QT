@@ -20,7 +20,7 @@ public:
 
   void paintPoints(k_means &k_m);
   void createContainer(Q3DScatter& graph);
-  void paintCenters();
+  void paintCenters(k_means &k_m);
 
 private:
   Ui::Scatter3DWidget *ui;

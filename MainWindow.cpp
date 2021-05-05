@@ -157,7 +157,7 @@ void MainWindow::getNextStep()
 
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
 {
-  if (m_k_means.getAllPoints().empty()){
+  if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()){
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
     msgBox.exec();
@@ -181,10 +181,10 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
         } else { // kmeans++
           in.initKMeansPpND(m_k_means);
         }
+        //qDebug() << "clusters: " << m_k_means.getClustersND();
+        //qDebug() << "clusters: " << m_k_means.getClustersND().at(0)->center;
         m_k_means.setInitialized(true);
-        // WILL BE REPLACED WITH ui->scatter3DWidget->paintCenters(m_k_means);
-        //ui->chartViewWidget->paintCenters(m_k_means);
-        //ui->chartViewWidget->update();
+        ui->scatter3DWidget->paintCenters(m_k_means);
       } else {
         if (initMethod == "Random Sample") {
           in.initRandomSample(m_k_means);

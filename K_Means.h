@@ -4,6 +4,7 @@
 #include <QPoint>
 #include <QVector>
 #include <QVector2D>
+#include <QColor>
 
 class k_means
 {
@@ -18,12 +19,31 @@ public:
   struct Cluster{
     QVector2D center;
     QVector<QVector2D> cluster_points;
+    QColor* color;
   };
 
   struct ClusterND{
     QVector<float> center;
     QVector<QVector<float>> cluster_points;
     QColor* color;
+  };
+
+  struct ClusterColor{
+    ClusterColor() { }
+
+    // TODOO: It has 15 colors currently, update it to be continuous colors
+    QVector<QColor> colorArray = {Qt::red, Qt::blue,
+                                  Qt::black, Qt::magenta, Qt::green,
+                                  Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
+                                  Qt::darkGreen, Qt::darkCyan, Qt::darkYellow,
+                                  Qt::darkMagenta, Qt::darkGray, Qt::yellow};
+    // QColor a(255,0,255,0); // Can have random color but will it be distinctive?
+
+
+    QColor* operator()(int i){
+      // modulo for making repeated pattern when pattern image is smaller
+      return &(colorArray[i % colorArray.size()]);
+    }
   };
 
   // common getters

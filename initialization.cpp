@@ -5,10 +5,10 @@
 #include "metrics.h"
 #include <k_means.h>
 #include <random>
+#include <QColor>
 
 constexpr int FLOAT_MIN = 0;
 constexpr int FLOAT_MAX = 100;
-
 
 initialization::initialization()
 {
@@ -24,6 +24,7 @@ initialization::initialization()
  */
 void initialization::initRandomReal(k_means &k_means)
 {
+  k_means::ClusterColor* color = new k_means::ClusterColor();
   for (int i = 0; i < k_means.getK(); ++i) {
     float p1 = FLOAT_MIN + (float)(rand()) /
         ((float)(RAND_MAX/(FLOAT_MAX - FLOAT_MIN)));
@@ -33,6 +34,7 @@ void initialization::initRandomReal(k_means &k_means)
     qDebug() << "CENTER: " << center;
     k_means::Cluster* cluster = new k_means::Cluster();
     cluster->center = center;
+    cluster->color = color->operator()(i);
     k_means.addCluster(cluster);
   }
 }
@@ -46,6 +48,7 @@ void initialization::initRandomReal(k_means &k_means)
  */
 void initialization::initRandomSample(k_means &k_means)
 {
+  k_means::ClusterColor* color = new k_means::ClusterColor();
   // Choose m_k centers randomly
   QSet<int> set;
   for (int i = 0; i < k_means.getK(); ++i) {
@@ -56,10 +59,12 @@ void initialization::initRandomSample(k_means &k_means)
     }
     set.insert(c);
     QVector2D* center = k_means.getAllPoints().at(c);
-    qDebug() << "CENTER: " << center;
+    qDebug() << "CENTER: " << *center;
     // Create cluster
     k_means::Cluster* cluster = new k_means::Cluster();
     cluster->center = *center;
+    cluster->color = color->operator()(i);
+    qDebug() << "Cluster color " << *(cluster->color) ;
     k_means.addCluster(cluster);
   }
 }
@@ -73,6 +78,7 @@ void initialization::initRandomSample(k_means &k_means)
  */
 void initialization::initKMeansPp(k_means &k_means)
 {
+  k_means::ClusterColor* color = new k_means::ClusterColor();
   int c = rand() % k_means.getNumOfPoints();
   QVector2D* center = k_means.getAllPoints().at(c);
 
@@ -80,6 +86,7 @@ void initialization::initKMeansPp(k_means &k_means)
   // Create cluster
   k_means::Cluster* cluster = new k_means::Cluster();
   cluster->center = *center;
+  cluster->color = color->operator()(0);
   k_means.addCluster(cluster);
 
   // for each point get distance between center and that point:
@@ -98,6 +105,7 @@ void initialization::initKMeansPp(k_means &k_means)
     center = k_means.getAllPoints().at(ind);
     k_means::Cluster* cluster = new k_means::Cluster();
     cluster->center = *center;
+    cluster->color = color->operator()(i+1);
     k_means.addCluster(cluster);
 
     // Get distances between all points and the new center
@@ -316,6 +324,7 @@ void initialization::generateNormalDistributionPointsND(float min, float max,
  */
 void initialization::initRandomRealND(k_means &k_means)
 {
+  k_means::ClusterColor* color = new k_means::ClusterColor();
   QVector<float> * center;
   for (int i = 0; i < k_means.getK(); ++i) {
     center = new QVector<float>();
@@ -328,6 +337,7 @@ void initialization::initRandomRealND(k_means &k_means)
     qDebug() << "CENTER: " << center;
     k_means::ClusterND* cluster = new k_means::ClusterND();
     cluster->center = *center;
+    cluster->color = color->operator()(i);
     k_means.addClusterND(cluster);
   }
 }
@@ -339,6 +349,7 @@ void initialization::initRandomRealND(k_means &k_means)
  */
 void initialization::initRandomSampleND(k_means &k_means)
 {
+  k_means::ClusterColor* color = new k_means::ClusterColor();
   // Choose m_k centers randomly
   QSet<int> set;
   for (int i = 0; i < k_means.getK(); ++i) {
@@ -354,12 +365,14 @@ void initialization::initRandomSampleND(k_means &k_means)
     // Create cluster
     k_means::ClusterND* cluster = new k_means::ClusterND();
     cluster->center = *center;
+    cluster->color = color->operator()(i);
     k_means.addClusterND(cluster);
   }
 }
 
 void initialization::initKMeansPpND(k_means &k_means)
 {
+  k_means::ClusterColor* color = new k_means::ClusterColor();
   int c = rand() % k_means.getNumOfPoints();
   QVector<float> *center = k_means.getAllPointsND().at(c);
   //QVector2D* center = k_means.getAllPoints().at(c);
@@ -368,6 +381,7 @@ void initialization::initKMeansPpND(k_means &k_means)
   // Create cluster
   k_means::ClusterND* cluster = new k_means::ClusterND();
   cluster->center = *center;
+  cluster->color = color->operator()(0);
   k_means.addClusterND(cluster);
 
   // for each point get distance between center and that point:
@@ -387,6 +401,7 @@ void initialization::initKMeansPpND(k_means &k_means)
     center = k_means.getAllPointsND().at(ind);
     k_means::ClusterND* cluster = new k_means::ClusterND();
     cluster->center = *center;
+    cluster->color = color->operator()(i+1);
     k_means.addClusterND(cluster);
 
     // Get distances between all points and the new center

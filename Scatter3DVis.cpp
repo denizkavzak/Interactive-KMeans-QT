@@ -93,3 +93,30 @@ void Scatter3DVis::addData(k_means &k_m)
 
   m_graph->seriesList().at(0)->dataProxy()->resetArray(dataArray);
 }
+
+void Scatter3DVis::addDataCenters(k_means &k_m)
+{
+  k_means::ClusterColor color;
+  qDebug() << "Inside add centers";
+  QScatterDataArray *dataArray = new QScatterDataArray;
+  dataArray->resize(k_m.getK()); // We only have k centers
+  QScatterDataItem *ptrToDataArray = &dataArray->first();
+
+  int ind = 0;
+  for (k_means::ClusterND* cluster : k_m.getClustersND()) {
+    qDebug() << "Inside loop";
+    ptrToDataArray->setPosition(QVector3D(cluster->center.at(0) ,
+                                          cluster->center.at(1),
+                                          cluster->center.at(2)));
+    qDebug() << QVector3D(cluster->center.at(0) ,
+                          cluster->center.at(1),
+                          cluster->center.at(2));
+
+    qDebug() << "SIZE OF SERIES LIST" << m_graph->seriesList().size();
+
+    // Will try ind+1 since all points are still in seriesList().at(0)
+    m_graph->seriesList().at(ind+1)->dataProxy()->resetArray(dataArray);
+    m_graph->seriesList().at(ind+1)->setBaseColor(*(cluster->color));
+    ind++;
+  }
+}
