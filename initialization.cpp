@@ -243,12 +243,19 @@ QVector<float> initialization::getProbs(QVector<float> d, float sum)
   return probs;
 }
 
+/**
+ * @brief initialization::choseWithProb
+ * @param prob
+ * @return
+ * Using the given probabilites, randomly choses
+ * one of the instances
+ */
 int initialization::choseWithProb(const QVector<float> prob)
 {
+  // Sorting is optional, commented out
   QVector<float> sorted = prob;
-  std::sort(sorted.begin(), sorted.end());
-
-  qDebug() << "SORTED: " << sorted;
+  // std::sort(sorted.begin(), sorted.end());
+  // qDebug() << "SORTED: " << sorted;
 
   float rand_x = (float) rand()/RAND_MAX;
   float cum = 0;
@@ -278,6 +285,13 @@ int initialization::choseWithProb(const QVector<float> prob)
 // ND functions
 //
 
+/**
+ * @brief initialization::generateRandomPointsND
+ * @param min
+ * @param max
+ * @param k_means
+ * N dimensional version of generating random points
+ */
 void initialization::generateRandomPointsND(float min, float max,
                                             k_means& k_means)
 {
@@ -300,6 +314,13 @@ void initialization::generateRandomPointsND(float min, float max,
   qDebug() << " " ;
 }
 
+/**
+ * @brief initialization::generateNormalDistributionPointsND
+ * @param min
+ * @param max
+ * @param k_means
+ * N dimensional version of generating normally distributed points
+ */
 void initialization::generateNormalDistributionPointsND(float min, float max,
                                                         k_means& k_means)
 {
@@ -370,6 +391,11 @@ void initialization::initRandomSampleND(k_means &k_means)
   }
 }
 
+/**
+ * @brief initialization::initKMeansPpND
+ * @param k_means
+ * N dimensional version of kmeans++ initialization implementation
+ */
 void initialization::initKMeansPpND(k_means &k_means)
 {
   k_means::ClusterColor* color = new k_means::ClusterColor();
@@ -413,6 +439,17 @@ void initialization::initKMeansPpND(k_means &k_means)
   }
 }
 
+/**
+ * @brief initialization::getPairwiseDistancesND
+ * @param k_means
+ * @param center
+ * @param metric
+ * @param min
+ * @param min_ind
+ * @param sum
+ * @return
+ * N dimensional version of the pairwise distance calculation function
+ */
 QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
                                  QVector<float> center, QString metric,
                                      float &min, int &min_ind, float &sum)
