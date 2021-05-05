@@ -18,8 +18,8 @@ NDViewWidget::NDViewWidget(QWidget *parent) :
   ui->setupUi(this);
 
   initialization in;
-  k_means* k_m = new k_means();
-  in.generateRandomPointsND(0, 1, *k_m);
+//  k_means* k_m = new k_means();
+//  in.generateRandomPointsND(0, 1, *k_m);
 
 //  for (int i = 0; i<  k_m->getAllPointsND().size(); i++) {
 //     QVector<float> *p = k_m->getAllPointsND().at(i);

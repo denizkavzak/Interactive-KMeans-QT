@@ -17,11 +17,14 @@ public:
   Q3DScatter* getGraph();
   void addData(k_means &k_m);
   void addDataCenters(k_means &k_m);
+  void addSeriesForEachCluster(k_means &k_m);
 
 private:
   Q3DScatter *m_graph;
   float m_pointSize;
   int m_numOfPoints;
+
+  void init();
 
 };
 

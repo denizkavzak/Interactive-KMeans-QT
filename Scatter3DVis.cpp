@@ -3,27 +3,24 @@
 Scatter3DVis::Scatter3DVis(Q3DScatter *scatter) :
   m_graph(scatter), m_pointSize(20.0f), m_numOfPoints(900)
 {
+  init();
+}
 
-  //! [0]
+void Scatter3DVis::init()
+{
   m_graph->activeTheme()->setType(Q3DTheme::ThemeEbony);
   QFont font = m_graph->activeTheme()->font();
   font.setPointSize(m_pointSize);
   m_graph->activeTheme()->setFont(font);
   m_graph->setShadowQuality(QAbstract3DGraph::ShadowQualitySoftLow);
   m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetFront);
-  //! [0]
 
-  //! [2]
+  // Add one series that will store all points
   QScatterDataProxy *proxy = new QScatterDataProxy;
   QScatter3DSeries *series = new QScatter3DSeries(proxy);
   series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
   //series->setMeshSmooth(m_smooth);
   m_graph->addSeries(series);
-  //! [2]
-
-  //! [3]
-  //addData();
-  //! [3]
 
 }
 
@@ -96,27 +93,42 @@ void Scatter3DVis::addData(k_means &k_m)
 
 void Scatter3DVis::addDataCenters(k_means &k_m)
 {
-  k_means::ClusterColor color;
   qDebug() << "Inside add centers";
-  QScatterDataArray *dataArray = new QScatterDataArray;
-  dataArray->resize(k_m.getK()); // We only have k centers
-  QScatterDataItem *ptrToDataArray = &dataArray->first();
-
-  int ind = 0;
+  int ind = 1;
   for (k_means::ClusterND* cluster : k_m.getClustersND()) {
+    QScatterDataArray *dataArray = new QScatterDataArray;
+    dataArray->resize(1); // We only have k centers
+    QScatterDataItem *ptrToDataArray = &dataArray->first();
     qDebug() << "Inside loop";
     ptrToDataArray->setPosition(QVector3D(cluster->center.at(0) ,
                                           cluster->center.at(1),
                                           cluster->center.at(2)));
+
+    ptrToDataArray++;
+
     qDebug() << QVector3D(cluster->center.at(0) ,
                           cluster->center.at(1),
                           cluster->center.at(2));
 
-    qDebug() << "SIZE OF SERIES LIST" << m_graph->seriesList().size();
-
-    // Will try ind+1 since all points are still in seriesList().at(0)
-    m_graph->seriesList().at(ind+1)->dataProxy()->resetArray(dataArray);
-    m_graph->seriesList().at(ind+1)->setBaseColor(*(cluster->color));
+    qDebug() << "from cluster " << *(cluster->color);
+    // ind starts from 1 since all points are still in seriesList().at(0)
+    //m_graph->seriesList().at(0)->dataProxy()->removeItems();
+    m_graph->seriesList().at(ind)->dataProxy()->resetArray(dataArray);
+    m_graph->seriesList().at(ind)->setBaseColor(*(cluster->color));
+    qDebug() << "series color" << m_graph->seriesList().at(ind)->baseColor();
     ind++;
+  }
+}
+
+void Scatter3DVis::addSeriesForEachCluster(k_means &k_m)
+{
+  // First series will be for all points, rest will be for clusters
+  for (int i=0; i < k_m.getK(); i++)
+  {
+    QScatterDataProxy *proxy = new QScatterDataProxy;
+    QScatter3DSeries *series = new QScatter3DSeries(proxy);
+    series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
+    //series->setMeshSmooth(m_smooth);
+    m_graph->addSeries(series);
   }
 }

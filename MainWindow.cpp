@@ -94,7 +94,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       } else {
         qDebug() << " Scatter graph is created ";
       }
-      ui->scatter3DWidget->createContainer(*m_graph);
+      ui->scatter3DWidget->createContainer(*m_graph, m_k_means);
       ui->scatter3DWidget->paintPoints(m_k_means);
     }
 
@@ -167,12 +167,13 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
       QMessageBox msgBox;
       msgBox.setText("Clustering is already initialized!");
       msgBox.exec();
-    }else {
+    } else {
       initialization in;
       m_k_means.setNumOfIter(iter);
+      qDebug() << "K is in first place:" << k;
       m_k_means.setK(k);
       m_k_means.setMetric(metric);
-      bool flag = (m_k_means.getDimension()>=3);
+      bool flag = (m_k_means.getDimension() >= 3);
       if (flag) {
         if (initMethod == "Random Sample") {
           in.initRandomSampleND(m_k_means);
@@ -341,7 +342,7 @@ void MainWindow::importPoints()
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
       } else if (dimension == 3) {
         m_graph = new Q3DScatter();
-        ui->scatter3DWidget->createContainer(*m_graph);
+        ui->scatter3DWidget->createContainer(*m_graph, m_k_means);
         ui->scatter3DWidget->paintPoints(m_k_means);
       }
       m_kMeansDialog->updatePointInfoLabel("Points Imported");
