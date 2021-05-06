@@ -66,6 +66,8 @@ MainWindow::~MainWindow()
  * @param min
  * @param max
  * Generate points using given parameters
+ * In cases where dimension is 2 or 3, there is visualization available
+ * and shown to user. In cases where N > 3 or N < 2, no visualization
  */
 void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
 {
@@ -96,6 +98,9 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       }
       ui->scatter3DWidget->createContainer(*m_graph);
       ui->scatter3DWidget->paintPoints(m_k_means);
+    } else { // No visualization available for N > 3 or N < 2
+      in.generateRandomPointsND(min, max, m_k_means);
+      m_kMeansDialog->updatePointInfoLabel("Points Generated");
     }
 
   }
@@ -107,6 +112,8 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
  * @param metric
  * @param iter
  * Cluster points using given parameters
+ * In cases where dimension is 2 or 3, there is visualization available
+ * and shown to user. In cases where N > 3 or N < 2, no visualization
  */
 void MainWindow::clusterPoints()
 {
@@ -136,11 +143,24 @@ void MainWindow::clusterPoints()
         ui->scatter3DWidget->clearAllPointsSeriesFromGraph();
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
+      } else { // No visualization available for N > 3 or N < 2
+        back_clicked = false;
+        m_k_means.clusterPointsND(m_k_means.getNumOfIter());
+        m_step = m_k_means.getNumOfIter();
+        m_kMeansDialog->updateIterationStepLabel(m_step);
+        m_k_means.printClustersND(); // Just printing the clusters
       }
+
     }
   }
 }
 
+/**
+ * @brief MainWindow::getNextStep
+ * Runs one iteration/step of k_means clustering algorithm.
+ * In cases where dimension is 2 or 3, there is visualization available
+ * and shown to user. In cases where N > 3 or N < 2, no visualization
+ */
 void MainWindow::getNextStep()
 {
   qDebug() << "getNextStep in mainwindow";
@@ -178,6 +198,12 @@ void MainWindow::getNextStep()
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
         m_k_means.finalizeOneStepND();
+      } else { // No visualization available for N > 3 or N < 2
+        m_k_means.moveOneStepND();
+        m_k_means.printClustersND(); // just printing the clusters
+        m_step += 1;
+        m_kMeansDialog->updateIterationStepLabel(m_step);
+        m_k_means.finalizeOneStepND();
       }
     }
   }
@@ -201,8 +227,9 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
       qDebug() << "K is in first place:" << k;
       m_k_means.setK(k);
       m_k_means.setMetric(metric);
-      bool flag = (m_k_means.getDimension() >= 3);
-      if (flag) {
+
+      // For N>=3 case
+      if (m_k_means.getDimension() >= 3) {
         if (initMethod == "Random Sample") {
           in.initRandomSampleND(m_k_means);
         } else if (initMethod == "Random Real") {
@@ -211,9 +238,11 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
           in.initKMeansPpND(m_k_means);
         }
         m_k_means.setInitialized(true);
-        ui->scatter3DWidget->paintCentersInit(m_k_means);
-        ui->scatter3DWidget->paintCenters(m_k_means);
-      } else {
+        if (m_k_means.getDimension() == 3) { // visualization for 3D
+          ui->scatter3DWidget->paintCentersInit(m_k_means);
+          ui->scatter3DWidget->paintCenters(m_k_means);
+        }
+      } else if (m_k_means.getDimension() == 2) { // For 2D case
         if (initMethod == "Random Sample") {
           in.initRandomSample(m_k_means);
         } else if (initMethod == "Random Real") {
@@ -229,6 +258,13 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
   }
 }
 
+/**
+ * @brief MainWindow::updatePointSize
+ * @param pointSize
+ * Updates point size in the graph for both 2D and 3D
+ * visualizations using the passed value that is taken
+ * from the spin box for point size in ui dialog
+ */
 void MainWindow::updatePointSize(int pointSize)
 {
   if (m_k_means.getAllPoints().isEmpty() && m_k_means.getAllPointsND().isEmpty()) {
@@ -244,6 +280,11 @@ void MainWindow::updatePointSize(int pointSize)
   }
 }
 
+/**
+ * @brief MainWindow::getPrevStep
+ * Reverts the clustering to one step backwards during step by step clustering
+ * TODO: FIX: Does not work properly for 2D, 3D not implemented yet
+ */
 void MainWindow::getPrevStep()
 {
   QMessageBox msgBox;
@@ -283,24 +324,44 @@ void MainWindow::getPrevStep()
 //  }
 }
 
+/**
+ * @brief MainWindow::zoomIn
+ * Zoom in for 2D view
+ */
 void MainWindow::zoomIn()
 {
   qDebug() << "Zoomed in";
   ui->chartViewWidget->zoomIn();
 }
 
+/**
+ * @brief MainWindow::zoomOut
+ * Zoom out for 2D view
+ */
 void MainWindow::zoomOut()
 {
   qDebug() << "Zoomed out";
   ui->chartViewWidget->zoomOut();
 }
 
+/**
+ * @brief MainWindow::zoomActualSize
+ * Zoom to actual size for 2D view
+ */
 void MainWindow::zoomActualSize()
 {
   qDebug() << "Zoom actual size";
   ui->chartViewWidget->zoomActualSize();
 }
 
+/**
+ * @brief MainWindow::importPoints
+ * Imports points from a file by prompting user to select a file
+ * from a file selector message box. First line of the file
+ * denotes the number of points, second line denotes the dimension
+ * of the points, each of the rest of the lines are the coordinates
+ * of point vectors.
+ */
 void MainWindow::importPoints()
 {
   if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
@@ -365,7 +426,7 @@ void MainWindow::importPoints()
           v->setX(p->at(0));
           v->setY(p->at(1));
           m_k_means.addPoint(v);
-        } else {
+        } else if ((dimension >= 3)) {
           m_k_means.addPointND(p);
         }
       }

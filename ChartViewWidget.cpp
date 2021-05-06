@@ -31,11 +31,24 @@ int ChartViewWidget::zoom() const
   return m_zoom;
 }
 
+/**
+ * @brief ChartViewWidget::paintPoints
+ * @param points
+ * Calls the paint points function from Chart View
+ * to visualize all 2D points
+ */
 void ChartViewWidget::paintPoints(QVector<QVector2D*> points)
 {
   ui->chartView->paintPoints(points);
 }
 
+/**
+ * @brief ChartViewWidget::paintClusters
+ * @param k_m
+ * Calls the paint clusters function from Chart View
+ * to visualize the clusters with all their points and centers
+ * with different colors that are assigned to them
+ */
 void ChartViewWidget::paintClusters(k_means k_m)
 {
   qDebug() << "PAINT";
@@ -43,11 +56,22 @@ void ChartViewWidget::paintClusters(k_means k_m)
   ui->chartView->paintClusters(k_m.getClusters());
 }
 
+/**
+ * @brief ChartViewWidget::paintCenters
+ * @param k_m
+ * Calls the paint centers function from Chart View
+ * to visualize the cluster centers with their asigned
+ * color and rectangle shape
+ */
 void ChartViewWidget::paintCenters(k_means k_m)
 {
   ui->chartView->paintCenters(k_m);
 }
 
+/**
+ * @brief ChartViewWidget::zoomIn
+ * Calls zoom in function from Chart View
+ */
 void ChartViewWidget::zoomIn()
 {
   m_zoom = m_zoom *2;
@@ -56,6 +80,10 @@ void ChartViewWidget::zoomIn()
   ui->chartView->chart()->zoomIn();
 }
 
+/**
+ * @brief ChartViewWidget::zoomOut
+ * Calls zoom out function from Chart View
+ */
 void ChartViewWidget::zoomOut()
 {
   m_zoom = m_zoom *0.5;
@@ -64,6 +92,10 @@ void ChartViewWidget::zoomOut()
   ui->chartView->chart()->zoomOut();
 }
 
+/**
+ * @brief ChartViewWidget::zoomActualSize
+ * Calls zoom actual size from Chart View
+ */
 void ChartViewWidget::zoomActualSize()
 {
   m_zoom = 1;
@@ -72,6 +104,13 @@ void ChartViewWidget::zoomActualSize()
   ui->chartView->chart()->zoomReset();
 }
 
+/**
+ * @brief ChartViewWidget::getNextStep
+ * @param k_m
+ * Calls paint cluster function from Chart view
+ * so that it is triggered and called when
+ * the user clicks on next step in clustering
+ */
 void ChartViewWidget::getNextStep(k_means &k_m)
 {
   qDebug() << " getNextStep in chartview widget" ;
@@ -79,6 +118,13 @@ void ChartViewWidget::getNextStep(k_means &k_m)
   ui->chartView->paintClusters(k_m.getClusters());
 }
 
+/**
+ * @brief ChartViewWidget::getPrevStep
+ * @param k_m
+ * Calls paint cluster sunction from Chart view
+ * so that it is triggered and called when
+ * the user clicks on previous step in clusterin
+ */
 void ChartViewWidget::getPrevStep(k_means &k_m)
 {
   //qDebug() << k_m.getPrevClusters().size();

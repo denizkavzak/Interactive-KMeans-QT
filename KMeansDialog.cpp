@@ -63,12 +63,22 @@ QString KMeansDialog::getSelectedMetric()
   }
 }
 
+/**
+ * @brief KMeansDialog::getNextStep
+ * Triggers the stepUpdated signal when next step
+ * button is clicked in dialog ui
+ */
 void KMeansDialog::getNextStep()
 {
   qDebug() << "getNextStep in dialog";
   emit stepUpdated();
 }
 
+/**
+ * @brief KMeansDialog::initializeClustering
+ * Triggers the initializationSelected signal when initialize
+ * button is clicked in dialog ui
+ */
 void KMeansDialog::initializeClustering()
 {
   int k = ui->kSpinBox->value();
@@ -78,29 +88,60 @@ void KMeansDialog::initializeClustering()
   emit initializationSelected(k, metric, iter, q);
 }
 
+/**
+ * @brief KMeansDialog::updateIterationStepLabel
+ * @param newStep
+ * Updates the label in dialog ui where the current
+ * iteration step of clustering is shown
+ */
 void KMeansDialog::updateIterationStepLabel(int newStep)
 {
   m_step = newStep;
   ui->stepNoLabel->setText(QString("%1").arg(m_step));
 }
 
+/**
+ * @brief KMeansDialog::updatePointSize
+ * Triggers the pointSizeUpdated signal when
+ * the update point size button is clicked
+ */
 void KMeansDialog::updatePointSize()
 {
   int pointSize = ui->pointSizeSpinBox->value();
   emit pointSizeUpdated(pointSize);
 }
 
+/**
+ * @brief KMeansDialog::getPrevStep
+ * Triggers the stepPrevUpdated signal when
+ * the previous step button is clicked
+ */
 void KMeansDialog::getPrevStep()
 {
   qDebug() << "getPrevStep in dialog";
   emit stepPrevUpdated();
 }
 
+/**
+ * @brief KMeansDialog::importPoints
+ * Triggers the importFileSelected signal when
+ * the import points button is clicked
+ */
 void KMeansDialog::importPoints()
 {
   emit importFileSelected();
 }
 
+/**
+ * @brief KMeansDialog::updateImportedPointParameters
+ * @param numOfPoint
+ * @param dimension
+ * @param min
+ * @param max
+ * Updates the spinboxes for number of points, dimension,
+ * min value and max value in the dialog ui by using
+ * the passed in parameters
+ */
 void KMeansDialog::updateImportedPointParameters(int numOfPoint, int dimension,
                                                  float min, float max)
 {
@@ -110,6 +151,13 @@ void KMeansDialog::updateImportedPointParameters(int numOfPoint, int dimension,
   ui->maxDoubleSpinBox->setValue(max);
 }
 
+/**
+ * @brief KMeansDialog::updatePointInfoLabel
+ * @param s
+ * Updates the text in the label indicating the
+ * state of points. It can be "Points Generated"
+ * or "Points Imported"
+ */
 void KMeansDialog::updatePointInfoLabel(QString s)
 {
   ui->pointsInfoLabel->setText(s);

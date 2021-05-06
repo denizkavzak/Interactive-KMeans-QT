@@ -6,6 +6,12 @@ Scatter3DVis::Scatter3DVis(Q3DScatter *scatter) :
   init();
 }
 
+/**
+ * @brief Scatter3DVis::init
+ * Initialize the graph by assigning initial parameters and add a single series
+ * to the graph series, which will be used to store all the generated/imported
+ * points later by using addData.
+ */
 void Scatter3DVis::init()
 {
   m_graph->activeTheme()->setType(Q3DTheme::ThemeEbony);
@@ -24,53 +30,23 @@ void Scatter3DVis::init()
 
 }
 
-void Scatter3DVis::addData()
-{
-  // Configure the axes according to the data
-  //! [4]
-  m_graph->axisX()->setTitle("X");
-  m_graph->axisY()->setTitle("Y");
-  m_graph->axisZ()->setTitle("Z");
-  //! [4]
-  //! [5]
-  QScatterDataArray *dataArray = new QScatterDataArray;
-  dataArray->resize(m_numOfPoints);
-  QScatterDataItem *ptrToDataArray = &dataArray->first();
-  //! [5]
-
-#ifdef RANDOM_SCATTER
-  for (int i = 0; i < m_itemCount; i++) {
-      ptrToDataArray->setPosition(randVector());
-      ptrToDataArray++;
-  }
-#else
-
-  //! [6]
-  float limit = qSqrt(m_numOfPoints) / 2.0f;
-  for (float i = -limit; i < limit; i++) {
-      for (float j = -limit; j < limit; j++) {
-          ptrToDataArray->setPosition(QVector3D(i + 0.5f,
-                                                qCos(qDegreesToRadians((i * j) / 0.75f)),
-                                                j + 0.5f));
-          ptrToDataArray++;
-      }
-  }
-  //! [6]
-#endif
-
-  qDebug() << " In add data ";
-  //! [7]
-  m_graph->seriesList().at(0)->dataProxy()->resetArray(dataArray);
-  //! [7]
-
-  qDebug() << " end of add data ";
-}
-
+/**
+ * @brief Scatter3DVis::getGraph
+ * @return
+ * Getter for 3DScatter graph
+ */
 Q3DScatter *Scatter3DVis::getGraph()
 {
   return m_graph;
 }
 
+/**
+ * @brief Scatter3DVis::addData
+ * @param k_m
+ * This function adds all the points from the generated/imported data
+ * into the graph by appending all to the index 0 series in the
+ * graph series.
+ */
 void Scatter3DVis::addData(k_means &k_m)
 {
   // Configure the axes according to the data
@@ -223,12 +199,28 @@ void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
   }
 }
 
+/**
+ * @brief Scatter3DVis::clearAllPointsSeriesFromGraph
+ * This function clears all points that initially
+ * generated/imported from the graph, which are hold at
+ * index 0 of series of the graph.
+ */
 void Scatter3DVis::clearAllPointsSeriesFromGraph()
 {
   m_graph->seriesList().at(0)->setVisible(false);
   //m_graph->seriesList().removeAt(0);
 }
 
+/**
+ * @brief Scatter3DVis::updatePointSize
+ * @param pointSize
+ * Updates the point size in the graph
+ * pointSize being 0 means the size of points will be automatically
+ * determined by the graph itself. Any value taken from the spinbox from
+ * ui and passed into this function is divided by 100, assuming the
+ * maximum selectable size is 100. The reason is the scatter graph
+ * sizes are between 0.0f and 1.0f.
+ */
 void Scatter3DVis::updatePointSize(int pointSize)
 {
   qDebug() << "current item size: " << m_graph->seriesList().at(0)->itemSize();

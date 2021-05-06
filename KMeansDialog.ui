@@ -359,7 +359,7 @@
          <item row="1" column="0" colspan="2">
           <widget class="QPushButton" name="updateChartButton">
            <property name="text">
-            <string>Update Chart</string>
+            <string>Update Point Size</string>
            </property>
           </widget>
          </item>

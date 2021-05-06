@@ -97,7 +97,7 @@ float metrics::getDistance(QVector3D p1, QVector3D p2, QString metric)
  * @param binary1
  * @param binary2
  * @return Distance between two binary points
- * with Hamming distance metric
+ * with Hamming distance metric in any dimension
  */
 float metrics::getDistance(QString binary1, QString binary2)
 {
@@ -114,6 +114,15 @@ float metrics::getDistance(QString binary1, QString binary2)
   return -1;
 }
 
+/**
+ * @brief metrics::getDistance
+ * @param p1
+ * @param p2
+ * @param metric
+ * @return Distance between ND (N>=3) points p1 and p2
+ * with the metric as m_metric
+ * m_metric can be euclidean or manhattan
+ */
 float metrics::getDistance(QVector<float> p1, QVector<float> p2, QString metric)
 {
   if (metric == "manhattan") {

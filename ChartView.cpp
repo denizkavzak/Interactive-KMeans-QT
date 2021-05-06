@@ -24,6 +24,12 @@ ChartView::ChartView(QWidget *parent) :
   //  setDragMode(QChartView::ScrollHandDrag);
 }
 
+/**
+ * @brief ChartView::paintPoints
+ * @param points
+ * Paints/Visualizes all the 2D points passed into the function
+ * in the chart graph
+ */
 void ChartView::paintPoints(QVector<QVector2D*> points)
 {
   for (QVector2D* point : points) {
@@ -40,6 +46,13 @@ void ChartView::paintPoints(QVector<QVector2D*> points)
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 }
 
+/**
+ * @brief ChartView::paintCenters
+ * @param k_m
+ * Paints/Visualizes all the 2D cluster centers taken from the passed
+ * kmeans object. The centers are drawn with a rectangle marker
+ * and bigger than the actual data points in the chart graph
+ */
 void ChartView::paintCenters(k_means k_m)
 {
   m_clusterCenterSeries.clear();
@@ -71,6 +84,12 @@ void ChartView::paintCenters(k_means k_m)
 
 }
 
+/**
+ * @brief ChartView::setPointSize
+ * @param pointSize
+ * @param step
+ * Sets the point size for the 2D data points in the chart graph
+ */
 void ChartView::setPointSize(int pointSize, int step)
 {
   qDebug() << " check points " ;
@@ -98,7 +117,7 @@ void ChartView::setPointSize(int pointSize, int step)
 /**
  * @brief ChartView::paintClusters
  * @param k_m
- * Paint cluster points with the same color to distinguish between
+ * Paint 2D cluster points with the same color to distinguish between
  * different clusters.
  * Paints all the points with their respective colors
  * determined by the cluster they belong to.
@@ -163,6 +182,11 @@ void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
 //  emit rangeChanged(m_minSize.width(), m_maxSize.width());
 //}
 
+/**
+ * @brief ChartView::getSeries
+ * @return
+ * Getter for the series of the chart graph
+ */
 QScatterSeries *ChartView::getSeries()
 {
   return m_series;

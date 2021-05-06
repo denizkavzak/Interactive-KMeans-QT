@@ -16,22 +16,29 @@ public:
 
   k_means(QVector<QVector<float>*> points, int k); // for ND
 
+  // Cluster struct for 2D points
   struct Cluster{
     QVector2D center;
     QVector<QVector2D> cluster_points;
     QColor* color;
   };
 
+  // Cluster strcut for ND points (N>=3)
   struct ClusterND{
     QVector<float> center;
     QVector<QVector<float>> cluster_points;
     QColor* color;
   };
 
+  /**
+  // Struct to assign a different color for each cluster
+  // Currently it has 14 colors,
+  // can be extended using random colors in next version
+  **/
   struct ClusterColor{
     ClusterColor() { }
 
-    // TODOO: It has 15 colors currently, update it to be continuous colors
+    // TODO: It has 14 colors currently, update it to be continuous colors
     QVector<QColor> colorArray = {Qt::red, Qt::blue,
                                   Qt::magenta, Qt::green,
                                   Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
@@ -70,7 +77,7 @@ public:
   // getters
   QVector<Cluster*> getClusters();
   QVector<QVector2D*> getAllPoints();
-  QVector2D getCenters();
+  //QVector2D getCenters();
   QVector<QVector2D*> getPrevClusterCenters();
 
   // kmeans functions

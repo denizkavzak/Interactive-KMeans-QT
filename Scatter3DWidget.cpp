@@ -22,6 +22,14 @@ Scatter3DWidget::~Scatter3DWidget()
   delete ui;
 }
 
+/**
+ * @brief Scatter3DWidget::paintPoints
+ * @param k_m
+ * Calls the addData function from 3DVis class
+ * to add all the generated/imported points
+ * to the graph using the index 0 in series of
+ * the graph
+ */
 void Scatter3DWidget::paintPoints(k_means &k_m)
 {
   qDebug() << "inside scatter3Dwidget paint points";
@@ -80,16 +88,37 @@ void Scatter3DWidget::paintClustersInit(k_means &k_m)
   m_scatter3Dvis->addSeriesForEachClusterPoints(k_m);
 }
 
+/**
+ * @brief Scatter3DWidget::paintCentersInit
+ * @param k_m
+ * Calls the corresponding init centers function from
+ * the 3DVis class to add k number of series to
+ * the graph, which will be used to store the
+ * cluster centers.
+ */
 void Scatter3DWidget::paintCentersInit(k_means &k_m)
 {
   m_scatter3Dvis->addSeriesForEachCluster(k_m);
 }
 
+/**
+ * @brief Scatter3DWidget::clearAllPointsSeriesFromGraph
+ * Calls the corresponding function from the 3DVis class
+ * to clear all generated/imported points from the
+ * graph, which are being held in series index 0.
+ */
 void Scatter3DWidget::clearAllPointsSeriesFromGraph()
 {
   m_scatter3Dvis->clearAllPointsSeriesFromGraph();
 }
 
+/**
+ * @brief Scatter3DWidget::updatePointSize
+ * @param pointSize
+ * Function calls point update function from the 3DVis class
+ * to update the point sizes in the graph using passed
+ * pointSize parameter
+ */
 void Scatter3DWidget::updatePointSize(int pointSize)
 {
   m_scatter3Dvis->updatePointSize(pointSize);
