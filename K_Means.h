@@ -33,7 +33,7 @@ public:
 
     // TODOO: It has 15 colors currently, update it to be continuous colors
     QVector<QColor> colorArray = {Qt::red, Qt::blue,
-                                  Qt::black, Qt::magenta, Qt::green,
+                                  Qt::magenta, Qt::green,
                                   Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
                                   Qt::darkGreen, Qt::darkCyan, Qt::darkYellow,
                                   Qt::darkMagenta, Qt::darkGray, Qt::yellow};

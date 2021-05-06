@@ -18,9 +18,13 @@ public:
                            //Qt::WindowFlags f = Qt::WindowFlags());
   ~Scatter3DWidget();
 
-  void paintPoints(k_means &k_m);
   void createContainer(Q3DScatter& graph, k_means &k_m);
+  void paintPoints(k_means &k_m);
   void paintCenters(k_means &k_m);
+  void paintClusters(k_means &k_m);
+  void paintClustersInit(k_means &k_m);
+  void paintCentersInit(k_means &k_m);
+  void clearAllPointsSeriesFromGraph();
 
 private:
   Ui::Scatter3DWidget *ui;

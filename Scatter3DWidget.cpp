@@ -49,8 +49,43 @@ void Scatter3DWidget::createContainer(Q3DScatter& graph, k_means &k_m)
   widget->show();
 }
 
+/**
+ * @brief Scatter3DWidget::paintCenters
+ * @param k_m
+ * Draw centers with current color and location
+ */
 void Scatter3DWidget::paintCenters(k_means &k_m)
 {
-  m_scatter3Dvis->addSeriesForEachCluster(k_m);
   m_scatter3Dvis->addDataCenters(k_m);
+}
+
+/**
+ * @brief Scatter3DWidget::paintClusters
+ * @param k_m
+ * Draw actual points with their current cluster color
+ */
+void Scatter3DWidget::paintClusters(k_means &k_m)
+{
+  m_scatter3Dvis->updateSeriesForEachCluster(k_m);
+}
+
+/**
+ * @brief Scatter3DWidget::paintClustersInit
+ * @param k_m
+ * Need to add the series for points first in the
+ * first clustering iteration.
+ */
+void Scatter3DWidget::paintClustersInit(k_means &k_m)
+{
+  m_scatter3Dvis->addSeriesForEachClusterPoints(k_m);
+}
+
+void Scatter3DWidget::paintCentersInit(k_means &k_m)
+{
+  m_scatter3Dvis->addSeriesForEachCluster(k_m);
+}
+
+void Scatter3DWidget::clearAllPointsSeriesFromGraph()
+{
+  m_scatter3Dvis->clearAllPointsSeriesFromGraph();
 }

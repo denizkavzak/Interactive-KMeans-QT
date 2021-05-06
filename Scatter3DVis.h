@@ -18,6 +18,9 @@ public:
   void addData(k_means &k_m);
   void addDataCenters(k_means &k_m);
   void addSeriesForEachCluster(k_means &k_m);
+  void addSeriesForEachClusterPoints(k_means &k_m);
+  void updateSeriesForEachCluster(k_means &k_m);
+  void clearAllPointsSeriesFromGraph();
 
 private:
   Q3DScatter *m_graph;

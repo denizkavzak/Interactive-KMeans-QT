@@ -91,6 +91,14 @@ void Scatter3DVis::addData(k_means &k_m)
   m_graph->seriesList().at(0)->dataProxy()->resetArray(dataArray);
 }
 
+
+/**
+ * @brief Scatter3DVis::addDataCenters
+ * @param k_m
+ * Sets cluster centers in graph using respective series for each
+ * all points are in seriesList().at(0)
+ * All cluster centers are from index 1....k
+ */
 void Scatter3DVis::addDataCenters(k_means &k_m)
 {
   qDebug() << "Inside add centers";
@@ -115,11 +123,17 @@ void Scatter3DVis::addDataCenters(k_means &k_m)
     //m_graph->seriesList().at(0)->dataProxy()->removeItems();
     m_graph->seriesList().at(ind)->dataProxy()->resetArray(dataArray);
     m_graph->seriesList().at(ind)->setBaseColor(*(cluster->color));
+    m_graph->seriesList().at(ind)->setMesh(QAbstract3DSeries::MeshCube);
     qDebug() << "series color" << m_graph->seriesList().at(ind)->baseColor();
     ind++;
   }
 }
 
+/**
+ * @brief Scatter3DVis::addSeriesForEachCluster
+ * @param k_m
+ * Add series for each cluster center to the graph (k series for k centers)
+ */
 void Scatter3DVis::addSeriesForEachCluster(k_means &k_m)
 {
   // First series will be for all points, rest will be for clusters
@@ -131,4 +145,82 @@ void Scatter3DVis::addSeriesForEachCluster(k_means &k_m)
     //series->setMeshSmooth(m_smooth);
     m_graph->addSeries(series);
   }
+}
+
+/**
+ * @brief Scatter3DVis::addSeriesForEachClusterPoints
+ * @param k_m
+ * Add series for points of each cluster (k series for k set of points)
+ */
+void Scatter3DVis::addSeriesForEachClusterPoints(k_means &k_m)
+{
+  // First series will be for all points, next k will be for cluster centers
+  // Then next k will be for the actual points of each cluster
+  // Cluster center in series index i's points will be in series index k+i+1
+  // There will be in total 2k + 1 series
+  for (int i=0; i < k_m.getK(); i++)
+  {
+    QScatterDataProxy *proxy = new QScatterDataProxy;
+    QScatter3DSeries *series = new QScatter3DSeries(proxy);
+    series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
+    //series->setMeshSmooth(m_smooth);
+    m_graph->addSeries(series);
+  }
+
+  qDebug() << "!!!!!! size of series list after series for cluster points added : " << m_graph->seriesList().size();
+}
+
+/**
+ * @brief Scatter3DVis::updateSeriesForEachCluster
+ * @param k_m
+ * Add cluster points into the respective series in the graph
+ * Index 0 holds all the points
+ * Indexes 1....k holds the cluster centers
+ * Indexes k+1......2k+1 holds the corresponding cluster points
+ * This function need to be called together with
+ * addDataCenters to update both centers and respective points
+ * in the graph
+ */
+void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
+{
+  // First series will be for all points, next k will be for cluster centers
+  // Then next k will be for the actual points of each cluster
+  // Cluster center in series index i's points will be in series index k+i+1
+  // There will be in total 2k + 1 series
+  qDebug() << "Inside update series for each cluster";
+  int ind = 1;
+  for (k_means::ClusterND* cluster : k_m.getClustersND()) {
+    QScatterDataArray *dataArray = new QScatterDataArray;
+    dataArray->resize(cluster->cluster_points.size()); // size of cluster pts
+    QScatterDataItem *ptrToDataArray = &dataArray->first();
+    qDebug() << "Inside loop";
+
+    qDebug() << "Num of points in cluster: " << cluster->cluster_points.size();
+    for (QVector<float> point : cluster->cluster_points) {
+
+      ptrToDataArray->setPosition(QVector3D(point.at(0) ,
+                                            point.at(1),
+                                            point.at(2)));
+      ptrToDataArray++;
+    }
+
+//    qDebug() << QVector3D(cluster->center.at(0) ,
+//                          cluster->center.at(1),
+//                          cluster->center.at(2));
+
+    qDebug() << "from cluster " << *(cluster->color);
+    // ind starts from 1 since all points are still in seriesList().at(0)
+    //m_graph->seriesList().at(0)->dataProxy()->removeItems();
+    m_graph->seriesList().at(ind+k_m.getK())->dataProxy()->resetArray(dataArray);
+    m_graph->seriesList().at(ind+k_m.getK())->setBaseColor(*(cluster->color));
+    qDebug() << "series" << ind+k_m.getK() << ": color" << m_graph->seriesList().at(ind+k_m.getK())->baseColor();
+    ind++;
+  }
+
+}
+
+void Scatter3DVis::clearAllPointsSeriesFromGraph()
+{
+  m_graph->seriesList().at(0)->setVisible(false);
+  //m_graph->seriesList().removeAt(0);
 }
