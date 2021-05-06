@@ -140,17 +140,9 @@ void ChartViewWidget::getPrevStep(k_means &k_m)
  */
 void ChartViewWidget::updatePointSize(int pointSize)
 {
-  // Currently resizing will work before clustering starts
-  if (m_step == 0) {
-    // Only attempt to draw if size is different than current size
-    if (pointSize != m_pointSize) {
-      m_pointSize = pointSize;
-      ui->chartView->setPointSize(pointSize, m_step);
-    }
-  } else {
-    QMessageBox msgBox;
-    msgBox.setText("Currently point size can only be changed "
-                   "before clustering starts!");
-    msgBox.exec();
+  // Only attempt to draw if size is different than current size
+  if (pointSize != m_pointSize) {
+    m_pointSize = pointSize;
+    ui->chartView->setPointSize(pointSize, m_step);
   }
 }

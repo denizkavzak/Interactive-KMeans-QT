@@ -92,23 +92,17 @@ void ChartView::paintCenters(k_means k_m)
  */
 void ChartView::setPointSize(int pointSize, int step)
 {
-  qDebug() << " check points " ;
   m_pointSize = pointSize;
   if (step == 0) {
-    qDebug() << " in points " ;
     m_series->setMarkerSize(m_pointSize);
   }
-  qDebug() << " check centers " ;
-  if (!m_clusterCenterSeries.empty()) {
-    qDebug() << " in centers " ;
-    for (int i = 0; i<m_clusterCenterSeries.size(); i++) {
-      m_clusterCenterSeries[i]->setMarkerSize(m_pointSize);
+  if (!m_clusterCenterSeries.empty()) { // centers are painted
+    for (int i = 0; i < m_clusterCenterSeries.size(); i++) {
+      m_clusterCenterSeries[i]->setMarkerSize(m_pointSize + 10.0);
     }
   }
-  qDebug() << " check clusters " ;
   if (!m_clusterSeries.empty()) {
-    qDebug() << " in clusters " ;
-    for (int i = 0; i<m_clusterSeries.size(); i++) {
+    for (int i = 0; i < m_clusterSeries.size(); i++) {
       m_clusterSeries[i]->setMarkerSize(m_pointSize);
     }
   }
@@ -157,6 +151,11 @@ void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
 
     i ++;
 
+    // First the cluster points are added, then the cluster center is added
+    // cluster points of cluster 0 is in index 0
+    // center of cluster 0 is in index 1
+    // cluster points of cluster 1 is in index 2
+    // center of cluster 1 is in index 3
     chart()->addSeries(clusterSeries);
     chart()->addSeries(clusterCenterSeries);
     m_clusterSeries += clusterSeries;
