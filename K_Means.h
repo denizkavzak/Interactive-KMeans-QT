@@ -93,6 +93,8 @@ public:
   // getters
   QVector<QVector<float>*> getAllPointsND();
   QVector<ClusterND*> getClustersND();
+  bool isPointsSet();
+  void setPointsSet(bool set);
 
   // kmeans functions
   void clusterPointsND(int num_iterations);
@@ -132,6 +134,7 @@ private:
   int m_iter = 0;
   bool m_initialized = false;
   int m_dim = 2;
+  bool m_pointsSet = false;
 };
 
 #endif // KMEANS_H

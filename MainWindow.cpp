@@ -132,7 +132,7 @@ void MainWindow::clusterPoints()
         m_k_means.clusterPointsND(m_k_means.getNumOfIter());
         m_step = m_k_means.getNumOfIter();
         m_kMeansDialog->updateIterationStepLabel(m_step);
-        //ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
+        ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
         ui->scatter3DWidget->clearAllPointsSeriesFromGraph();
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
@@ -165,15 +165,19 @@ void MainWindow::getNextStep()
         m_kMeansDialog->updateIterationStepLabel(m_step);
       } else if (m_k_means.getDimension() == 3) {
         back_clicked = false;
-        m_k_means.clusterPointsND(m_k_means.getNumOfIter());
-        m_step = m_k_means.getNumOfIter();
+        m_k_means.moveOneStepND();
+        //m_k_means.clusterPointsND(m_k_means.getNumOfIter());
+        m_k_means.printClustersND();
+        if (!m_k_means.isPointsSet()) { // initialize if clustering just started
+        // use another flag to test if points are set to any cluster yet
+          ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
+        }
+        m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
-//        if (m_step == 0) { // initialize if clustering just started
-//          ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
-//        }
-        ui->scatter3DWidget->clearAllPointsSeriesFromGraph();
+        //ui->scatter3DWidget->clearAllPointsSeriesFromGraph(); // do not need to call it each time
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
+        m_k_means.finalizeOneStepND();
       }
     }
   }
@@ -209,7 +213,6 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
         m_k_means.setInitialized(true);
         ui->scatter3DWidget->paintCentersInit(m_k_means);
         ui->scatter3DWidget->paintCenters(m_k_means);
-        ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
       } else {
         if (initMethod == "Random Sample") {
           in.initRandomSample(m_k_means);

@@ -420,6 +420,7 @@ void k_means::finalizeOneStepND()
     qDebug() << "/------------Final Clusters---------------/: ";
     moveOneStepND();
   }
+  m_pointsSet = true;
 }
 
 void k_means::setClusterCentersToPrevND()
@@ -514,4 +515,14 @@ void k_means::updateCentersND()
     }
     ind += 1;
   }
+}
+
+bool k_means::isPointsSet()
+{
+  return m_pointsSet;
+}
+
+void k_means::setPointsSet(bool set)
+{
+  m_pointsSet = set;
 }
