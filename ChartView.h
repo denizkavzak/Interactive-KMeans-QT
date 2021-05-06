@@ -19,11 +19,10 @@ public:
   void paintCenters(k_means k_m);
   void setPointSize(int pointSize, int step);
 
-//public slots:
-//  void updateRange();
+protected:
 
-//signals:
-  //void rangeChanged(qreal, qreal);
+    virtual void mousePressEvent(QMouseEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
 
@@ -35,6 +34,7 @@ private:
   QSizeF m_minSize;
   QSizeF m_maxSize;
   int m_pointSize;
+  QPointF m_lastMousePos;
 
 };
 

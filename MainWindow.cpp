@@ -53,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
   // Can access clusters by using m.getClusters()
 
+  //m_graph->;
+
 }
 
 MainWindow::~MainWindow()

@@ -6,6 +6,7 @@
 #include <QtCore/QtMath>
 #include <QWidget>
 #include <QDebug>
+#include <QApplication>
 
 ChartView::ChartView(QWidget *parent) :
   QChartView(new QChart(), parent)
@@ -16,12 +17,8 @@ ChartView::ChartView(QWidget *parent) :
   m_series->setMarkerShape(QScatterSeries::MarkerShapeCircle);
   m_series->setMarkerSize(m_pointSize);
 
-  //chart()->zoomIn();
-  //setRubberBand(QChartView::RectangleRubberBand);
-  //setDragMode(QChartView::ScrollHandDrag);
-  //setDragMode(QChartView::NoDrag);
-  //  setRubberBand(QChartView::NoRubberBand);
-  //  setDragMode(QChartView::ScrollHandDrag);
+  setDragMode(QGraphicsView::NoDrag);
+  this->setMouseTracking(true);
 }
 
 /**
@@ -109,6 +106,51 @@ void ChartView::setPointSize(int pointSize, int step)
 }
 
 /**
+ * @brief ChartView::mousePressEvent
+ * @param event
+ * Implements mouse press event for the middle mouse button
+ * Which triggers the mouseMoveEvent that is overriden.
+ * Ref from https://github.com/nholthaus/chart
+ */
+void ChartView::mousePressEvent(QMouseEvent *event)
+{
+  if (event->button() == Qt::MiddleButton)
+  {
+      QApplication::setOverrideCursor(QCursor(Qt::SizeAllCursor));
+      m_lastMousePos = event->pos();
+      event->accept();
+  }
+
+  QChartView::mousePressEvent(event);
+}
+
+/**
+ * @brief ChartView::mouseMoveEvent
+ * @param event
+ * The triggered mouse event moves the
+ * chart to new mouse position that is collected by
+ * mouse press event by using the scroll
+ * function of chart view
+ * Ref from https://github.com/nholthaus/chart
+ */
+void ChartView::mouseMoveEvent(QMouseEvent *event)
+{
+  // pan the chart with a middle mouse drag
+  if (event->buttons() & Qt::MiddleButton)
+  {
+      auto dPos = event->pos() - m_lastMousePos;
+      chart()->scroll(-dPos.x(), dPos.y());
+
+      m_lastMousePos = event->pos();
+      event->accept();
+
+      QApplication::restoreOverrideCursor();
+  }
+
+  QChartView::mouseMoveEvent(event);
+}
+
+/**
  * @brief ChartView::paintClusters
  * @param k_m
  * Paint 2D cluster points with the same color to distinguish between
@@ -172,14 +214,6 @@ void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
   chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 
 }
-
-//void ChartView::updateRange()
-//{
-//  m_minSize = chart()->minimumSize();
-//  m_maxSize = chart()->maximumSize();
-
-//  emit rangeChanged(m_minSize.width(), m_maxSize.width());
-//}
 
 /**
  * @brief ChartView::getSeries
