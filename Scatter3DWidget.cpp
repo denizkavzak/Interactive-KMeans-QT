@@ -28,7 +28,7 @@ void Scatter3DWidget::paintPoints(k_means &k_m)
   m_scatter3Dvis->addData(k_m);
 }
 
-void Scatter3DWidget::createContainer(Q3DScatter& graph, k_means &k_m)
+void Scatter3DWidget::createContainer(Q3DScatter& graph)
 {
   m_container = QWidget::createWindowContainer(&graph);
 
@@ -88,4 +88,9 @@ void Scatter3DWidget::paintCentersInit(k_means &k_m)
 void Scatter3DWidget::clearAllPointsSeriesFromGraph()
 {
   m_scatter3Dvis->clearAllPointsSeriesFromGraph();
+}
+
+void Scatter3DWidget::updatePointSize(int pointSize)
+{
+  m_scatter3Dvis->updatePointSize(pointSize);
 }

@@ -21,6 +21,7 @@ public:
   void addSeriesForEachClusterPoints(k_means &k_m);
   void updateSeriesForEachCluster(k_means &k_m);
   void clearAllPointsSeriesFromGraph();
+  void updatePointSize(int pointSize);
 
 private:
   Q3DScatter *m_graph;

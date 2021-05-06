@@ -228,3 +228,11 @@ void Scatter3DVis::clearAllPointsSeriesFromGraph()
   m_graph->seriesList().at(0)->setVisible(false);
   //m_graph->seriesList().removeAt(0);
 }
+
+void Scatter3DVis::updatePointSize(int pointSize)
+{
+  qDebug() << "current item size: " << m_graph->seriesList().at(0)->itemSize();
+  for (int i = 0; i < m_graph->seriesList().size(); i++) {
+    m_graph->seriesList().at(i)->setItemSize(float(pointSize)/100.0f);
+  }
+}

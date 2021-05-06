@@ -69,7 +69,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
 {
-  if (!m_k_means.getAllPoints().empty()){
+  if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
     QMessageBox msgBox;
     msgBox.setText("Points are already generated, open a new instance!");
     msgBox.exec();
@@ -94,7 +94,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       } else {
         qDebug() << " Scatter graph is created ";
       }
-      ui->scatter3DWidget->createContainer(*m_graph, m_k_means);
+      ui->scatter3DWidget->createContainer(*m_graph);
       ui->scatter3DWidget->paintPoints(m_k_means);
     }
 
@@ -231,12 +231,16 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
 
 void MainWindow::updatePointSize(int pointSize)
 {
-  if (m_k_means.getAllPoints().isEmpty()) {
+  if (m_k_means.getAllPoints().isEmpty() && m_k_means.getAllPointsND().isEmpty()) {
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
     msgBox.exec();
   } else {
-    ui->chartViewWidget->updatePointSize(pointSize);
+    if (m_k_means.getDimension() == 2) {
+      ui->chartViewWidget->updatePointSize(pointSize);
+    } else if (m_k_means.getDimension() == 3) {
+      ui->scatter3DWidget->updatePointSize(pointSize);
+    }
   }
 }
 
@@ -299,7 +303,7 @@ void MainWindow::zoomActualSize()
 
 void MainWindow::importPoints()
 {
-  if (!m_k_means.getAllPoints().empty()){
+  if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
     QMessageBox msgBox;
     msgBox.setText("Points are already generated, open a new instance!");
     msgBox.exec();
@@ -369,7 +373,7 @@ void MainWindow::importPoints()
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
       } else if (dimension == 3) {
         m_graph = new Q3DScatter();
-        ui->scatter3DWidget->createContainer(*m_graph, m_k_means);
+        ui->scatter3DWidget->createContainer(*m_graph);
         ui->scatter3DWidget->paintPoints(m_k_means);
       }
       m_kMeansDialog->updatePointInfoLabel("Points Imported");
