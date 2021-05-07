@@ -81,9 +81,9 @@ void Scatter3DVis::addDataCenters(k_means &k_m)
   int ind = 1;
   for (k_means::ClusterND* cluster : k_m.getClustersND()) {
     QScatterDataArray *dataArray = new QScatterDataArray;
-    dataArray->resize(1); // We only have k centers
+    dataArray->resize(1);
     QScatterDataItem *ptrToDataArray = &dataArray->first();
-    qDebug() << "Inside loop";
+
     ptrToDataArray->setPosition(QVector3D(cluster->center.at(0) ,
                                           cluster->center.at(1),
                                           cluster->center.at(2)));
@@ -94,13 +94,13 @@ void Scatter3DVis::addDataCenters(k_means &k_m)
                           cluster->center.at(1),
                           cluster->center.at(2));
 
-    qDebug() << "from cluster " << *(cluster->color);
+    //qDebug() << "from cluster " << *(cluster->color);
     // ind starts from 1 since all points are still in seriesList().at(0)
     //m_graph->seriesList().at(0)->dataProxy()->removeItems();
     m_graph->seriesList().at(ind)->dataProxy()->resetArray(dataArray);
     m_graph->seriesList().at(ind)->setBaseColor(*(cluster->color));
     m_graph->seriesList().at(ind)->setMesh(QAbstract3DSeries::MeshCube);
-    qDebug() << "series color" << m_graph->seriesList().at(ind)->baseColor();
+    //qDebug() << "series color" << m_graph->seriesList().at(ind)->baseColor();
     ind++;
   }
 }
@@ -143,7 +143,7 @@ void Scatter3DVis::addSeriesForEachClusterPoints(k_means &k_m)
     m_graph->addSeries(series);
   }
 
-  qDebug() << "!!!!!! size of series list after series for cluster points added : " << m_graph->seriesList().size();
+  //qDebug() << "!!!!!! size of series list after series for cluster points added : " << m_graph->seriesList().size();
 }
 
 /**
@@ -165,16 +165,16 @@ void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
   // There will be in total 2k + 1 series
   qDebug() << "Inside update series for each cluster";
   int ind = 1;
-  qDebug() << "Num of series in graph: " << m_graph->seriesList().size();
+  //qDebug() << "Num of series in graph: " << m_graph->seriesList().size();
   for (k_means::ClusterND* cluster : k_m.getClustersND()) {
-    qDebug() << "Num of points in cluster: " << cluster->cluster_points.size();
+    //qDebug() << "Num of points in cluster: " << cluster->cluster_points.size();
     if (cluster->cluster_points.size() != 0) {
       m_graph->seriesList().at(0)->setVisible(false);
-      qDebug() << "Num of points in cluster: " << cluster->cluster_points.size();
+      //qDebug() << "Num of points in cluster: " << cluster->cluster_points.size();
       QScatterDataArray *dataArray = new QScatterDataArray;
       dataArray->resize(cluster->cluster_points.size()); // size of cluster pts
       QScatterDataItem *ptrToDataArray = &dataArray->first();
-      qDebug() << "Inside loop";
+      //qDebug() << "Inside loop";
 
       for (QVector<float> point : cluster->cluster_points) {
 
@@ -188,12 +188,12 @@ void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
       //                          cluster->center.at(1),
       //                          cluster->center.at(2));
 
-      qDebug() << "from cluster " << *(cluster->color);
+      //qDebug() << "from cluster " << *(cluster->color);
       // ind starts from 1 since all points are still in seriesList().at(0)
       //m_graph->seriesList().at(0)->dataProxy()->removeItems();
-      m_graph->seriesList().at(ind+k_m.getK())->dataProxy()->resetArray(dataArray);
-      m_graph->seriesList().at(ind+k_m.getK())->setBaseColor(*(cluster->color));
-      qDebug() << "series" << ind+k_m.getK() << ": color" << m_graph->seriesList().at(ind+k_m.getK())->baseColor();
+      m_graph->seriesList().at(ind + k_m.getK())->dataProxy()->resetArray(dataArray);
+      m_graph->seriesList().at(ind + k_m.getK())->setBaseColor(*(cluster->color));
+      //qDebug() << "series" << ind+k_m.getK() << ": color" << m_graph->seriesList().at(ind+k_m.getK())->baseColor();
       ind++;
     }
   }
@@ -223,7 +223,7 @@ void Scatter3DVis::clearAllPointsSeriesFromGraph()
  */
 void Scatter3DVis::updatePointSize(int pointSize)
 {
-  qDebug() << "current item size: " << m_graph->seriesList().at(0)->itemSize();
+  //qDebug() << "current item size: " << m_graph->seriesList().at(0)->itemSize();
   for (int i = 0; i < m_graph->seriesList().size(); i++) {
     m_graph->seriesList().at(i)->setItemSize(float(pointSize)/100.0f);
   }

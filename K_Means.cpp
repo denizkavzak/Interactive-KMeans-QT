@@ -393,17 +393,6 @@ bool k_means::isInitialized()
 }
 
 /**
- * @brief k_means::getPrevClusterCenters
- * @return
- * Getter for the previous cluster centers attribute
- * Used for back step feature during clustering
- */
-QVector<QVector2D*> k_means::getPrevClusterCenters()
-{
-  return m_previousCenters;
-}
-
-/**
  * @brief k_means::setStep
  * @param step
  * Setter for step attribute indicating the current
@@ -470,9 +459,69 @@ void k_means::printClustersND()
 }
 
 /**
+ * @brief k_means::updateClusteringCenterHistoryND
+ * Update clustering center history with current
+ * cluster centers in current iteration for ND (N>=3)
+ */
+void k_means::updateClusteringCenterHistoryND()
+{
+  QVector<QVector<float>*> centers; // <numOfclusters<dimension
+  for (int i = 0; i < m_clustersND.size(); i++) { // numOfClusters
+    QVector<float>* p = new QVector<float>(m_clustersND.at(i)->center);
+    centers.append(p);
+  }
+  m_clusteringCenterHistoryND->replace(m_step, centers);
+}
+
+/**
+ * @brief k_means::printClusteringCenterHistoryND
+ * Print cluster centers history for ND (N>=3)
+ */
+void k_means::printClusteringCenterHistoryND()
+{
+  qDebug() << "PREV HISTORY: ";
+  for (int i = 0; i < m_clusteringCenterHistoryND->size(); i++) {
+    qDebug() << "iteration " << i;
+    for (int j = 0; j < m_clusteringCenterHistoryND->at(i).size(); j++) {
+      qDebug() << *m_clusteringCenterHistoryND->at(i).at(j);
+    }
+  }
+}
+
+/**
+ * @brief k_means::setClusterCentersToPrevStepInHistoryND
+ * Sets current cluster centers to the
+ * stored previous step cluster center history in ND (N>=3)
+ * Used for back step feature during clustering
+ */
+void k_means::setClusterCentersToPrevStepInHistoryND()
+{
+  m_step -= 1;
+  QVector<QVector<float>*> prev = m_clusteringCenterHistoryND->at(m_step - 1);
+  for (int i = 0; i < m_clustersND.size(); i++) {
+    QVector<float> p(*prev.at(i)); // get previous center point
+    qDebug() << m_clustersND[i]->center  << " set to " << p;
+    m_clustersND[i]->center = p;
+  }
+  m_back_clicked = true;
+}
+
+/**
+ * @brief k_means::initClusterCentersHistoryND
+ * Initialize cluster centers history by number of iterations for ND (N>=3)
+ */
+void k_means::initClusterCentersHistoryND()
+{
+  qDebug() << "init history nd: ";
+  m_clusteringCenterHistoryND = new QVector<QVector<QVector<float>*>>(m_iter);
+  printClusteringCenterHistoryND();
+}
+
+/**
  * @brief k_means::updateClusteringCenterHistory
  * Update clustering center history with current
  * cluster centers in current iteration
+ * Used for back step feature during clustering in ND (N>=3)
  */
 void k_means::updateClusteringCenterHistory()
 {
@@ -509,7 +558,7 @@ void k_means::printClusteringCenterHistory()
 void k_means::setClusterCentersToPrevStepInHistory()
 {
   m_step -= 1;
-  QVector<QVector2D*> prev = m_clusteringCenterHistory->at(m_step-1);
+  QVector<QVector2D*> prev = m_clusteringCenterHistory->at(m_step - 1);
   for (int i = 0; i < m_clusters.size(); i++) {
     QVector2D p(prev.at(i)->x(), prev.at(i)->y());
     m_clusters[i]->center = p;
@@ -517,6 +566,10 @@ void k_means::setClusterCentersToPrevStepInHistory()
   m_back_clicked = true;
 }
 
+/**
+ * @brief k_means::initClusterCentersHistory
+ * Initialize cluster centers history by number of iterations
+ */
 void k_means::initClusterCentersHistory()
 {
   m_clusteringCenterHistory = new QVector<QVector<QVector2D*>>(m_iter);
@@ -554,6 +607,8 @@ void k_means::clusterPointsND(int num_iterations)
     moveOneStepND();
     finalizeOneStepND();
   }
+
+  printClusteringCenterHistoryND();
 }
 
 /**
@@ -566,6 +621,12 @@ void k_means::moveOneStepND()
   // Point assignment
   setPointsND();
 
+  if (m_step != m_iter && m_back_clicked != true) {
+    updateClusteringCenterHistoryND();
+    printClusteringCenterHistoryND();
+  }
+  m_back_clicked = false;
+
   qDebug() << "Iteration : " << m_step;
   printClustersND();
 }
@@ -576,7 +637,6 @@ void k_means::moveOneStepND()
  */
 void k_means::finalizeOneStepND()
 {
-  updatePrevClusterCentersND();
   // Cluster center update
   // for each cluster center 0...m_k
   updateCentersND();
@@ -587,25 +647,6 @@ void k_means::finalizeOneStepND()
     moveOneStepND();
   }
   m_pointsSet = true;
-}
-
-/**
- * @brief k_means::setClusterCentersToPrevND
- * Sets current cluster centers to the
- * stored previous cluster centers in ND (N>=3)
- * Used for back step feature during clustering
- */
-void k_means::setClusterCentersToPrevND()
-{
-  m_step -= 1;
-  for (int i = 0; i < m_clustersND.size(); i++) {
-    qDebug() << "PREV: " << m_clustersND[i]->center;
-
-    QVector<float> *p = m_previousCentersND.at(i);
-    m_clustersND[i]->center = *p;
-    qDebug() << "AFTER: " << m_clustersND[i]->center;
-  }
-
 }
 
 /**
@@ -649,9 +690,9 @@ void k_means::setPointsND()
 void k_means::clearClusterPointsND()
 {
   for (k_means::ClusterND* cluster : m_clustersND) {
-    qDebug() << "PREV CLUSTER CLEAR:" << cluster->cluster_points.size();
+    //qDebug() << "PREV CLUSTER CLEAR:" << cluster->cluster_points.size();
     cluster->cluster_points.clear();
-    qDebug() << "AFTER CLUSTER CLEAR:" << cluster->cluster_points.size();
+    //qDebug() << "AFTER CLUSTER CLEAR:" << cluster->cluster_points.size();
   }
 }
 
@@ -666,24 +707,6 @@ void k_means::addClusterND(k_means::ClusterND *cluster)
 }
 
 /**
- * @brief k_means::updatePrevClusterCentersND
- * Updates the previous cluster centers
- * Used for back step feature during clustering in ND (N>=3)
- */
-void k_means::updatePrevClusterCentersND()
-{
-  qDebug() << "Setting up prev : ";
-  qDebug() << m_previousCentersND;
-  m_previousCentersND.clear();
-  for (int i = 0; i < m_clustersND.size(); i++) {
-    QVector<float> *p = new QVector<float>(m_clustersND.at(i)->center);
-    m_previousCentersND += p;
-  }
-  qDebug() << "AFTER prev";
-  qDebug() << m_previousCentersND;
-}
-
-/**
  * @brief k_means::updateCentersND
  * This function updates the cluster centers by using the mean of the
  * points in the cluster in ND (N>=3)
@@ -695,7 +718,7 @@ void k_means::updateCentersND()
   int ind = 0;
   for (k_means::ClusterND* cluster : m_clustersND) {
     // new center = mean of all points assigned to that cluster
-    if (cluster->cluster_points.size()!=0){ // check if cluster has any points
+    if (cluster->cluster_points.size() != 0){ // check if cluster has any points
       QVector<float> p(m_dim, 0.0);
       for (QVector<float> cluster_point : cluster->cluster_points) {
         for (int i = 0; i < m_dim; i++) {

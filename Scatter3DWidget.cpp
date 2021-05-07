@@ -123,3 +123,10 @@ void Scatter3DWidget::updatePointSize(int pointSize)
 {
   m_scatter3Dvis->updatePointSize(pointSize);
 }
+
+void Scatter3DWidget::getPrevStep(k_means &k_m)
+{
+  //m_step -= 1;
+  paintClusters(k_m);
+  paintCenters(k_m);
+}

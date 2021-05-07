@@ -78,7 +78,6 @@ public:
   QVector<Cluster*> getClusters();
   QVector<QVector2D*> getAllPoints();
   //QVector2D getCenters();
-  QVector<QVector2D*> getPrevClusterCenters();
 
   // kmeans functions
   void clusterPoints(int num_iterations);
@@ -113,35 +112,34 @@ public:
   void moveOneStepND();
   void finalizeOneStepND();
   void setPoints();
+  void setPointsND();
+  void updateCentersND();
 
   // helper functions
-  void setClusterCentersToPrevND();
   void clearClusterPointsND();
   void addClusterND(ClusterND* cluster);
   void addPointND(QVector<float>* point);
-  void updatePrevClusterCentersND();
   void printClustersND();
 
-private:
+  // back step functions
+  void updateClusteringCenterHistoryND();
+  void printClusteringCenterHistoryND();
+  void setClusterCentersToPrevStepInHistoryND();
+  void initClusterCentersHistoryND();
 
-  // for ND
-  void setPointsND();
-  void updateCentersND();
+private:
 
   QVector<QVector2D*> m_allPoints;
   int m_num_points;
   int m_k;
   QVector<Cluster*> m_clusters;
-  QVector<Cluster*> m_PreviousClusters;
-  QVector<QVector2D*> m_previousCenters;
 
   // for ND
   QVector<QVector<float>*> m_allPointsND;
   QVector<ClusterND*> m_clustersND;
-  QVector<QVector<float>*> m_previousCentersND;
   QVector<QVector<QVector2D*>> *m_clusteringCenterHistory; // store all clustering history
-  QVector<QVector<QVector2D*>> *m_clusteringCenterHistoryND; // store all clustering history
-
+  QVector<QVector<QVector<float>*>> *m_clusteringCenterHistoryND; // store all clustering history
+  // each iteration < each cluster < center point > >
   QString m_metric;
   int m_step = 0;
   int m_iter = 0;

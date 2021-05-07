@@ -26,6 +26,7 @@ public:
   void paintCentersInit(k_means &k_m);
   void clearAllPointsSeriesFromGraph();
   void updatePointSize(int pointSize);
+  void getPrevStep(k_means &k_m);
 
 private:
   Ui::Scatter3DWidget *ui;

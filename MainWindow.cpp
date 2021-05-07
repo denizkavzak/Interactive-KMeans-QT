@@ -143,8 +143,8 @@ void MainWindow::clusterPoints()
         m_kMeansDialog->updateIterationStepLabel(m_step);
         ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
         ui->scatter3DWidget->clearAllPointsSeriesFromGraph();
-        ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
+        ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
       } else { // No visualization available for N > 3 or N < 2
         m_back_clicked = false;
         m_k_means.clusterPointsND(m_k_means.getNumOfIter());
@@ -176,7 +176,7 @@ void MainWindow::getNextStep()
       QMessageBox msgBox;
       msgBox.setText("Clustering is finalized!");
       msgBox.exec();
-    } else{
+    } else {
       if (m_k_means.getDimension() == 2) {
         m_back_clicked = false;
         m_k_means.moveOneStep();
@@ -198,8 +198,8 @@ void MainWindow::getNextStep()
         m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
         //ui->scatter3DWidget->clearAllPointsSeriesFromGraph(); // do not need to call it each time
-        ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
+        ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
       } else { // No visualization available for N > 3 or N < 2
         m_k_means.moveOneStepND();
         m_k_means.finalizeOneStepND();
@@ -226,7 +226,6 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
     } else {
       initialization in;
       m_k_means.setNumOfIter(iter);
-      qDebug() << "K is in first place:" << k;
       m_k_means.setK(k);
       m_k_means.setMetric(metric);
 
@@ -244,6 +243,7 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
           ui->scatter3DWidget->paintCentersInit(m_k_means);
           ui->scatter3DWidget->paintCenters(m_k_means);
         }
+        m_k_means.initClusterCentersHistoryND();
       } else if (m_k_means.getDimension() == 2) { // For 2D case
         if (initMethod == "Random Sample") {
           in.initRandomSample(m_k_means);
@@ -307,19 +307,34 @@ void MainWindow::getPrevStep()
       QMessageBox msgBox;
       msgBox.setText("Only one step is done, cannot go back!");
       msgBox.exec();
-    } else{
+    } else {
       if (!m_back_clicked) {
-        //m_k_means.getPrevClusters();
-        m_back_clicked = true;
-        m_step -= 1;
-        m_k_means.setStep(m_step);
-        m_kMeansDialog->updateIterationStepLabel(m_step);
-        //m_k_means.setClusterCentersToPrev();
-        qDebug() << "step in prev step in main: " << m_step;
-        m_k_means.setClusterCentersToPrevStepInHistory();
-        m_k_means.setPoints();
-        m_k_means.updateCenters();
-        ui->chartViewWidget->getPrevStep(m_k_means);
+        if (m_k_means.getDimension() == 2) {
+          //m_k_means.getPrevClusters();
+          m_back_clicked = true;
+          m_step -= 1;
+          m_k_means.setStep(m_step);
+          m_kMeansDialog->updateIterationStepLabel(m_step);
+          //m_k_means.setClusterCentersToPrev();
+          qDebug() << "step in prev step in main: " << m_step;
+          m_k_means.setClusterCentersToPrevStepInHistory();
+          m_k_means.setPoints();
+          m_k_means.updateCenters();
+          ui->chartViewWidget->getPrevStep(m_k_means);
+        } else if (m_k_means.getDimension() >= 3) {
+          m_back_clicked = true;
+          m_step -= 1;
+          m_k_means.setStep(m_step);
+          m_kMeansDialog->updateIterationStepLabel(m_step);
+          //m_k_means.setClusterCentersToPrev();
+          qDebug() << "step in prev step in main: " << m_step;
+          m_k_means.setClusterCentersToPrevStepInHistoryND();
+          m_k_means.setPointsND();
+          m_k_means.updateCentersND();
+          if (m_k_means.getDimension() == 3) { // visualize
+            ui->scatter3DWidget->getPrevStep(m_k_means);
+          }
+        }
       } else {
         QMessageBox msgBox;
         msgBox.setText("Already moved one back, cannot go more!");

@@ -382,7 +382,7 @@ void initialization::initRandomSampleND(k_means &k_means)
     set.insert(c);
     QVector<float> * center = k_means.getAllPointsND().at(c);
     //QVector2D* center = k_means.getAllPoints().at(c);
-    qDebug() << "CENTER: " << center;
+    qDebug() << "CENTER: " << *center;
     // Create cluster
     k_means::ClusterND* cluster = new k_means::ClusterND();
     cluster->center = *center;
