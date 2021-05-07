@@ -7,6 +7,7 @@
 #include <initialization.h>
 #include <limits>
 #include <QtDataVisualization/Q3DScatter>
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,8 @@ public slots:
   void initializeClustering(int k, QString, int, QString);
   void updatePointSize(int pointSize);
   void getPrevStep();
+  void play(int ms_value);
+  void stop();
 
   void zoomIn();
   void zoomOut();
@@ -40,6 +43,8 @@ private:
   int m_step;
   bool m_back_clicked = false;
   QtDataVisualization::Q3DScatter* m_graph;
+  QTimer* m_timer;
+  bool m_playing = false;
 };
 
 #endif // MAINWINDOW_H

@@ -162,3 +162,14 @@ void KMeansDialog::updatePointInfoLabel(QString s)
 {
   ui->pointsInfoLabel->setText(s);
 }
+
+void KMeansDialog::play()
+{
+  int ms_value = ui->animationSpeedSpinBox->value();
+  emit playTriggered(ms_value);
+}
+
+void KMeansDialog::stop()
+{
+  emit stopTriggered();
+}

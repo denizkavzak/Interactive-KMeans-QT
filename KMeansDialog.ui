@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
-    <height>409</height>
+    <width>706</width>
+    <height>413</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -334,6 +334,39 @@
        </widget>
       </item>
       <item>
+       <widget class="QGroupBox" name="animationGroupBox">
+        <property name="title">
+         <string>Animation</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QSpinBox" name="animationSpeedSpinBox">
+           <property name="maximum">
+            <number>100000</number>
+           </property>
+           <property name="value">
+            <number>500</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="playPushButton">
+           <property name="text">
+            <string>Play</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QPushButton" name="stopPushButton">
+           <property name="text">
+            <string>Stop</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QGroupBox" name="visualizationGroupBox">
         <property name="title">
          <string>Visualization</string>
@@ -527,6 +560,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>playPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>play()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>439</x>
+     <y>300</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stopPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>KMeansDialog</receiver>
+   <slot>stop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>clicked()</signal>
@@ -537,5 +602,7 @@
   <slot>updatePointSize()</slot>
   <slot>getPrevStep()</slot>
   <slot>importPoints()</slot>
+  <slot>play()</slot>
+  <slot>stop()</slot>
  </slots>
 </ui>

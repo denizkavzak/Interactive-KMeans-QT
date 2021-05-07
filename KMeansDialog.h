@@ -28,6 +28,8 @@ public slots:
   void updateImportedPointParameters(int numOfPoint, int dimension,
                                      float min, float max);
   void updatePointInfoLabel(QString s);
+  void play();
+  void stop();
 
 signals:
   void pointsParametersChanged(int, float, float, int);
@@ -37,6 +39,8 @@ signals:
   void initializationSelected(int, QString, int, QString);
   void pointSizeUpdated(int);
   void importFileSelected();
+  void playTriggered(int ms_value);
+  void stopTriggered();
 
 private:
   Ui::KMeansDialog *ui;

@@ -41,13 +41,21 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::importFileSelected,
           this, &MainWindow::importPoints);
 
-  //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
+  connect(m_kMeansDialog, &KMeansDialog::playTriggered,
+          this, &MainWindow::play);
 
+  connect(m_kMeansDialog, &KMeansDialog::stopTriggered,
+          this, &MainWindow::stop);
+
+  //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
   qDebug() << "Clustering started !";
 
   //m.clusterPoints(5);
 
   qDebug() << "Clustering ended !";
+
+  m_timer = new QTimer(this);
+  m_timer->callOnTimeout(this, &MainWindow::getNextStep);
 
   //ui->ndViewWidget->paintPoints();
 
@@ -165,6 +173,9 @@ void MainWindow::clusterPoints()
  */
 void MainWindow::getNextStep()
 {
+  if (m_step == m_k_means.getNumOfIter() - 1) {
+    m_timer->stop();
+  }
   qDebug() << "getNextStep in mainwindow";
   if (!m_k_means.isInitialized()){
     QMessageBox msgBox;
@@ -213,7 +224,7 @@ void MainWindow::getNextStep()
 
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
 {
-  if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()){
+  if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()) {
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
     msgBox.exec();
@@ -342,6 +353,28 @@ void MainWindow::getPrevStep()
       }
     }
   }
+}
+
+void MainWindow::play(int ms_value)
+{
+  qDebug() << "Play called in mainwindow";
+  if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()) {
+    QMessageBox msgBox;
+    msgBox.setText("Generate points first!");
+    msgBox.exec();
+  } else if (!m_k_means.isInitialized()) {
+    QMessageBox msgBox;
+    msgBox.setText("Initialize clustering first!");
+    msgBox.exec();
+  } else {
+    m_timer->start(ms_value);
+    qDebug() << "Start timer";
+  }
+}
+
+void MainWindow::stop()
+{
+  m_timer->stop();
 }
 
 /**
