@@ -86,12 +86,17 @@ public:
   void finalizeOneStep();
 
   // helper functions
-  void setClusterCentersToPrev();
   void clearClusterPoints();
   void addCluster(Cluster* cluster);
   void addPoint(QVector2D* point);
-  void updatePrevClusterCenters();
   void printClusters();
+  void updateCenters();
+
+  // back step functions
+  void updateClusteringCenterHistory();
+  void printClusteringCenterHistory();
+  void setClusterCentersToPrevStepInHistory();
+  void initClusterCentersHistory();
 
   //
   // functions for ND
@@ -107,6 +112,7 @@ public:
   void clusterPointsND(int num_iterations);
   void moveOneStepND();
   void finalizeOneStepND();
+  void setPoints();
 
   // helper functions
   void setClusterCentersToPrevND();
@@ -117,8 +123,6 @@ public:
   void printClustersND();
 
 private:
-  void setPoints();
-  void updateCenters();
 
   // for ND
   void setPointsND();
@@ -135,6 +139,8 @@ private:
   QVector<QVector<float>*> m_allPointsND;
   QVector<ClusterND*> m_clustersND;
   QVector<QVector<float>*> m_previousCentersND;
+  QVector<QVector<QVector2D*>> *m_clusteringCenterHistory; // store all clustering history
+  QVector<QVector<QVector2D*>> *m_clusteringCenterHistoryND; // store all clustering history
 
   QString m_metric;
   int m_step = 0;
@@ -142,6 +148,7 @@ private:
   bool m_initialized = false;
   int m_dim = 2;
   bool m_pointsSet = false;
+  bool m_back_clicked = false;
 };
 
 #endif // KMEANS_H

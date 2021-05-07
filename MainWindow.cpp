@@ -255,6 +255,7 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
         m_k_means.setInitialized(true);
         ui->chartViewWidget->paintCenters(m_k_means);
         ui->chartViewWidget->update();
+        m_k_means.initClusterCentersHistory();
       }
     }
   }
@@ -289,9 +290,9 @@ void MainWindow::updatePointSize(int pointSize)
  */
 void MainWindow::getPrevStep()
 {
-  QMessageBox msgBox;
-  msgBox.setText("Not working properly yet!");
-  msgBox.exec();
+//  QMessageBox msgBox;
+//  msgBox.setText("Not working properly yet!");
+//  msgBox.exec();
   qDebug() << "getPrevStep in main window";
   if (!m_k_means.isInitialized()) {
     QMessageBox msgBox;
@@ -302,7 +303,7 @@ void MainWindow::getPrevStep()
       QMessageBox msgBox;
       msgBox.setText("Clustering has not started yet, cannot go back!");
       msgBox.exec();
-    } else if (m_step == 1) {
+    } else if (m_step == 1 || m_step == 2) {
       QMessageBox msgBox;
       msgBox.setText("Only one step is done, cannot go back!");
       msgBox.exec();
@@ -313,8 +314,11 @@ void MainWindow::getPrevStep()
         m_step -= 1;
         m_k_means.setStep(m_step);
         m_kMeansDialog->updateIterationStepLabel(m_step);
-        m_k_means.setClusterCentersToPrev();
-        m_k_means.moveOneStep();
+        //m_k_means.setClusterCentersToPrev();
+        qDebug() << "step in prev step in main: " << m_step;
+        m_k_means.setClusterCentersToPrevStepInHistory();
+        m_k_means.setPoints();
+        m_k_means.updateCenters();
         ui->chartViewWidget->getPrevStep(m_k_means);
       } else {
         QMessageBox msgBox;
