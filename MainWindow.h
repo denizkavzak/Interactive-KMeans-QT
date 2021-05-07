@@ -38,7 +38,7 @@ private:
   KMeansDialog *m_kMeansDialog;
   k_means m_k_means;
   int m_step;
-  bool back_clicked = false;
+  bool m_back_clicked = false;
   QtDataVisualization::Q3DScatter* m_graph;
 };
 

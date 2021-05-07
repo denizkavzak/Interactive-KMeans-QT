@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>667</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,7 +32,29 @@
      <height>600</height>
     </size>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="Scatter3DWidget" name="scatter3DWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>209</width>
+          <height>68</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
     <item>
      <widget class="QScrollArea" name="chartViewScrollArea">
       <property name="sizePolicy">
@@ -56,7 +78,7 @@
          <x>0</x>
          <y>0</y>
          <width>780</width>
-         <height>196</height>
+         <height>704</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -70,48 +92,6 @@
          <width>0</width>
          <height>0</height>
         </size>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout"/>
-      </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QScrollArea" name="nsWidgetScrollArea">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="NDViewWidget" name="ndViewWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>780</width>
-         <height>196</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3"/>
-      </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="Scatter3DWidget" name="scatter3DWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>780</width>
-         <height>196</height>
-        </rect>
        </property>
       </widget>
      </widget>
@@ -181,12 +161,6 @@
    <class>ChartViewWidget</class>
    <extends>QWidget</extends>
    <header>ChartViewWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>NDViewWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">NDViewWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

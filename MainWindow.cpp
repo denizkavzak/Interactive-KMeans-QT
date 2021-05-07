@@ -88,7 +88,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       m_kMeansDialog->updatePointInfoLabel("Points Generated");
     } else if (dim  == 3) {
       in.generateRandomPointsND(min, max, m_k_means);
-      ui->ndViewWidget->addPoints(&m_k_means);
+      //ui->ndViewWidget->addPoints(&m_k_means);
       m_kMeansDialog->updatePointInfoLabel("Points Generated");
       m_graph = new Q3DScatter();
       if (!m_graph->hasContext()) {
@@ -130,14 +130,14 @@ void MainWindow::clusterPoints()
       msgBox.exec();
     } else {
       if (m_k_means.getDimension() == 2) {
-        back_clicked = false;
+        m_back_clicked = false;
         m_k_means.clusterPoints(m_k_means.getNumOfIter());
         m_step = m_k_means.getNumOfIter();
         m_kMeansDialog->updateIterationStepLabel(m_step);
         ui->chartViewWidget->paintClusters(m_k_means);
         ui->chartViewWidget->update();
       } else if (m_k_means.getDimension() == 3) {
-        back_clicked = false;
+        m_back_clicked = false;
         m_k_means.clusterPointsND(m_k_means.getNumOfIter());
         m_step = m_k_means.getNumOfIter();
         m_kMeansDialog->updateIterationStepLabel(m_step);
@@ -146,7 +146,7 @@ void MainWindow::clusterPoints()
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
       } else { // No visualization available for N > 3 or N < 2
-        back_clicked = false;
+        m_back_clicked = false;
         m_k_means.clusterPointsND(m_k_means.getNumOfIter());
         m_step = m_k_means.getNumOfIter();
         m_kMeansDialog->updateIterationStepLabel(m_step);
@@ -178,34 +178,34 @@ void MainWindow::getNextStep()
       msgBox.exec();
     } else{
       if (m_k_means.getDimension() == 2) {
-        back_clicked = false;
+        m_back_clicked = false;
         m_k_means.moveOneStep();
         // If this is the first step, assign prev clusters before update
-        ui->chartViewWidget->getNextStep(m_k_means);
         m_k_means.finalizeOneStep();
+        ui->chartViewWidget->getNextStep(m_k_means);
         m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
       } else if (m_k_means.getDimension() == 3) {
-        back_clicked = false;
+        m_back_clicked = false;
         m_k_means.moveOneStepND();
-        //m_k_means.clusterPointsND(m_k_means.getNumOfIter());
-        m_k_means.printClustersND();
         if (!m_k_means.isPointsSet()) { // initialize if clustering just started
         // use another flag to test if points are set to any cluster yet
           ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
         }
+        m_k_means.finalizeOneStepND();
+        //m_k_means.clusterPointsND(m_k_means.getNumOfIter());
+        m_k_means.printClustersND();
         m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
         //ui->scatter3DWidget->clearAllPointsSeriesFromGraph(); // do not need to call it each time
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
-        m_k_means.finalizeOneStepND();
       } else { // No visualization available for N > 3 or N < 2
         m_k_means.moveOneStepND();
+        m_k_means.finalizeOneStepND();
         m_k_means.printClustersND(); // just printing the clusters
         m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
-        m_k_means.finalizeOneStepND();
       }
     }
   }
@@ -292,38 +292,37 @@ void MainWindow::getPrevStep()
   QMessageBox msgBox;
   msgBox.setText("Not working properly yet!");
   msgBox.exec();
-//  qDebug() << "getPrevStep in main window";
-//  if (!m_k_means.isInitialized()){
-//    QMessageBox msgBox;
-//    msgBox.setText("Initialize clustering first!");
-//    msgBox.exec();
-//  }
-//  else {
-//    if (m_step == 0){
-//      QMessageBox msgBox;
-//      msgBox.setText("Clustering has not started yet, cannot go back!");
-//      msgBox.exec();
-//    } else if (m_step == 1){
-//      QMessageBox msgBox;
-//      msgBox.setText("Only one step is done, cannot go back!");
-//      msgBox.exec();
-//    } else{
-//      if (!back_clicked){
-//        //m_k_means.getPrevClusters();
-//        back_clicked = true;
-//        m_step -= 1;
-//        m_k_means.setStep(m_step);
-//        m_kMeansDialog->updateIterationStepLabel(m_step);
-//        m_k_means.setClusterCentersToPrev();
-//        m_k_means.moveOneStep();
-//        ui->chartViewWidget->getPrevStep(m_k_means);
-//      }else {
-//        QMessageBox msgBox;
-//        msgBox.setText("Already moved one back, cannot go more!");
-//        msgBox.exec();
-//      }
-//    }
-//  }
+  qDebug() << "getPrevStep in main window";
+  if (!m_k_means.isInitialized()) {
+    QMessageBox msgBox;
+    msgBox.setText("Initialize clustering first!");
+    msgBox.exec();
+  } else {
+    if (m_step == 0) {
+      QMessageBox msgBox;
+      msgBox.setText("Clustering has not started yet, cannot go back!");
+      msgBox.exec();
+    } else if (m_step == 1) {
+      QMessageBox msgBox;
+      msgBox.setText("Only one step is done, cannot go back!");
+      msgBox.exec();
+    } else{
+      if (!m_back_clicked) {
+        //m_k_means.getPrevClusters();
+        m_back_clicked = true;
+        m_step -= 1;
+        m_k_means.setStep(m_step);
+        m_kMeansDialog->updateIterationStepLabel(m_step);
+        m_k_means.setClusterCentersToPrev();
+        m_k_means.moveOneStep();
+        ui->chartViewWidget->getPrevStep(m_k_means);
+      } else {
+        QMessageBox msgBox;
+        msgBox.setText("Already moved one back, cannot go more!");
+        msgBox.exec();
+      }
+    }
+  }
 }
 
 /**

@@ -282,7 +282,6 @@ void k_means::updateCenters()
       m_clusters[ind]->center = QVector2D(x/cluster->cluster_points.size(),
                                           y/cluster->cluster_points.size());
 
-      m_clusters[ind]->cluster_points.clear();
     }
     ind += 1;
   }
@@ -403,8 +402,8 @@ QVector<QVector2D*> k_means::getPrevClusterCenters()
  */
 void k_means::updatePrevClusterCenters()
 {
-  qDebug() << "Setting up prev : ";
-  qDebug() << m_previousCenters;
+//  qDebug() << "Setting up prev : ";
+//  qDebug() << m_previousCenters;
   m_previousCenters.clear();
   for (int i = 0; i < m_clusters.size(); i++) {
     QVector2D *p = new QVector2D(m_clusters.at(i)->center.x(),
@@ -686,7 +685,7 @@ void k_means::updateCentersND()
       }
 
       m_clustersND[ind]->center = p;
-      m_clustersND[ind]->cluster_points.clear();
+      //m_clustersND[ind]->cluster_points.clear();
     }
     ind += 1;
   }
