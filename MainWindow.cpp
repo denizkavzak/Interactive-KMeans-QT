@@ -253,8 +253,20 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
           msgBox.setText("Cannot cluster with K <= 0 !");
           msgBox.exec();
         } else { // If K >= 1
-          // For N>=3 and N=1 case
-          if (m_k_means.getDimension() >= 3 || m_k_means.getDimension() == 1) {
+          if (m_k_means.getDimension() == 2) { // For 2D case
+            if (initMethod == "Random Sample") {
+              in.initRandomSample(m_k_means);
+            } else if (initMethod == "Random Real") {
+              in.initRandomReal(m_k_means);
+            } else { // kmeans++
+              in.initKMeansPp(m_k_means);
+            }
+            m_k_means.setInitialized(true);
+            ui->chartViewWidget->paintCenters(m_k_means);
+            ui->chartViewWidget->update();
+            m_k_means.initClusterCentersHistory();
+            // For N>=3 and N=1 case
+          } else { //(m_k_means.getDimension() >= 3 || m_k_means.getDimension() == 1) {
             if (initMethod == "Random Sample") {
               in.initRandomSampleND(m_k_means);
             } else if (initMethod == "Random Real") {
@@ -268,19 +280,6 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
               ui->scatter3DWidget->paintCenters(m_k_means);
             }
             m_k_means.initClusterCentersHistoryND();
-
-          } else if (m_k_means.getDimension() == 2) { // For 2D case
-            if (initMethod == "Random Sample") {
-              in.initRandomSample(m_k_means);
-            } else if (initMethod == "Random Real") {
-              in.initRandomReal(m_k_means);
-            } else { // kmeans++
-              in.initKMeansPp(m_k_means);
-            }
-            m_k_means.setInitialized(true);
-            ui->chartViewWidget->paintCenters(m_k_means);
-            ui->chartViewWidget->update();
-            m_k_means.initClusterCentersHistory();
           }
         }
       } else {
@@ -311,6 +310,10 @@ void MainWindow::updatePointSize(int pointSize)
       ui->chartViewWidget->updatePointSize(pointSize);
     } else if (m_k_means.getDimension() == 3) {
       ui->scatter3DWidget->updatePointSize(pointSize);
+    } else {
+      QMessageBox msgBox;
+      msgBox.setText("Cannot visualize dimensions other than 2 and 3!");
+      msgBox.exec();
     }
   }
 }
@@ -353,7 +356,7 @@ void MainWindow::getPrevStep()
           m_k_means.setPoints();
           m_k_means.updateCenters();
           ui->chartViewWidget->getPrevStep(m_k_means);
-        } else if (m_k_means.getDimension() >= 3) {
+        } else { //if (m_k_means.getDimension() >= 3) {
           m_back_clicked = true;
           m_step -= 1;
           m_k_means.setStep(m_step);
@@ -500,7 +503,7 @@ void MainWindow::importPoints()
           v->setX(p->at(0));
           v->setY(p->at(1));
           m_k_means.addPoint(v);
-        } else if ((dimension >= 3)) {
+        } else { //if ((dimension >= 3 || dimension == 1)) {
           m_k_means.addPointND(p);
         }
       }
