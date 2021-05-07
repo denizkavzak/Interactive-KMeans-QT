@@ -512,7 +512,6 @@ void k_means::setClusterCentersToPrevStepInHistoryND()
  */
 void k_means::initClusterCentersHistoryND()
 {
-  qDebug() << "init history nd: ";
   m_clusteringCenterHistoryND = new QVector<QVector<QVector<float>*>>(m_iter);
   printClusteringCenterHistoryND();
 }

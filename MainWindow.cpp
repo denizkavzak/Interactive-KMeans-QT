@@ -81,38 +81,44 @@ MainWindow::~MainWindow()
  */
 void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
 {
-  if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
+  // Cannot generate points for N <= 0
+  if (noOfPoints <= 0) {
     QMessageBox msgBox;
-    msgBox.setText("Points are already generated, open a new instance!");
+    msgBox.setText("Cannot generate points N <=0 !");
     msgBox.exec();
   } else {
-    m_k_means.setNoOfPoints(noOfPoints);
-    m_k_means.setDimension(dim);
-    initialization in;
-    // Try using generateRandomPointsND
-    if (dim == 2) {
-      in.generateRandomPoints(min, max, m_k_means);
-      ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
-      m_kMeansDialog->updatePointInfoLabel("Points Generated");
-    } else if (dim  == 3) {
-      in.generateRandomPointsND(min, max, m_k_means);
-      //ui->ndViewWidget->addPoints(&m_k_means);
-      m_kMeansDialog->updatePointInfoLabel("Points Generated");
-      m_graph = new Q3DScatter();
-      if (!m_graph->hasContext()) {
-        QMessageBox msgBox;
-        msgBox.setText("Couldn't initialize the OpenGL context.");
-        msgBox.exec();
-      } else {
-        qDebug() << " Scatter graph is created ";
+    if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
+      QMessageBox msgBox;
+      msgBox.setText("Points are already generated, open a new instance!");
+      msgBox.exec();
+    } else {
+      m_k_means.setNoOfPoints(noOfPoints);
+      m_k_means.setDimension(dim);
+      initialization in;
+      // Try using generateRandomPointsND
+      if (dim == 2) {
+        in.generateRandomPoints(min, max, m_k_means);
+        ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
+        m_kMeansDialog->updatePointInfoLabel("Points Generated");
+      } else if (dim  == 3) {
+        in.generateRandomPointsND(min, max, m_k_means);
+        //ui->ndViewWidget->addPoints(&m_k_means);
+        m_kMeansDialog->updatePointInfoLabel("Points Generated");
+        m_graph = new Q3DScatter();
+        if (!m_graph->hasContext()) {
+          QMessageBox msgBox;
+          msgBox.setText("Couldn't initialize the OpenGL context.");
+          msgBox.exec();
+        } else {
+          qDebug() << " Scatter graph is created ";
+        }
+        ui->scatter3DWidget->createContainer(*m_graph);
+        ui->scatter3DWidget->paintPoints(m_k_means);
+      } else { // No visualization available for N > 3 or N < 2
+        in.generateRandomPointsND(min, max, m_k_means);
+        m_kMeansDialog->updatePointInfoLabel("Points Generated");
       }
-      ui->scatter3DWidget->createContainer(*m_graph);
-      ui->scatter3DWidget->paintPoints(m_k_means);
-    } else { // No visualization available for N > 3 or N < 2
-      in.generateRandomPointsND(min, max, m_k_means);
-      m_kMeansDialog->updatePointInfoLabel("Points Generated");
     }
-
   }
 }
 
@@ -240,34 +246,49 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
       m_k_means.setK(k);
       m_k_means.setMetric(metric);
 
-      // For N>=3 case
-      if (m_k_means.getDimension() >= 3) {
-        if (initMethod == "Random Sample") {
-          in.initRandomSampleND(m_k_means);
-        } else if (initMethod == "Random Real") {
-          in.initRandomRealND(m_k_means);
-        } else { // kmeans++
-          in.initKMeansPpND(m_k_means);
+      if (m_k_means.getK() <= m_k_means.getNumOfPoints()) {
+        // Cannot run for K <= 0
+        if (m_k_means.getK() <= 0) {
+          QMessageBox msgBox;
+          msgBox.setText("Cannot cluster with K <= 0 !");
+          msgBox.exec();
+        } else { // If K >= 1
+          // For N>=3 and N=1 case
+          if (m_k_means.getDimension() >= 3 || m_k_means.getDimension() == 1) {
+            if (initMethod == "Random Sample") {
+              in.initRandomSampleND(m_k_means);
+            } else if (initMethod == "Random Real") {
+              in.initRandomRealND(m_k_means);
+            } else { // kmeans++
+              in.initKMeansPpND(m_k_means);
+            }
+            m_k_means.setInitialized(true);
+            if (m_k_means.getDimension() == 3) { // visualization for 3D
+              ui->scatter3DWidget->paintCentersInit(m_k_means);
+              ui->scatter3DWidget->paintCenters(m_k_means);
+            }
+            m_k_means.initClusterCentersHistoryND();
+
+          } else if (m_k_means.getDimension() == 2) { // For 2D case
+            if (initMethod == "Random Sample") {
+              in.initRandomSample(m_k_means);
+            } else if (initMethod == "Random Real") {
+              in.initRandomReal(m_k_means);
+            } else { // kmeans++
+              in.initKMeansPp(m_k_means);
+            }
+            m_k_means.setInitialized(true);
+            ui->chartViewWidget->paintCenters(m_k_means);
+            ui->chartViewWidget->update();
+            m_k_means.initClusterCentersHistory();
+          }
         }
-        m_k_means.setInitialized(true);
-        if (m_k_means.getDimension() == 3) { // visualization for 3D
-          ui->scatter3DWidget->paintCentersInit(m_k_means);
-          ui->scatter3DWidget->paintCenters(m_k_means);
-        }
-        m_k_means.initClusterCentersHistoryND();
-      } else if (m_k_means.getDimension() == 2) { // For 2D case
-        if (initMethod == "Random Sample") {
-          in.initRandomSample(m_k_means);
-        } else if (initMethod == "Random Real") {
-          in.initRandomReal(m_k_means);
-        } else { // kmeans++
-          in.initKMeansPp(m_k_means);
-        }
-        m_k_means.setInitialized(true);
-        ui->chartViewWidget->paintCenters(m_k_means);
-        ui->chartViewWidget->update();
-        m_k_means.initClusterCentersHistory();
+      } else {
+        QMessageBox msgBox;
+        msgBox.setText("Cannot initialize when K > number of points!");
+        msgBox.exec();
       }
+
     }
   }
 }

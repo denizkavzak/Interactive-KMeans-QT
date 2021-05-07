@@ -64,6 +64,7 @@ auto manhattanND = [] (QVector<float> p1, QVector<float> p2) {
  * @param metric
  * @return Distance between 2D points p1 and p2
  * with the metric as m_metric
+ * Can easily be extended by adding other functions
  */
 float metrics::getDistance(QVector2D p1, QVector2D p2, QString metric)
 {

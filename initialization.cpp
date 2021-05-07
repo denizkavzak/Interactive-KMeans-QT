@@ -64,7 +64,7 @@ void initialization::initRandomSample(k_means &k_means)
     k_means::Cluster* cluster = new k_means::Cluster();
     cluster->center = *center;
     cluster->color = color->operator()(i);
-    qDebug() << "Cluster color " << *(cluster->color) ;
+    qDebug() << "Cluster color " << *(cluster->color);
     k_means.addCluster(cluster);
   }
 }
@@ -168,6 +168,27 @@ void initialization::generateNormalDistributionPoints(float min, float max,
   }
 }
 
+
+/**
+ * @brief initialization::initSpecialCases
+ * @param k_means
+ * Include checks for degenerate conditions defined in the slides
+ * including Slide 15 (K=0, K=1, N=0, K>N, N identical points,
+ * sets of identical points).
+ */
+void initialization::initSpecialCases(k_means& k_means)
+{
+  // k cannot be 0
+  if (k_means.getK() > 0) {
+    if (k_means.getK() == 1) {
+
+
+
+    }
+  }
+
+}
+
 /**
  * @brief initialization::getPairwiseDistances
  * @param k_means
@@ -177,7 +198,8 @@ void initialization::generateNormalDistributionPoints(float min, float max,
  * @param min_ind : passed param to return minimum distance index
  * @param sum : passed param to return the sum of squared distances
  * This function calculates the distances between all points in the
- * k_means object and given center.
+ * k_means object and given center. Can easily be extended by
+ * adding other functions in distance calculation
  * @return
  */
 QVector<float> initialization::getPairwiseDistances(k_means &k_means,
@@ -449,6 +471,8 @@ void initialization::initKMeansPpND(k_means &k_means)
  * @param sum
  * @return
  * N dimensional version of the pairwise distance calculation function
+ * Can easily be extended by
+ * adding other functions in distance calculation
  */
 QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
                                  QVector<float> center, QString metric,
