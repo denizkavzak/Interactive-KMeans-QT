@@ -28,6 +28,8 @@ public slots:
   void updateImportedPointParameters(int numOfPoint, int dimension,
                                      float min, float max);
   void updatePointInfoLabel(QString s);
+  void updateConvergenceTimeLabel(int time);
+  void updateConvergenceStepLabel(int step);
   void play();
   void stop();
 

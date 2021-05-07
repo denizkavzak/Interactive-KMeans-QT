@@ -148,6 +148,11 @@ int k_means::getDimension()
   return m_dim;
 }
 
+bool k_means::isConverged()
+{
+  return m_converged;
+}
+
 /**
  * @brief k_means::getClusters
  * @return clusters
@@ -514,6 +519,50 @@ void k_means::initClusterCentersHistoryND()
 {
   m_clusteringCenterHistoryND = new QVector<QVector<QVector<float>*>>(m_iter);
   printClusteringCenterHistoryND();
+}
+
+/**
+ * @brief k_means::detectConvergence
+ * Detect if clustering is converged, i.e. the cluster
+ * centers are not changing
+ */
+void k_means::detectConvergence()
+{
+  if (m_converged == false) { // if not converged yet
+    if (m_step != 0 && m_step != 1 && m_step != 2) {
+      m_converged = true;
+      if (m_dim == 2) {
+        QVector<QVector2D*> current = m_clusteringCenterHistory->at(m_step-1);
+        QVector<QVector2D*> prev = m_clusteringCenterHistory->at(m_step-2);
+
+        qDebug() << " Current " << current;
+        qDebug() << " Prev " << prev;
+        for (int i = 0; i < current.size(); i++) {
+          if ( (current[i]->x() != prev[i]->x()) ||
+               (current[i]->y() != prev[i]->y())) {
+            m_converged = false;
+            break;
+          }
+        }
+        qDebug() << "Converged? " << m_converged;
+      } else {
+        QVector<QVector<float>*> current = m_clusteringCenterHistoryND->at(m_step-1);
+        QVector<QVector<float>*> prev = m_clusteringCenterHistoryND->at(m_step-2);
+
+        for (int i = 0; i < current.size(); i++) {
+          for (int j = 0; j < m_dim; j++) {
+            if (current[i][j] != prev[i][j]) { // Center i's j dimension
+              m_converged = false;
+              break;
+            }
+          }
+        }
+
+      }
+    }
+  }/* else { // We assume the clustering does not converge in first steps
+    m_converged = false;
+  }*/
 }
 
 /**

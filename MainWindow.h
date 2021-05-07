@@ -45,6 +45,7 @@ private:
   QtDataVisualization::Q3DScatter* m_graph;
   QTimer* m_timer;
   bool m_playing = false;
+  bool m_converged = false;
 };
 
 #endif // MAINWINDOW_H

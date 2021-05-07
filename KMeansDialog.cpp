@@ -163,6 +163,16 @@ void KMeansDialog::updatePointInfoLabel(QString s)
   ui->pointsInfoLabel->setText(s);
 }
 
+void KMeansDialog::updateConvergenceTimeLabel(int time)
+{
+  ui->convergenceTimeValueLabel->setText(QString("%1").arg(time));
+}
+
+void KMeansDialog::updateConvergenceStepLabel(int step)
+{
+  ui->convergenceStepValueLabel->setText(QString("%1").arg(step));
+}
+
 void KMeansDialog::play()
 {
   int ms_value = ui->animationSpeedSpinBox->value();

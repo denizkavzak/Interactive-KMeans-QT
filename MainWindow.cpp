@@ -6,6 +6,9 @@
 
 using namespace QtDataVisualization;
 
+auto start = std::chrono::high_resolution_clock::now();
+auto end = std::chrono::high_resolution_clock::now();
+
 //constexpr int FLOAT_MIN = 0;
 //constexpr int FLOAT_MAX = 100;
 
@@ -178,10 +181,7 @@ void MainWindow::clusterPoints()
  * and shown to user. In cases where N > 3 or N < 2, no visualization
  */
 void MainWindow::getNextStep()
-{
-  if (m_step == m_k_means.getNumOfIter() - 1) {
-    m_timer->stop();
-  }
+{ 
   qDebug() << "getNextStep in mainwindow";
   if (!m_k_means.isInitialized()){
     QMessageBox msgBox;
@@ -189,6 +189,15 @@ void MainWindow::getNextStep()
     msgBox.exec();
   }
   else {
+    if (m_step == 0) { // get time to start measuring convergence speed
+      start = std::chrono::high_resolution_clock::now();
+    }
+    // stop animation if it is still running in last iteration
+    if ((m_step == m_k_means.getNumOfIter() - 1) && m_playing) {
+      m_timer->stop();
+      m_playing = false;
+    }
+
     if (m_step == m_k_means.getNumOfIter()){
       QMessageBox msgBox;
       msgBox.setText("Clustering is finalized!");
@@ -223,6 +232,20 @@ void MainWindow::getNextStep()
         m_k_means.printClustersND(); // just printing the clusters
         m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
+      }
+      m_k_means.detectConvergence();
+      // get time to start measuring convergence speed
+      if (m_converged == false && m_k_means.isConverged()) {
+        end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        qDebug() << "CONVERGED TIME : " << duration.count();
+        m_kMeansDialog->updateConvergenceTimeLabel(duration.count());
+        m_kMeansDialog->updateConvergenceStepLabel(m_step);
+        m_converged = true;
+        if (m_playing) {
+          m_timer->stop();
+          m_playing = false;
+        }
       }
     }
   }
@@ -395,6 +418,7 @@ void MainWindow::play(int ms_value)
   } else {
     m_timer->start(ms_value);
     qDebug() << "Start timer";
+    m_playing = true;
   }
 }
 

@@ -60,6 +60,7 @@ public:
   int getNumOfIter();
   bool isInitialized();
   int getDimension();
+  bool isConverged();
 
   // common setters
   void setNumOfIter(int numOfIterations);
@@ -77,7 +78,6 @@ public:
   // getters
   QVector<Cluster*> getClusters();
   QVector<QVector2D*> getAllPoints();
-  //QVector2D getCenters();
 
   // kmeans functions
   void clusterPoints(int num_iterations);
@@ -127,6 +127,11 @@ public:
   void setClusterCentersToPrevStepInHistoryND();
   void initClusterCentersHistoryND();
 
+  // for measuring performance
+  void detectConvergence();
+  void calculateEnergy();
+  void calculateSpeed();
+
 private:
 
   QVector<QVector2D*> m_allPoints;
@@ -139,6 +144,7 @@ private:
   QVector<ClusterND*> m_clustersND;
   QVector<QVector<QVector2D*>> *m_clusteringCenterHistory; // store all clustering history
   QVector<QVector<QVector<float>*>> *m_clusteringCenterHistoryND; // store all clustering history
+
   // each iteration < each cluster < center point > >
   QString m_metric;
   int m_step = 0;
@@ -147,6 +153,7 @@ private:
   int m_dim = 2;
   bool m_pointsSet = false;
   bool m_back_clicked = false;
+  bool m_converged = false;
 };
 
 #endif // KMEANS_H
