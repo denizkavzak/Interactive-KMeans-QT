@@ -78,6 +78,7 @@ void Scatter3DVis::addData(k_means &k_m)
 void Scatter3DVis::addDataCenters(k_means &k_m)
 {
   qDebug() << "Inside add centers";
+  qDebug() << "size of clusters nd: " << k_m.getClustersND().size();
   int ind = 1;
   for (k_means::ClusterND* cluster : k_m.getClustersND()) {
     QScatterDataArray *dataArray = new QScatterDataArray;
@@ -103,6 +104,7 @@ void Scatter3DVis::addDataCenters(k_means &k_m)
     //qDebug() << "series color" << m_graph->seriesList().at(ind)->baseColor();
     ind++;
   }
+  qDebug() << "end of add Centers" ;
 }
 
 /**

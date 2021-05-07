@@ -1,5 +1,6 @@
 #include "metrics.h"
 #include <QString>
+#include <QDebug>
 
 metrics::metrics()
 {
@@ -126,6 +127,7 @@ float metrics::getDistance(QString binary1, QString binary2)
  */
 float metrics::getDistance(QVector<float> p1, QVector<float> p2, QString metric)
 {
+  qDebug() << "In get distance for nd";
   if (metric == "manhattan") {
     return manhattanND(p1, p2);
   } else { // m_metric == "euclidean"

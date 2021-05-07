@@ -12,7 +12,7 @@ constexpr int FLOAT_MAX = 100;
 
 initialization::initialization()
 {
-
+  srand(time(nullptr));
 }
 
 /**
@@ -53,7 +53,7 @@ void initialization::initRandomSample(k_means &k_means)
   QSet<int> set;
   for (int i = 0; i < k_means.getK(); ++i) {
     int c = rand() % k_means.getNumOfPoints();
-    // TODO: FIX: This would cause an infinite loop in case where k > num_points
+    // since we prohibited cases k > number of points, no problem
     while (set.contains(c)) {   // Make sure no two selected points are the same
       c = rand() % k_means.getNumOfPoints();
     }
@@ -78,11 +78,14 @@ void initialization::initRandomSample(k_means &k_means)
  */
 void initialization::initKMeansPp(k_means &k_means)
 {
+  QSet<int> set;
   k_means::ClusterColor* color = new k_means::ClusterColor();
   int c = rand() % k_means.getNumOfPoints();
+  set.insert(c);
   QVector2D* center = k_means.getAllPoints().at(c);
 
-  qDebug() << "CENTER: " << center;
+  qDebug() << "first center index: " << c;
+  qDebug() << "CENTER: " << *center;
   // Create cluster
   k_means::Cluster* cluster = new k_means::Cluster();
   cluster->center = *center;
@@ -96,16 +99,23 @@ void initialization::initKMeansPp(k_means &k_means)
   QVector<float> d = getPairwiseDistances(k_means, *center, k_means.getMetric(),
                                           min, min_ind, sum);
   qDebug() << "d is found";
-  for (int i = 0; i < k_means.getK(); ++i) {
+  for (int i = 1; i < k_means.getK(); ++i) {
     QVector<float> prob = getProbs(d, sum);
     qDebug() << "probs: " << prob;
+
     int ind = choseWithProb(prob);
+    // since we prohibited cases k > number of points, no problem
+    while (set.contains(ind)) {
+      ind = choseWithProb(prob);
+    }
+    set.insert(ind);
     qDebug() << "selected ind: " << ind;
+
     // Get new center point
     center = k_means.getAllPoints().at(ind);
     k_means::Cluster* cluster = new k_means::Cluster();
     cluster->center = *center;
-    cluster->color = color->operator()(i+1);
+    cluster->color = color->operator()(i);
     k_means.addCluster(cluster);
 
     // Get distances between all points and the new center
@@ -282,25 +292,29 @@ int initialization::choseWithProb(const QVector<float> prob)
   float rand_x = (float) rand()/RAND_MAX;
   float cum = 0;
   float selected_prob = 0;
+  float selected_ind = 0;
 
+  // Use CDF from PDF for random pick
   for (int i = 0; i< prob.size(); i++){
     cum += sorted[i];
 
     if (rand_x < cum) {
       selected_prob = sorted[i];
+      selected_ind = i;
       break;
     }
   }
 
-  int ind = prob.indexOf(selected_prob);
-  int last_ind = prob.lastIndexOf(selected_prob);
-  // If there are more than one points with same probability
-  // break the tie by randomly selecting one of them
-  if (ind != last_ind){
-    ind = (rand() % last_ind) + ind;
-  }
+  // No need this part when it is not sorted
+//  int ind = prob.indexOf(selected_prob);
+//  int last_ind = prob.lastIndexOf(selected_prob);
+//  // If there are more than one points with same probability
+//  // break the tie by randomly selecting one of them
+//  if (ind != last_ind){
+//    ind = (rand() % last_ind) + ind;
+//  }
 
-  return ind;
+  return selected_ind;
 }
 
 //
@@ -397,7 +411,7 @@ void initialization::initRandomSampleND(k_means &k_means)
   QSet<int> set;
   for (int i = 0; i < k_means.getK(); ++i) {
     int c = rand() % k_means.getNumOfPoints();
-    // TODO: FIX: This would cause an infinite loop in case where k > num_points
+    // since we prohibited cases k > number of points, no problem
     while (set.contains(c)) {   // Make sure no two selected points are the same
       c = rand() % k_means.getNumOfPoints();
     }
@@ -420,11 +434,14 @@ void initialization::initRandomSampleND(k_means &k_means)
  */
 void initialization::initKMeansPpND(k_means &k_means)
 {
+  QSet<int> set;
   k_means::ClusterColor* color = new k_means::ClusterColor();
   int c = rand() % k_means.getNumOfPoints();
+  set.insert(c);
   QVector<float> *center = k_means.getAllPointsND().at(c);
   //QVector2D* center = k_means.getAllPoints().at(c);
 
+  qDebug() << "first center index: " << c;
   qDebug() << "CENTER: " << center;
   // Create cluster
   k_means::ClusterND* cluster = new k_means::ClusterND();
@@ -440,16 +457,23 @@ void initialization::initKMeansPpND(k_means &k_means)
                                             k_means.getMetric(),
                                           min, min_ind, sum);
   qDebug() << "d is found";
-  for (int i = 0; i < k_means.getK(); ++i) {
+  for (int i = 1; i < k_means.getK(); ++i) {
     QVector<float> prob = getProbs(d, sum);
     qDebug() << "probs: " << prob;
+
     int ind = choseWithProb(prob);
+    // since we prohibited cases k > number of points, no problem
+    while (set.contains(ind)) {
+      ind = choseWithProb(prob);
+    }
+    set.insert(ind);
     qDebug() << "selected ind: " << ind;
+
     // Get new center point
     center = k_means.getAllPointsND().at(ind);
     k_means::ClusterND* cluster = new k_means::ClusterND();
     cluster->center = *center;
-    cluster->color = color->operator()(i+1);
+    cluster->color = color->operator()(i);
     k_means.addClusterND(cluster);
 
     // Get distances between all points and the new center
@@ -478,6 +502,7 @@ QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
                                  QVector<float> center, QString metric,
                                      float &min, int &min_ind, float &sum)
 {
+  qDebug() << "In get pairwise distance nd";
   metrics m;
   // Create an array to store the distances between center and all points
   QVector<float> d(k_means.getNumOfPoints());

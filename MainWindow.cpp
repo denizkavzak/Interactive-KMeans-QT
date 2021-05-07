@@ -265,6 +265,7 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
             ui->chartViewWidget->paintCenters(m_k_means);
             ui->chartViewWidget->update();
             m_k_means.initClusterCentersHistory();
+            qDebug() << "size of clusters nd: " << m_k_means.getClusters().size();
             // For N>=3 and N=1 case
           } else { //(m_k_means.getDimension() >= 3 || m_k_means.getDimension() == 1) {
             if (initMethod == "Random Sample") {
@@ -280,6 +281,7 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
               ui->scatter3DWidget->paintCenters(m_k_means);
             }
             m_k_means.initClusterCentersHistoryND();
+            qDebug() << "after init history";
           }
         }
       } else {
