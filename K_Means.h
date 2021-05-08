@@ -130,7 +130,6 @@ public:
   // for measuring performance
   void detectConvergence();
   void calculateEnergy();
-  void calculateSpeed();
 
 private:
 
@@ -143,8 +142,8 @@ private:
   QVector<QVector<float>*> m_allPointsND;
   QVector<ClusterND*> m_clustersND;
   QVector<QVector<QVector2D*>> *m_clusteringCenterHistory; // store all clustering history
-  QVector<QVector<QVector<float>*>> *m_clusteringCenterHistoryND; // store all clustering history
-
+  QVector<QVector<QVector<float>>> *m_clusteringCenterHistoryND; // store all clustering history
+  // <#iteration<#cluster<N dimensional point vector
   // each iteration < each cluster < center point > >
   QString m_metric;
   int m_step = 0;
