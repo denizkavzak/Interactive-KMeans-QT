@@ -129,7 +129,7 @@ public:
 
   // for measuring performance
   void detectConvergence();
-  void calculateEnergy();
+  float calculateEnergy(QString metric);
 
 private:
 

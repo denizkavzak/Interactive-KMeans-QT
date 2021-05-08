@@ -242,6 +242,8 @@ void MainWindow::getNextStep()
         m_kMeansDialog->updateConvergenceTimeLabel(duration.count());
         m_kMeansDialog->updateConvergenceStepLabel(m_step);
         m_converged = true;
+        float energy = m_k_means.calculateEnergy(m_kMeansDialog->getSelectedMetric());
+        qDebug() << "CONVERGENCE TOTAL ENERGY: " << energy;
         if (m_playing) {
           m_timer->stop();
           m_playing = false;

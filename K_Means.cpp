@@ -570,6 +570,28 @@ void k_means::detectConvergence()
   }*/
 }
 
+float k_means::calculateEnergy(QString metric)
+{
+  metrics m;
+  float energy = 0;
+  if (m_dim == 2) {
+    for (Cluster* cluster : m_clusters) {
+      for (int i = 0; i < cluster->cluster_points.size(); i++) {
+        energy += m.getDistance(cluster->center, cluster->cluster_points.at(i),
+                                metric);
+      }
+    }
+  } else {
+    for (ClusterND* cluster : m_clustersND) {
+      for (int i = 0; i < cluster->cluster_points.size(); i++) {
+        energy += m.getDistance(cluster->center, cluster->cluster_points.at(i),
+                                metric);
+      }
+    }
+  }
+  return energy;
+}
+
 /**
  * @brief k_means::updateClusteringCenterHistory
  * Update clustering center history with current
