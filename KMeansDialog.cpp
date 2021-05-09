@@ -183,3 +183,10 @@ void KMeansDialog::stop()
 {
   emit stopTriggered();
 }
+
+void KMeansDialog::getInitializationParameters(int &k, QString &metric, int &iter)
+{
+  k = ui->kSpinBox->value();
+  iter = ui->iterSpinBox->value();
+  metric = getSelectedMetric();
+}

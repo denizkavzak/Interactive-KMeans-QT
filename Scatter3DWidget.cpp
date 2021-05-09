@@ -130,3 +130,75 @@ void Scatter3DWidget::getPrevStep(k_means &k_m)
   paintClusters(k_m);
   paintCenters(k_m);
 }
+
+int Scatter3DWidget::getSelectedPointID()
+{
+  return m_selectedPointID;
+}
+
+int Scatter3DWidget::getManualInitCount()
+{
+  return m_manualInitCount;
+}
+
+void Scatter3DWidget::selectClusterCenter()
+{
+  qDebug() << "select cluster center scatter3dwidget" ;
+  emit clusterCenterSelected();
+}
+
+void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
+{
+  qDebug() << "set cluster center scatter3dwidget";
+  if (m_manualInitCount != k_m.getK()) {
+    k_means::ClusterColor* color = new k_means::ClusterColor();
+    k_means::ClusterND *cluster = new k_means::ClusterND();
+    // Series index 0 consists of all points
+    QScatter3DSeries* series = m_scatter3Dvis->getGraph()->seriesList().at(0);
+    // Use selected index of point in the series 0 to assign as cluster center
+    QScatterDataItem dataItem = series->dataProxy()->array()->at(ind);
+
+    QVector<float>* point = new QVector<float>();
+
+    point->append(dataItem.x());
+    point->append(dataItem.y());
+    point->append(dataItem.z());
+    qDebug() << m_manualInitCount;
+    cluster->center = *point;
+    qDebug() << "Selected center :" << cluster->center;
+    cluster->color = color->operator()(m_manualInitCount);
+    k_m.addClusterND(cluster);
+    if (m_manualInitCount == 0) {
+      paintCentersInit(k_m);
+    }
+    paintCenters(k_m);
+    m_manualInitCount += 1;
+//    selected = false;
+//    qDebug() << selected;
+
+    if (m_manualInitCount == k_m.getK()) {
+      k_m.setInitialized(true);
+      k_m.initClusterCentersHistoryND();
+      qDebug() << "Initialized " ;
+    }
+
+  } else {
+    QMessageBox msgBox;
+    msgBox.setText("All clusters are already selected!");
+    msgBox.exec();
+  }
+}
+
+void Scatter3DWidget::mousePressEvent(QMouseEvent *event)
+{
+  qDebug() << "mouse press event scatter3dwidget";
+  if (!m_initialized) {
+    if (event->button() == Qt::LeftButton)
+    {
+      QScatter3DSeries* series = m_scatter3Dvis->getGraph()->seriesList().at(0);
+      m_selectedPointID = series->selectedItem();
+      qDebug() << "ID " << m_selectedPointID;
+      selectClusterCenter();
+    }
+  }
+}

@@ -33,6 +33,8 @@ public slots:
   void play();
   void stop();
 
+  void getInitializationParameters(int&, QString&, int&);
+
 signals:
   void pointsParametersChanged(int, float, float, int);
   void clusteringParametersChanged();

@@ -50,6 +50,9 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(m_kMeansDialog, &KMeansDialog::stopTriggered,
           this, &MainWindow::stop);
 
+  connect(ui->scatter3DWidget, &Scatter3DWidget::clusterCenterSelected,
+          this, &MainWindow::selectClusterCenter);
+
   //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
   qDebug() << "Clustering started !";
 
@@ -252,6 +255,8 @@ void MainWindow::getNextStep()
     }
   }
 }
+
+
 
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
 {
@@ -547,5 +552,26 @@ void MainWindow::importPoints()
                                                          min, max);
     }
   }
+}
+
+void MainWindow::selectClusterCenter()
+{
+  qDebug() << " select cluster center in mainwindow ";
+  if (ui->scatter3DWidget->getManualInitCount() == 0) {
+    setParamsForManualInit();
+  }
+  ui->scatter3DWidget->setClusterCenter(m_k_means,
+                                        ui->scatter3DWidget->getSelectedPointID());
+}
+
+void MainWindow::setParamsForManualInit()
+{
+  int k;
+  QString metric;
+  int iter;
+  m_kMeansDialog->getInitializationParameters(k, metric, iter);
+  m_k_means.setNumOfIter(iter);
+  m_k_means.setK(k);
+  m_k_means.setMetric(metric);
 }
 

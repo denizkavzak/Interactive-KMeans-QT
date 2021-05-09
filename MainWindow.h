@@ -35,6 +35,8 @@ public slots:
   void zoomOut();
   void zoomActualSize();
   void importPoints();
+  void selectClusterCenter();
+  void setParamsForManualInit();
 
 private:
   Ui::MainWindow *ui;

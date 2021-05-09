@@ -27,11 +27,30 @@ public:
   void clearAllPointsSeriesFromGraph();
   void updatePointSize(int pointSize);
   void getPrevStep(k_means &k_m);
+  int getSelectedPointID();
+  int getManualInitCount();
+
+public slots:
+  void selectClusterCenter();
+  void setClusterCenter(k_means &k_m, int ind);
+
+signals:
+  void clusterCenterSelected();
+
+protected:
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void keyPressEvent(QKeyEvent *event) override;
 
 private:
   Ui::Scatter3DWidget *ui;
   Scatter3DVis *m_scatter3Dvis;
   QWidget *m_container;
+  int m_selectedPointID;
+  QPointF m_lastMousePos;
+
+  bool m_initialized = false;
+  int m_manualInitCount = 0;
+  //bool selected = false;
 };
 
 #endif // SCATTER3DWIDGET_H
