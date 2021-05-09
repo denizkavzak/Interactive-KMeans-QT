@@ -115,9 +115,15 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
           QMessageBox msgBox;
           msgBox.setText("Couldn't initialize the OpenGL context.");
           msgBox.exec();
+          return;
         } else {
           qDebug() << " Scatter graph is created ";
         }
+        float min, max;
+        getMinMax(min, max);
+        m_graph->axisX()->setRange(-min,max);
+        m_graph->axisY()->setRange(-min,max);
+        m_graph->axisZ()->setRange(-min,max);
         ui->scatter3DWidget->createContainer(*m_graph);
         ui->scatter3DWidget->paintPoints(m_k_means);
       } else { // No visualization available for N > 3 or N < 2
@@ -557,6 +563,19 @@ void MainWindow::importPoints()
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
       } else if (dimension == 3) {
         m_graph = new Q3DScatter();
+        if (!m_graph->hasContext()) {
+          QMessageBox msgBox;
+          msgBox.setText("Couldn't initialize the OpenGL context.");
+          msgBox.exec();
+          return;
+        } else {
+          qDebug() << " Scatter graph is created ";
+        }
+        float min, max;
+        getMinMax(min, max);
+        m_graph->axisX()->setRange(-min,max);
+        m_graph->axisY()->setRange(-min,max);
+        m_graph->axisZ()->setRange(-min,max);
         ui->scatter3DWidget->createContainer(*m_graph);
         ui->scatter3DWidget->paintPoints(m_k_means);
       }
@@ -600,5 +619,11 @@ void MainWindow::setParamsForManualInit()
   m_k_means.setNumOfIter(iter);
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
+}
+
+void MainWindow::getMinMax(float &min, float &max)
+{
+  min = m_kMeansDialog->getMin();
+  max = m_kMeansDialog->getMax();
 }
 

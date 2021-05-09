@@ -37,6 +37,7 @@ public slots:
   void importPoints();
   void selectClusterCenter();
   void setParamsForManualInit();
+  void getMinMax(float &min, float &max);
 
 private:
   Ui::MainWindow *ui;

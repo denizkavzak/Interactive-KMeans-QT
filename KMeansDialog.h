@@ -32,6 +32,8 @@ public slots:
   void updateConvergenceStepLabel(int step);
   void play();
   void stop();
+  float getMin();
+  float getMax();
 
   void getInitializationParameters(int&, QString&, int&);
 

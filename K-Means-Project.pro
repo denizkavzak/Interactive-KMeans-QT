@@ -14,6 +14,7 @@ CONFIG -= app_bundle
 SOURCES += \
         ChartView.cpp \
         ChartViewWidget.cpp \
+        InputHandlerPanning.cpp \
         KMeansDialog.cpp \
         K_Means.cpp \
         MainWindow.cpp \
@@ -32,6 +33,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ChartView.h \
     ChartViewWidget.h \
+    InputHandlerPanning.h \
     KMeansDialog.h \
     K_Means.h \
     MainWindow.h \

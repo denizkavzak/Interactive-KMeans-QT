@@ -5,11 +5,13 @@
 #include <QtMath>
 #include <QDebug>
 #include "k_means.h"
+#include "InputHandlerPanning.h"
 
 using namespace QtDataVisualization;
 
-class Scatter3DVis
+class Scatter3DVis : public QObject
 {
+  Q_OBJECT
 public:  
   explicit Scatter3DVis(Q3DScatter *scatter);
 
@@ -29,6 +31,8 @@ private:
   int m_numOfPoints;
 
   void init();
+  InputHandlerPanning m_inputHandlerPanning;
+  bool m_autoAdjust;
 
 };
 

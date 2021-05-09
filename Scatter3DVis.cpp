@@ -1,7 +1,8 @@
 #include "Scatter3DVis.h"
 
 Scatter3DVis::Scatter3DVis(Q3DScatter *scatter) :
-  m_graph(scatter), m_pointSize(20.0f), m_numOfPoints(900)
+  m_graph(scatter), m_pointSize(20.0f), m_numOfPoints(900),
+  m_inputHandlerPanning(m_graph), m_autoAdjust(false)
 {
   init();
 }
@@ -15,11 +16,15 @@ Scatter3DVis::Scatter3DVis(Q3DScatter *scatter) :
 void Scatter3DVis::init()
 {
   m_graph->activeTheme()->setType(Q3DTheme::ThemeEbony);
+  m_graph->activeTheme()->setLabelBorderEnabled(true);
   QFont font = m_graph->activeTheme()->font();
   font.setPointSize(m_pointSize);
   m_graph->activeTheme()->setFont(font);
   m_graph->setShadowQuality(QAbstract3DGraph::ShadowQualitySoftLow);
   m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetFront);
+
+  m_graph->setActiveInputHandler(&m_inputHandlerPanning);
+  m_inputHandlerPanning.setAxes(m_graph->axisX(), m_graph->axisZ(), m_graph->axisY());
 
   // Add one series that will store all points
   QScatterDataProxy *proxy = new QScatterDataProxy;
@@ -27,7 +32,6 @@ void Scatter3DVis::init()
   series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
   //series->setMeshSmooth(m_smooth);
   m_graph->addSeries(series);
-
 }
 
 /**
@@ -230,3 +234,4 @@ void Scatter3DVis::updatePointSize(int pointSize)
     m_graph->seriesList().at(i)->setItemSize(float(pointSize)/100.0f);
   }
 }
+
