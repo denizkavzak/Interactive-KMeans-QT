@@ -163,27 +163,54 @@ void KMeansDialog::updatePointInfoLabel(QString s)
   ui->pointsInfoLabel->setText(s);
 }
 
+/**
+ * @brief KMeansDialog::updateConvergenceTimeLabel
+ * @param time
+ * Updates the convergence time label in ui
+ */
 void KMeansDialog::updateConvergenceTimeLabel(int time)
 {
   ui->convergenceTimeValueLabel->setText(QString("%1").arg(time));
 }
 
+/**
+ * @brief KMeansDialog::updateConvergenceStepLabel
+ * @param step
+ * Updates the convergence step label in ui
+ */
 void KMeansDialog::updateConvergenceStepLabel(int step)
 {
   ui->convergenceStepValueLabel->setText(QString("%1").arg(step));
 }
 
+/**
+ * @brief KMeansDialog::play
+ * Triggers the playTriggered signal when Play button is clicked
+ * The playTriggered signal is connected to play slot in MainWindow
+ */
 void KMeansDialog::play()
 {
   int ms_value = ui->animationSpeedSpinBox->value();
   emit playTriggered(ms_value);
 }
 
+/**
+ * @brief KMeansDialog::stop
+ * Triggers the stopTriggered signal when Stop button is clicked.
+ * The stopTriggered signal is connected to stop slot in MainWindow
+ */
 void KMeansDialog::stop()
 {
   emit stopTriggered();
 }
 
+/**
+ * @brief KMeansDialog::getInitializationParameters
+ * @param k
+ * @param metric
+ * @param iter
+ * Get initialization parameters from the ui and pass them back by reference
+ */
 void KMeansDialog::getInitializationParameters(int &k, QString &metric, int &iter)
 {
   k = ui->kSpinBox->value();

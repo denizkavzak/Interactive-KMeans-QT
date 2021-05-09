@@ -257,7 +257,14 @@ void MainWindow::getNextStep()
 }
 
 
-
+/**
+ * @brief MainWindow::initializeClustering
+ * @param k
+ * @param metric
+ * @param iter
+ * @param initMethod
+ * Initializes the necessary parameters for clustering
+ */
 void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
 {
   if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()) {
@@ -357,9 +364,6 @@ void MainWindow::updatePointSize(int pointSize)
  */
 void MainWindow::getPrevStep()
 {
-//  QMessageBox msgBox;
-//  msgBox.setText("Not working properly yet!");
-//  msgBox.exec();
   qDebug() << "getPrevStep in main window";
   if (!m_k_means.isInitialized()) {
     QMessageBox msgBox;
@@ -411,6 +415,11 @@ void MainWindow::getPrevStep()
   }
 }
 
+/**
+ * @brief MainWindow::play
+ * @param ms_value
+ * Starts the timer for animation
+ */
 void MainWindow::play(int ms_value)
 {
   qDebug() << "Play called in mainwindow";
@@ -429,6 +438,10 @@ void MainWindow::play(int ms_value)
   }
 }
 
+/**
+ * @brief MainWindow::stop
+ * Stops the timer for animation
+ */
 void MainWindow::stop()
 {
   m_timer->stop();
@@ -554,6 +567,15 @@ void MainWindow::importPoints()
   }
 }
 
+/**
+ * @brief MainWindow::selectClusterCenter
+ * Slot that is triggered by the clusterCenterSelected signal in
+ * Scatter3DWidget. This slot initializes parameters for the
+ * initialization for clustering algorithm when it is first called.
+ * Calls the setClusterCenter function from Scatter3DWidget instance
+ * to add the selected point to the m_k_means attribute during manual
+ * cluster center selection process
+ */
 void MainWindow::selectClusterCenter()
 {
   qDebug() << " select cluster center in mainwindow ";
@@ -564,6 +586,11 @@ void MainWindow::selectClusterCenter()
                                         ui->scatter3DWidget->getSelectedPointID());
 }
 
+/**
+ * @brief MainWindow::setParamsForManualInit
+ * Sets the initialization parameters of the m_k_means attribute
+ * by taking the necessary values from the dialog ui
+ */
 void MainWindow::setParamsForManualInit()
 {
   int k;

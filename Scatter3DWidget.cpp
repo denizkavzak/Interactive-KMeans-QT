@@ -124,29 +124,65 @@ void Scatter3DWidget::updatePointSize(int pointSize)
   m_scatter3Dvis->updatePointSize(pointSize);
 }
 
+/**
+ * @brief Scatter3DWidget::getPrevStep
+ * @param k_m
+ * Being called when previous step of clustering in iteration
+ * is triggered. Simply paints the clusters and centers
+ * of current step in the passed k_means instance
+ */
 void Scatter3DWidget::getPrevStep(k_means &k_m)
 {
-  //m_step -= 1;
   paintClusters(k_m);
   paintCenters(k_m);
 }
 
+/**
+ * @brief Scatter3DWidget::getSelectedPointID
+ * @return selected point ID
+ * Returns the selected point ID from the 3DScatter
+ * which indicates the index in the series at
+ * 0 index of the graph
+ */
 int Scatter3DWidget::getSelectedPointID()
 {
   return m_selectedPointID;
 }
 
+/**
+ * @brief Scatter3DWidget::getManualInitCount
+ * @return manual init count
+ * Returns the manual init count which keeps track of
+ * the manually selected cluster centers.
+ */
 int Scatter3DWidget::getManualInitCount()
 {
   return m_manualInitCount;
 }
 
+/**
+ * @brief Scatter3DWidget::selectClusterCenter
+ * Slot to trigger clusterCenterSelected signal
+ * which is connected to MainWindow slot
+ * selectClusterCenter. This is called when
+ * the overriden left mouse click is triggered.
+ */
 void Scatter3DWidget::selectClusterCenter()
 {
   qDebug() << "select cluster center scatter3dwidget" ;
   emit clusterCenterSelected();
 }
 
+/**
+ * @brief Scatter3DWidget::setClusterCenter
+ * @param k_m
+ * @param ind
+ * Adds a cluster with center determined by the passed index.
+ * The parameter ind gives the index of the selected point
+ * in all points series (series 0). Necessary initializations
+ * are made when m_manualInitCount is 0. An error message
+ * is popped up if all the cluster centers are already selected.
+ */
 void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
 {
   qDebug() << "set cluster center scatter3dwidget";
@@ -173,8 +209,6 @@ void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
     }
     paintCenters(k_m);
     m_manualInitCount += 1;
-//    selected = false;
-//    qDebug() << selected;
 
     if (m_manualInitCount == k_m.getK()) {
       k_m.setInitialized(true);
@@ -189,6 +223,14 @@ void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
   }
 }
 
+/**
+ * @brief Scatter3DWidget::mousePressEvent
+ * @param event
+ * Mouse Press Event is overriden to allow user
+ * select a point and add it as a cluster center
+ * by clicking on left mouse button on Scatter3DWidget
+ * instance on MainWindow.
+ */
 void Scatter3DWidget::mousePressEvent(QMouseEvent *event)
 {
   qDebug() << "mouse press event scatter3dwidget";
