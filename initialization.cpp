@@ -22,15 +22,15 @@ initialization::initialization()
 void initialization::initRandomReal(k_means &k_means, float min,
                                     float max)
 {
-  k_means::ClusterColor* color = new k_means::ClusterColor();
-  for (int i = 0; i < k_means.getK(); ++i) {
+  k_means::ClusterColor *color = new k_means::ClusterColor();
+  for (int i = 0; i < k_means.getK(); i++) {
     float p1 = min + (float)(rand()) /
         ((float)(RAND_MAX/(max - min)));
     float p2 = min + (float)(rand()) /
         ((float)(RAND_MAX/(max - min)));
     QVector2D center = QVector2D(p1, p2);
     qDebug() << "CENTER: " << center;
-    k_means::Cluster* cluster = new k_means::Cluster();
+    k_means::Cluster *cluster = new k_means::Cluster();
     cluster->center = center;
     cluster->color = color->operator()(i);
     k_means.addCluster(cluster);
@@ -46,20 +46,20 @@ void initialization::initRandomReal(k_means &k_means, float min,
  */
 void initialization::initRandomSample(k_means &k_means)
 {
-  k_means::ClusterColor* color = new k_means::ClusterColor();
+  k_means::ClusterColor *color = new k_means::ClusterColor();
   // Choose m_k centers randomly
   QSet<int> set;
-  for (int i = 0; i < k_means.getK(); ++i) {
+  for (int i = 0; i < k_means.getK(); i++) {
     int c = rand() % k_means.getNumOfPoints();
     // since we prohibited cases k > number of points, no problem
-    while (set.contains(c)) {   // Make sure no two selected points are the same
+    while (set.contains(c)) { // Make sure no two selected points are the same
       c = rand() % k_means.getNumOfPoints();
     }
     set.insert(c);
     QVector2D* center = k_means.getAllPoints().at(c);
     qDebug() << "CENTER: " << *center;
     // Create cluster
-    k_means::Cluster* cluster = new k_means::Cluster();
+    k_means::Cluster *cluster = new k_means::Cluster();
     cluster->center = *center;
     cluster->color = color->operator()(i);
     qDebug() << "Cluster color " << *(cluster->color);
@@ -77,14 +77,14 @@ void initialization::initRandomSample(k_means &k_means)
 void initialization::initKMeansPp(k_means &k_means)
 {
   QSet<int> set;
-  k_means::ClusterColor* color = new k_means::ClusterColor();
+  k_means::ClusterColor *color = new k_means::ClusterColor();
   int c = rand() % k_means.getNumOfPoints();
   set.insert(c);
   QVector2D* center = k_means.getAllPoints().at(c);
 
   qDebug() << "CENTER: " << *center;
   // Create cluster
-  k_means::Cluster* cluster = new k_means::Cluster();
+  k_means::Cluster *cluster = new k_means::Cluster();
   cluster->center = *center;
   cluster->color = color->operator()(0);
   k_means.addCluster(cluster);
@@ -96,7 +96,7 @@ void initialization::initKMeansPp(k_means &k_means)
   QVector<float> d = getPairwiseDistances(k_means, *center, k_means.getMetric(),
                                           min, min_ind, sum);
 
-  for (int i = 1; i < k_means.getK(); ++i) {
+  for (int i = 1; i < k_means.getK(); i++) {
     QVector<float> prob = getProbs(d, sum);
 
     int ind = choseWithProb(prob);
@@ -108,7 +108,7 @@ void initialization::initKMeansPp(k_means &k_means)
 
     // Get new center point
     center = k_means.getAllPoints().at(ind);
-    k_means::Cluster* cluster = new k_means::Cluster();
+    k_means::Cluster *cluster = new k_means::Cluster();
     cluster->center = *center;
     cluster->color = color->operator()(i);
     k_means.addCluster(cluster);
@@ -134,9 +134,9 @@ void initialization::initKMeansPp(k_means &k_means)
  * min and max
  */
 void initialization::generateRandomPoints(float min, float max,
-                                          k_means& k_means)
+                                          k_means &k_means)
 {
-  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
+  for (int i = 0; i < k_means.getNumOfPoints(); i++) {
     float p1 = min + (float)(rand()) /
         ((float)(RAND_MAX/(max - min)));
     float p2 = min + (float)(rand()) /
@@ -161,14 +161,14 @@ void initialization::generateRandomPoints(float min, float max,
  * min and max, with a normal distribution
  */
 void initialization::generateNormalDistributionPoints(float min, float max,
-                                                      k_means& k_means)
+                                                      k_means &k_means)
 {
   std::random_device rd;
   std::default_random_engine eng(rd());
   std::uniform_real_distribution<float> distr(min, max);
 
-  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
-    QVector2D* point = new QVector2D(distr(eng), distr(eng));
+  for (int i = 0; i < k_means.getNumOfPoints(); i++) {
+    QVector2D *point = new QVector2D(distr(eng), distr(eng));
     k_means.addPoint(point);
   }
 }
@@ -198,8 +198,8 @@ QVector<float> initialization::getPairwiseDistances(k_means &k_means,
   min_ind = 0;
   sum = 0;
 
-  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
-    QVector2D* point = k_means.getAllPoints().at(i);
+  for (int i = 0; i < k_means.getNumOfPoints(); i++) {
+    QVector2D *point = k_means.getAllPoints().at(i);
 
     // These two metrics will return a float value
     if (metric == "euclidean" || metric == "manhattan"){
@@ -209,7 +209,7 @@ QVector<float> initialization::getPairwiseDistances(k_means &k_means,
         min_ind = i;
       }
       d[i] = distance;
-      sum += distance*distance;
+      sum += distance * distance;
     }
   }
   return d;
@@ -303,7 +303,7 @@ int initialization::choseWithProb(const QVector<float> prob)
  * N dimensional version of generating random points
  */
 void initialization::generateRandomPointsND(float min, float max,
-                                            k_means& k_means)
+                                            k_means &k_means)
 {
   // for each point
   for (int i = 0; i < k_means.getNumOfPoints(); i++) {
@@ -332,14 +332,14 @@ void initialization::generateRandomPointsND(float min, float max,
  * N dimensional version of generating normally distributed points
  */
 void initialization::generateNormalDistributionPointsND(float min, float max,
-                                                        k_means& k_means)
+                                                        k_means &k_means)
 {
   std::random_device rd;
   std::default_random_engine eng(rd());
   std::uniform_real_distribution<float> distr(min, max);
   // for each point
-  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
-    QVector<float>* point = new QVector<float>();
+  for (int i = 0; i < k_means.getNumOfPoints(); i++) {
+    QVector<float> *point = new QVector<float>();
     // for each dimension
     for (int j = 0; j < k_means.getDimension(); j++){
       point->append(distr(eng));
@@ -358,7 +358,7 @@ void initialization::initRandomRealND(k_means &k_means, float min,
 {
   k_means::ClusterColor *color = new k_means::ClusterColor();
   QVector<float> *center;
-  for (int i = 0; i < k_means.getK(); ++i) {
+  for (int i = 0; i < k_means.getK(); i++) {
     center = new QVector<float>();
     for (int j = 0; j< k_means.getDimension(); j++){
       float p = min + (float)(rand()) /
@@ -367,7 +367,7 @@ void initialization::initRandomRealND(k_means &k_means, float min,
     }
 
     qDebug() << "CENTER: " << center;
-    k_means::ClusterND* cluster = new k_means::ClusterND();
+    k_means::ClusterND *cluster = new k_means::ClusterND();
     cluster->center = *center;
     cluster->color = color->operator()(i);
     k_means.addClusterND(cluster);
@@ -381,21 +381,21 @@ void initialization::initRandomRealND(k_means &k_means, float min,
  */
 void initialization::initRandomSampleND(k_means &k_means)
 {
-  k_means::ClusterColor* color = new k_means::ClusterColor();
+  k_means::ClusterColor *color = new k_means::ClusterColor();
   // Choose m_k centers randomly
   QSet<int> set;
-  for (int i = 0; i < k_means.getK(); ++i) {
+  for (int i = 0; i < k_means.getK(); i++) {
     int c = rand() % k_means.getNumOfPoints();
     // since we prohibited cases k > number of points, no problem
     while (set.contains(c)) { // Make sure no two selected points are the same
       c = rand() % k_means.getNumOfPoints();
     }
     set.insert(c);
-    QVector<float> * center = k_means.getAllPointsND().at(c);
+    QVector<float> *center = k_means.getAllPointsND().at(c);
 
     qDebug() << "CENTER: " << *center;
     // Create cluster
-    k_means::ClusterND* cluster = new k_means::ClusterND();
+    k_means::ClusterND *cluster = new k_means::ClusterND();
     cluster->center = *center;
     cluster->color = color->operator()(i);
     k_means.addClusterND(cluster);
@@ -417,7 +417,7 @@ void initialization::initKMeansPpND(k_means &k_means)
 
   qDebug() << "CENTER: " << center;
   // Create cluster
-  k_means::ClusterND* cluster = new k_means::ClusterND();
+  k_means::ClusterND *cluster = new k_means::ClusterND();
   cluster->center = *center;
   cluster->color = color->operator()(0);
   k_means.addClusterND(cluster);
@@ -430,7 +430,7 @@ void initialization::initKMeansPpND(k_means &k_means)
                                             k_means.getMetric(),
                                           min, min_ind, sum);
 
-  for (int i = 1; i < k_means.getK(); ++i) {
+  for (int i = 1; i < k_means.getK(); i++) {
     QVector<float> prob = getProbs(d, sum);
 
     int ind = choseWithProb(prob);
@@ -442,7 +442,7 @@ void initialization::initKMeansPpND(k_means &k_means)
 
     // Get new center point
     center = k_means.getAllPointsND().at(ind);
-    k_means::ClusterND* cluster = new k_means::ClusterND();
+    k_means::ClusterND *cluster = new k_means::ClusterND();
     cluster->center = *center;
     cluster->color = color->operator()(i);
     k_means.addClusterND(cluster);
@@ -480,7 +480,7 @@ QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
   min_ind = 0;
   sum = 0;
 
-  for (int i = 0; i < k_means.getNumOfPoints(); ++i) {
+  for (int i = 0; i < k_means.getNumOfPoints(); i++) {
     QVector<float>* point = k_means.getAllPointsND().at(i);
 
     // These two metrics will return a float value
@@ -491,7 +491,7 @@ QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
         min_ind = i;
       }
       d[i] = distance;
-      sum += distance*distance;
+      sum += distance * distance;
     }
   }
   return d;

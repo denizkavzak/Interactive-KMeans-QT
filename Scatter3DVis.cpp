@@ -42,7 +42,7 @@ void Scatter3DVis::init()
  * @return
  * Getter for 3DScatter graph
  */
-Q3DScatter *Scatter3DVis::getGraph()
+Q3DScatter* Scatter3DVis::getGraph()
 {
   return m_graph;
 }
@@ -90,7 +90,7 @@ void Scatter3DVis::addDataCenters(k_means &k_m)
     dataArray->resize(1);
     QScatterDataItem *ptrToDataArray = &dataArray->first();
 
-    ptrToDataArray->setPosition(QVector3D(cluster->center.at(0) ,
+    ptrToDataArray->setPosition(QVector3D(cluster->center.at(0),
                                           cluster->center.at(1),
                                           cluster->center.at(2)));
 
@@ -182,7 +182,7 @@ void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
 
       for (QVector<float> point : cluster->cluster_points) {
 
-        ptrToDataArray->setPosition(QVector3D(point.at(0) ,
+        ptrToDataArray->setPosition(QVector3D(point.at(0),
                                               point.at(1),
                                               point.at(2)));
         ptrToDataArray++;
@@ -222,7 +222,7 @@ void Scatter3DVis::clearAllPointsSeriesFromGraph()
 void Scatter3DVis::updatePointSize(int pointSize)
 {
   for (int i = 0; i < m_graph->seriesList().size(); i++) {
-    m_graph->seriesList().at(i)->setItemSize(float(pointSize)/100.0f);
+    m_graph->seriesList().at(i)->setItemSize(float(pointSize) / 100.0f);
   }
 }
 

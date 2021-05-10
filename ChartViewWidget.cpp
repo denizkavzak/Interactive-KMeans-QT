@@ -9,7 +9,7 @@ ChartViewWidget::ChartViewWidget(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  ui->chartView->setRubberBand( QChartView::HorizontalRubberBand );
+  ui->chartView->setRubberBand(QChartView::HorizontalRubberBand);
 }
 
 ChartViewWidget::~ChartViewWidget()
@@ -69,7 +69,7 @@ void ChartViewWidget::paintCenters(k_means k_m)
  */
 void ChartViewWidget::zoomIn()
 {
-  m_zoom = m_zoom *2;
+  m_zoom = m_zoom * 2;
   updateGeometry();
   adjustSize();
   ui->chartView->chart()->zoomIn();
@@ -81,7 +81,7 @@ void ChartViewWidget::zoomIn()
  */
 void ChartViewWidget::zoomOut()
 {
-  m_zoom = m_zoom *0.5;
+  m_zoom = m_zoom * 0.5;
   updateGeometry();
   adjustSize();
   ui->chartView->chart()->zoomOut();

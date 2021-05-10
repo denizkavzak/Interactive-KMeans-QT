@@ -31,7 +31,7 @@ private:
   int m_numOfPoints;
 
   void init();
-  InputHandlerPanning* m_inputHandlerPanning;
+  InputHandlerPanning *m_inputHandlerPanning;
   bool m_autoAdjust;
 
 };

@@ -51,7 +51,7 @@ private:
 
   bool m_initialized = false;
   int m_manualInitCount = 0;
-  Q3DScatter* m_graph;
+  Q3DScatter *m_graph;
 };
 
 #endif // SCATTER3DWIDGET_H

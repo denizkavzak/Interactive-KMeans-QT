@@ -9,27 +9,27 @@ metrics::metrics()
 
 // lambda function for euclidean distance of 2 2D points
 auto euclidean = [] (QVector2D p1, QVector2D p2) {
-  return sqrt((p1.x()-p2.x())*(p1.x()-p2.x()) +
-              (p1.y()-p2.y())*(p1.y()-p2.y()));
+  return sqrt((p1.x() - p2.x()) * (p1.x() - p2.x()) +
+              (p1.y() - p2.y()) * (p1.y() - p2.y()));
 };
 
 // lambda function for manhattan distance of 2 2D points
 auto manhattan = [] (QVector2D p1, QVector2D p2) {
-  return qAbs(p1.x()-p2.x()) +
-      qAbs(p1.y()-p2.y());
+  return qAbs(p1.x() - p2.x()) +
+      qAbs(p1.y() - p2.y());
 };
 
 // lambda function for euclidean distance of 2 2D points
 auto euclidean3D = [] (QVector3D p1, QVector3D p2) {
-  return sqrt((p1.x()-p2.x())*(p1.x()-p2.x()) +
-              (p1.y()-p2.y())*(p1.y()-p2.y()) +
-              (p1.z()-p2.z())*(p1.z()-p2.z()));
+  return sqrt((p1.x() - p2.x()) * (p1.x() - p2.x()) +
+              (p1.y() - p2.y()) * (p1.y() - p2.y()) +
+              (p1.z() - p2.z()) * (p1.z() - p2.z()));
 };
 
 // lambda function for manhattan distance of 2 2D points
 auto manhattan3D = [] (QVector3D p1, QVector3D p2) {
-  return qAbs(p1.x()-p2.x()) +
-      qAbs(p1.y()-p2.y()) + qAbs(p1.z()-p2.z());
+  return qAbs(p1.x() - p2.x()) +
+      qAbs(p1.y() - p2.y()) + qAbs(p1.z() - p2.z());
 };
 
 // lambda function for euclidean distance of 2 2D points
@@ -39,7 +39,7 @@ auto euclideanND = [] (QVector<float> p1, QVector<float> p2) {
 
   // for each dimension
   for (int i = 0; i < p1.size(); i++) {
-    result += (p1[i] - p2[i])*(p1[i] - p2[i]);
+    result += (p1[i] - p2[i]) * (p1[i] - p2[i]);
   }
 
   return sqrt(result);

@@ -67,7 +67,7 @@ k_means::k_means(QVector<QVector2D*> points, int k)
  * @param k
  * Constructor for k-means class with points dimension >=3
  */
-k_means::k_means(QVector<QVector<float> *> points, int k)
+k_means::k_means(QVector<QVector<float>*> points, int k)
 {
   m_allPointsND = points;
   m_num_points = m_allPointsND.size();
@@ -218,7 +218,7 @@ void k_means::addCluster(k_means::Cluster *cluster)
  * @param point
  * Add a point to the all points 2D vector
  */
-void k_means::addPoint(QVector2D* point)
+void k_means::addPoint(QVector2D *point)
 {
   m_allPoints += point;
 }
@@ -233,9 +233,9 @@ void k_means::setPoints()
   clearClusterPoints();
   metrics m;
   // Point assignment
-  for (int i = 0; i < m_num_points; ++i) {
+  for (int i = 0; i < m_num_points; i++) {
     // for each point:
-    QVector2D* point = m_allPoints.at(i);
+    QVector2D *point = m_allPoints.at(i);
     float min = FLT_MAX;
     int min_ind = 0;
     int ind = 0;
@@ -267,7 +267,7 @@ void k_means::updateCenters()
   int ind = 0;
   for (k_means::Cluster* cluster : m_clusters) {
     // new center = mean of all points assigned to that cluster
-    if (cluster->cluster_points.size()!=0){ // check if cluster has any points
+    if (cluster->cluster_points.size() != 0){ // check if cluster has any points
       float x = 0;
       float y = 0;
       for (QVector2D cluster_point : cluster->cluster_points) {
@@ -275,8 +275,8 @@ void k_means::updateCenters()
         y += cluster_point.y();
       }
 
-      m_clusters[ind]->center = QVector2D(x/cluster->cluster_points.size(),
-                                          y/cluster->cluster_points.size());
+      m_clusters[ind]->center = QVector2D(x / cluster->cluster_points.size(),
+                                          y / cluster->cluster_points.size());
 
     }
     ind += 1;
@@ -301,7 +301,7 @@ void k_means::clusterPoints(int num_iterations)
   qDebug() << " " ;
 
   // loop in num_iterations
-  for (int j = m_step; j < num_iterations; ++j) {
+  for (int j = m_step; j < num_iterations; j++) {
     moveOneStep();
     finalizeOneStep();
   }
@@ -521,8 +521,8 @@ void k_means::detectConvergence()
     if (m_step != 0 && m_step != 1 && m_step != 2) {
       m_converged = true;
       if (m_dim == 2) {
-        QVector<QVector2D*> current = m_clusteringCenterHistory->at(m_step-1);
-        QVector<QVector2D*> prev = m_clusteringCenterHistory->at(m_step-2);
+        QVector<QVector2D*> current = m_clusteringCenterHistory->at(m_step - 1);
+        QVector<QVector2D*> prev = m_clusteringCenterHistory->at(m_step - 2);
 
         for (int i = 0; i < current.size(); i++) {
           if ( (current[i]->x() != prev[i]->x()) ||
@@ -534,9 +534,9 @@ void k_means::detectConvergence()
         qDebug() << "Converged? " << m_converged;
       } else {
         QVector<QVector<float>> current =
-            m_clusteringCenterHistoryND->at(m_step-1);
+            m_clusteringCenterHistoryND->at(m_step - 1);
         QVector<QVector<float>> prev =
-            m_clusteringCenterHistoryND->at(m_step-2);
+            m_clusteringCenterHistoryND->at(m_step - 2);
 
         for (int i = 0; i < current.size(); i++) {
 
@@ -666,7 +666,7 @@ void k_means::clusterPointsND(int num_iterations)
 
   //m_step = 0;
   // loop in num_iterations
-  for (int j = m_step; j < num_iterations; ++j) {
+  for (int j = m_step; j < num_iterations; j++) {
     moveOneStepND();
     finalizeOneStepND();
   }
@@ -721,9 +721,9 @@ void k_means::setPointsND()
   clearClusterPointsND();
   metrics m;
   // Point assignment
-  for (int i = 0; i < m_num_points; ++i) {
+  for (int i = 0; i < m_num_points; i++) {
     // for each point:
-    QVector<float>* point = m_allPointsND.at(i);
+    QVector<float> *point = m_allPointsND.at(i);
     float min = FLT_MAX;
     int min_ind = 0;
     int ind = 0;
@@ -731,7 +731,7 @@ void k_means::setPointsND()
     // find the nearest center point
     for (k_means::ClusterND* cluster : m_clustersND) {
       QVector<float> center = cluster->center;
-      float distance = m.getDistance(*point,center,m_metric);
+      float distance = m.getDistance(*point, center, m_metric);
       if (distance < min) {
         min = distance;
         min_ind = ind;

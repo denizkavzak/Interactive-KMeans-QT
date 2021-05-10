@@ -33,16 +33,12 @@ public slots:
   void getPrevStep(k_means &k_m);
 
 private:
+  Ui::ChartViewWidget *ui;
 
   int m_zoom;
   bool m_scrolling;
-
-  Ui::ChartViewWidget *ui;
-
   int m_step;
-
   int m_pointSize;
-
 };
 
 #endif // CHARTVIEWWIDGET_H

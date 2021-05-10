@@ -30,7 +30,7 @@ ChartView::ChartView(QWidget *parent) :
 void ChartView::paintPoints(QVector<QVector2D*> points)
 {
   for (QVector2D* point : points) {
-    m_series->append(point->x(),point->y());
+    m_series->append(point->x(), point->y());
   }
 
   setRenderHint(QPainter::Antialiasing);
@@ -71,7 +71,6 @@ void ChartView::paintCenters(k_means k_m)
   }
 
   setRenderHint(QPainter::Antialiasing);
-  //chart()->addSeries(m_series);
 
   chart()->setTitle("Points");
   chart()->createDefaultAxes();
@@ -170,8 +169,8 @@ void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
   int i = 0;
 
   for (k_means::Cluster* cluster : clusters) {
-    QScatterSeries* clusterSeries = new QScatterSeries();
-    QScatterSeries* clusterCenterSeries = new QScatterSeries();
+    QScatterSeries *clusterSeries = new QScatterSeries();
+    QScatterSeries *clusterCenterSeries = new QScatterSeries();
 
     clusterSeries->setName(QString("Cluster_%1").arg(i));
 
@@ -181,7 +180,7 @@ void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
     clusterSeries->setColor(*(cluster->color));
 
     for (QVector2D point : cluster->cluster_points) {
-      clusterSeries->append(point.x(),point.y());
+      clusterSeries->append(point.x(), point.y());
     }
 
     // Paint center with rectangle and bigger marker
@@ -219,7 +218,7 @@ void ChartView::paintClusters(QVector<k_means::Cluster*> clusters)
  * @return
  * Getter for the series of the chart graph
  */
-QScatterSeries *ChartView::getSeries()
+QScatterSeries* ChartView::getSeries()
 {
   return m_series;
 }

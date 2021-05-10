@@ -20,14 +20,14 @@ public:
   struct Cluster{
     QVector2D center;
     QVector<QVector2D> cluster_points;
-    QColor* color;
+    QColor *color;
   };
 
   // Cluster strcut for ND points (N>=3)
   struct ClusterND{
     QVector<float> center;
     QVector<QVector<float>> cluster_points;
-    QColor* color;
+    QColor *color;
   };
 
   /**
@@ -84,8 +84,8 @@ public:
 
   // helper functions
   void clearClusterPoints();
-  void addCluster(Cluster* cluster);
-  void addPoint(QVector2D* point);
+  void addCluster(Cluster *cluster);
+  void addPoint(QVector2D *point);
   void printClusters();
   void updateCenters();
 
@@ -115,8 +115,8 @@ public:
 
   // helper functions
   void clearClusterPointsND();
-  void addClusterND(ClusterND* cluster);
-  void addPointND(QVector<float>* point);
+  void addClusterND(ClusterND *cluster);
+  void addPointND(QVector<float> *point);
   void printClustersND();
 
   // back step functions

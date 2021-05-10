@@ -37,10 +37,6 @@ void KMeansDialog::applyGeneratePoints()
  */
 void KMeansDialog::applyClustering()
 {
-//  int k = ui->kSpinBox->value();
-//  int iter = ui->iterSpinBox->value();
-//  QString metric = getSelectedMetric();
-
   emit clusteringParametersChanged();
 }
 

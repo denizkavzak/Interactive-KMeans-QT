@@ -193,7 +193,7 @@ void Scatter3DWidget::selectClusterCenter()
 void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
 {
   if (m_manualInitCount != k_m.getK()) {
-    k_means::ClusterColor* color = new k_means::ClusterColor();
+    k_means::ClusterColor *color = new k_means::ClusterColor();
     k_means::ClusterND *cluster = new k_means::ClusterND();
     // Series index 0 consists of all points
     QScatter3DSeries* series = m_scatter3Dvis->getGraph()->seriesList().at(0);
@@ -241,7 +241,7 @@ void Scatter3DWidget::mousePressEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton) {
     if (!m_initialized) {
-      QScatter3DSeries* series = m_scatter3Dvis->getGraph()->seriesList().at(0);
+      QScatter3DSeries *series = m_scatter3Dvis->getGraph()->seriesList().at(0);
       m_selectedPointID = series->selectedItem();
       qDebug() << "ID " << m_selectedPointID;
       selectClusterCenter();
