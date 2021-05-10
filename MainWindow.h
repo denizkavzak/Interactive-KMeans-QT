@@ -38,6 +38,9 @@ public slots:
   void setParamsForManualInit();
 
 private:
+  bool isPointsGenerated();
+
+private:
   Ui::MainWindow *ui;
   KMeansDialog *m_kMeansDialog;
   k_means m_k_means;

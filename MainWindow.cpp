@@ -6,11 +6,10 @@
 
 using namespace QtDataVisualization;
 
-auto start = std::chrono::high_resolution_clock::now();
-auto end = std::chrono::high_resolution_clock::now();
+using namespace std::chrono;
 
-//constexpr int FLOAT_MIN = 0;
-//constexpr int FLOAT_MAX = 100;
+auto start = high_resolution_clock::now();
+auto end = high_resolution_clock::now();
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -53,21 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->scatter3DWidget, &Scatter3DWidget::clusterCenterSelected,
           this, &MainWindow::selectClusterCenter);
 
-  //k_means m(20, 3, FLOAT_MIN, FLOAT_MAX);
-  qDebug() << "Clustering started !";
-
-  //m.clusterPoints(5);
-
-  qDebug() << "Clustering ended !";
-
   m_timer = new QTimer(this);
   m_timer->callOnTimeout(this, &MainWindow::getNextStep);
-
-  //ui->ndViewWidget->paintPoints();
-
-  // Can access clusters by using m.getClusters()
-
-  //m_graph->;
 
 }
 
@@ -93,7 +79,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
     msgBox.setText("Cannot generate points N <=0 !");
     msgBox.exec();
   } else {
-    if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
+    if (isPointsGenerated()) {
       QMessageBox msgBox;
       msgBox.setText("Points are already generated, open a new instance!");
       msgBox.exec();
@@ -101,7 +87,6 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
       m_k_means.setNoOfPoints(noOfPoints);
       m_k_means.setDimension(dim);
       initialization in;
-      // Try using generateRandomPointsND
       if (dim == 2) {
         in.generateRandomPoints(min, max, m_k_means);
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
@@ -177,7 +162,6 @@ void MainWindow::clusterPoints()
  */
 void MainWindow::getNextStep()
 { 
-  qDebug() << "getNextStep in mainwindow";
   if (!m_k_means.isInitialized()){
     QMessageBox msgBox;
     msgBox.setText("Initialize clustering first!");
@@ -185,7 +169,7 @@ void MainWindow::getNextStep()
   }
   else {
     if (m_step == 0) { // get time to start measuring convergence speed
-      start = std::chrono::high_resolution_clock::now();
+      start = high_resolution_clock::now();
     }
     // stop animation if it is still running in last iteration
     if ((m_step == m_k_means.getNumOfIter() - 1) && m_playing) {
@@ -209,16 +193,15 @@ void MainWindow::getNextStep()
       } else if (m_k_means.getDimension() == 3) {
         m_back_clicked = false;
         m_k_means.moveOneStepND();
-        if (!m_k_means.isPointsSet()) { // initialize if clustering just started
-        // use another flag to test if points are set to any cluster yet
-          ui->scatter3DWidget->paintClustersInit(m_k_means); // initialize series
+        if (!m_k_means.isPointsSet()) { // init if clustering just started
+          // use another flag to test if points are set to any cluster yet
+          ui->scatter3DWidget->paintClustersInit(m_k_means); // init series
         }
         m_k_means.finalizeOneStepND();
-        //m_k_means.clusterPointsND(m_k_means.getNumOfIter());
         m_k_means.printClustersND();
         m_step += 1;
         m_kMeansDialog->updateIterationStepLabel(m_step);
-        //ui->scatter3DWidget->clearAllPointsSeriesFromGraph(); // do not need to call it each time
+
         ui->scatter3DWidget->paintClusters(m_k_means); // draw series
         ui->scatter3DWidget->paintCenters(m_k_means); // draw new centers
       } else { // No visualization available for N > 3 or N < 2
@@ -231,13 +214,14 @@ void MainWindow::getNextStep()
       m_k_means.detectConvergence();
       // get time to start measuring convergence speed
       if (m_converged == false && m_k_means.isConverged()) {
-        end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        end = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(end - start);
         qDebug() << "CONVERGED TIME : " << duration.count();
         m_kMeansDialog->updateConvergenceTimeLabel(duration.count());
         m_kMeansDialog->updateConvergenceStepLabel(m_step);
         m_converged = true;
-        float energy = m_k_means.calculateEnergy(m_kMeansDialog->getSelectedMetric());
+        float energy = m_k_means.calculateEnergy(
+              m_kMeansDialog->getSelectedMetric());
         qDebug() << "CONVERGENCE TOTAL ENERGY: " << energy;
         if (m_playing) {
           m_timer->stop();
@@ -257,9 +241,10 @@ void MainWindow::getNextStep()
  * @param initMethod
  * Initializes the necessary parameters for clustering
  */
-void MainWindow::initializeClustering(int k, QString metric, int iter, QString initMethod)
+void MainWindow::initializeClustering(int k, QString metric, int iter,
+                                      QString initMethod)
 {
-  if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()) {
+  if (!isPointsGenerated()) {
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
     msgBox.exec();
@@ -294,9 +279,9 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
             ui->chartViewWidget->paintCenters(m_k_means);
             ui->chartViewWidget->update();
             m_k_means.initClusterCentersHistory();
-            qDebug() << "size of clusters nd: " << m_k_means.getClusters().size();
+
             // For N>=3 and N=1 case
-          } else { //(m_k_means.getDimension() >= 3 || m_k_means.getDimension() == 1) {
+          } else {
             if (initMethod == "Random Sample") {
               in.initRandomSampleND(m_k_means);
             } else if (initMethod == "Random Real") {
@@ -310,7 +295,6 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
               ui->scatter3DWidget->paintCenters(m_k_means);
             }
             m_k_means.initClusterCentersHistoryND();
-            qDebug() << "after init history";
           }
         }
       } else {
@@ -332,7 +316,8 @@ void MainWindow::initializeClustering(int k, QString metric, int iter, QString i
  */
 void MainWindow::updatePointSize(int pointSize)
 {
-  if (m_k_means.getAllPoints().isEmpty() && m_k_means.getAllPointsND().isEmpty()) {
+  if (m_k_means.getAllPoints().isEmpty() &&
+      m_k_means.getAllPointsND().isEmpty()) {
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
     msgBox.exec();
@@ -356,7 +341,6 @@ void MainWindow::updatePointSize(int pointSize)
  */
 void MainWindow::getPrevStep()
 {
-  qDebug() << "getPrevStep in main window";
   if (!m_k_means.isInitialized()) {
     QMessageBox msgBox;
     msgBox.setText("Initialize clustering first!");
@@ -378,8 +362,7 @@ void MainWindow::getPrevStep()
           m_step -= 1;
           m_k_means.setStep(m_step);
           m_kMeansDialog->updateIterationStepLabel(m_step);
-          //m_k_means.setClusterCentersToPrev();
-          qDebug() << "step in prev step in main: " << m_step;
+
           m_k_means.setClusterCentersToPrevStepInHistory();
           m_k_means.setPoints();
           m_k_means.updateCenters();
@@ -389,8 +372,7 @@ void MainWindow::getPrevStep()
           m_step -= 1;
           m_k_means.setStep(m_step);
           m_kMeansDialog->updateIterationStepLabel(m_step);
-          //m_k_means.setClusterCentersToPrev();
-          qDebug() << "step in prev step in main: " << m_step;
+
           m_k_means.setClusterCentersToPrevStepInHistoryND();
           m_k_means.setPointsND();
           m_k_means.updateCentersND();
@@ -414,8 +396,7 @@ void MainWindow::getPrevStep()
  */
 void MainWindow::play(int ms_value)
 {
-  qDebug() << "Play called in mainwindow";
-  if (m_k_means.getAllPoints().empty() && m_k_means.getAllPointsND().empty()) {
+  if (!isPointsGenerated()) {
     QMessageBox msgBox;
     msgBox.setText("Generate points first!");
     msgBox.exec();
@@ -436,7 +417,15 @@ void MainWindow::play(int ms_value)
  */
 void MainWindow::stop()
 {
-  m_timer->stop();
+  if (m_playing) {
+    m_timer->stop();
+    m_playing = false;
+  } else {
+    QMessageBox msgBox;
+    msgBox.setText("No animation running!");
+    msgBox.exec();
+  }
+
 }
 
 /**
@@ -479,7 +468,7 @@ void MainWindow::zoomActualSize()
  */
 void MainWindow::importPoints()
 {
-  if (!m_k_means.getAllPoints().empty() || !m_k_means.getAllPointsND().isEmpty()){
+  if (isPointsGenerated()){
     QMessageBox msgBox;
     msgBox.setText("Points are already generated, open a new instance!");
     msgBox.exec();
@@ -541,7 +530,7 @@ void MainWindow::importPoints()
           v->setX(p->at(0));
           v->setY(p->at(1));
           m_k_means.addPoint(v);
-        } else { //if ((dimension >= 3 || dimension == 1)) {
+        } else {
           m_k_means.addPointND(p);
         }
       }
@@ -569,12 +558,11 @@ void MainWindow::importPoints()
  */
 void MainWindow::selectClusterCenter()
 {
-  qDebug() << " select cluster center in mainwindow ";
   if (ui->scatter3DWidget->getManualInitCount() == 0) {
     setParamsForManualInit();
   }
   ui->scatter3DWidget->setClusterCenter(m_k_means,
-                                        ui->scatter3DWidget->getSelectedPointID());
+                            ui->scatter3DWidget->getSelectedPointID());
 }
 
 /**
@@ -591,6 +579,12 @@ void MainWindow::setParamsForManualInit()
   m_k_means.setNumOfIter(iter);
   m_k_means.setK(k);
   m_k_means.setMetric(metric);
+}
+
+bool MainWindow::isPointsGenerated()
+{
+  return !m_k_means.getAllPoints().empty() ||
+      !m_k_means.getAllPointsND().isEmpty();
 }
 
 
