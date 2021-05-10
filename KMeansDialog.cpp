@@ -204,16 +204,6 @@ void KMeansDialog::stop()
   emit stopTriggered();
 }
 
-float KMeansDialog::getMin()
-{
-  return ui->minDoubleSpinBox->value();
-}
-
-float KMeansDialog::getMax()
-{
-  return ui->maxDoubleSpinBox->value();
-}
-
 /**
  * @brief KMeansDialog::getInitializationParameters
  * @param k

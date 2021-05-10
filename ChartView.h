@@ -20,9 +20,8 @@ public:
   void setPointSize(int pointSize, int step);
 
 protected:
-
-    virtual void mousePressEvent(QMouseEvent *event) override;
-    virtual void mouseMoveEvent(QMouseEvent *event) override;
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
 
