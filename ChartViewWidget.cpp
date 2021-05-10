@@ -9,11 +9,7 @@ ChartViewWidget::ChartViewWidget(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  //m_ChartView = (new ChartView(this));
   ui->chartView->setRubberBand( QChartView::HorizontalRubberBand );
-
-  //connect( c->axisX( ), SIGNAL(rangeChanged(qreal, qreal)), this,
-  //  SLOT(on_rangeChanged(qreal,qreal)) );
 }
 
 ChartViewWidget::~ChartViewWidget()
@@ -51,7 +47,6 @@ void ChartViewWidget::paintPoints(QVector<QVector2D*> points)
  */
 void ChartViewWidget::paintClusters(k_means k_m)
 {
-  qDebug() << "PAINT";
   m_step = k_m.getNumOfIter();
   ui->chartView->paintClusters(k_m.getClusters());
 }
@@ -113,7 +108,6 @@ void ChartViewWidget::zoomActualSize()
  */
 void ChartViewWidget::getNextStep(k_means &k_m)
 {
-  qDebug() << " getNextStep in chartview widget" ;
   m_step += 1;
   ui->chartView->paintClusters(k_m.getClusters());
 }
@@ -127,7 +121,6 @@ void ChartViewWidget::getNextStep(k_means &k_m)
  */
 void ChartViewWidget::getPrevStep(k_means &k_m)
 {
-  //qDebug() << k_m.getPrevClusters().size();
   m_step -= 1;
   ui->chartView->paintClusters(k_m.getClusters());
 }

@@ -24,9 +24,6 @@ protected:
   virtual void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-
-  //void clearSeries();
-
   QScatterSeries *m_series;
   QVector<QScatterSeries*> m_clusterSeries;
   QVector<QScatterSeries*> m_clusterCenterSeries;
