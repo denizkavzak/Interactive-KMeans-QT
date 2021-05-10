@@ -3,7 +3,6 @@
 #include <random>
 #include <QMap>
 #include <QtMath>
-#include <QVector2D>
 #include <QSet>
 #include <QDebug>
 #include <initialization.h>
@@ -87,7 +86,8 @@ void k_means::printClusters()
   qDebug() << "Clusters : ";
   int id = 0;
   for (k_means::Cluster* cluster : m_clusters) {
-    qDebug() << "Cluster " << id << " - size: " << cluster->cluster_points.size();
+    qDebug() << "Cluster " << id << " - size: " <<
+                cluster->cluster_points.size();
     qDebug() << "Center: " << cluster->center.x() << ", "
              << cluster->center.y();
     for (QVector2D p : cluster->cluster_points) {
@@ -203,20 +203,11 @@ QString k_means::getMetric()
   return m_metric;
 }
 
-///**
-// * @brief k_means::getCenters
-// * @return
-// * Returns the centers of each cluster in a vector in 2D
-// */
-//QVector2D k_means::getCenters()
-//{
-//  QVector2D centers;
-//  for (k_means::Cluster* cluster : m_clusters) {
-//    centers += cluster->center;
-//  }
-//  return centers;
-//}
-
+/**
+ * @brief k_means::addCluster
+ * @param cluster
+ * Add cluster to the clusters vector attribute
+ */
 void k_means::addCluster(k_means::Cluster *cluster)
 {
   m_clusters += cluster;
@@ -309,7 +300,6 @@ void k_means::clusterPoints(int num_iterations)
   qDebug() << "Iterations Start!" ;
   qDebug() << " " ;
 
-  //m_step = 0;
   // loop in num_iterations
   for (int j = m_step; j < num_iterations; ++j) {
     moveOneStep();
@@ -325,7 +315,6 @@ void k_means::clusterPoints(int num_iterations)
  */
 void k_means::moveOneStep()
 {
-  qDebug() << "move one step";
   // Point assignment
   setPoints();
 
@@ -345,7 +334,6 @@ void k_means::moveOneStep()
  */
 void k_means::finalizeOneStep()
 {
-  //updatePrevClusterCenters();
   // Cluster center update
   // for each cluster center 0...m_k
   updateCenters();
@@ -453,7 +441,8 @@ void k_means::printClustersND()
   qDebug() << "Clusters : ";
   int id = 0;
   for (k_means::ClusterND* cluster : m_clustersND) {
-    qDebug() << "Cluster " << id << " - size: " << cluster->cluster_points.size();
+    qDebug() << "Cluster " << id << " - size: " <<
+                cluster->cluster_points.size();
     qDebug() << "Center: " << cluster->center;
     for (QVector<float> p : cluster->cluster_points) {
       qDebug() << p;
@@ -505,7 +494,7 @@ void k_means::setClusterCentersToPrevStepInHistoryND()
   QVector<QVector<float>> prev = m_clusteringCenterHistoryND->at(m_step - 1);
   for (int i = 0; i < m_clustersND.size(); i++) {
     QVector<float> p(prev.at(i)); // get previous center point
-    qDebug() << m_clustersND[i]->center  << " set to " << p;
+
     m_clustersND[i]->center = p;
   }
   m_back_clicked = true;
@@ -529,15 +518,12 @@ void k_means::initClusterCentersHistoryND()
 void k_means::detectConvergence()
 {
   if (m_converged == false) { // if not converged yet
-    qDebug() << "in detect convergence : ";
     if (m_step != 0 && m_step != 1 && m_step != 2) {
       m_converged = true;
       if (m_dim == 2) {
         QVector<QVector2D*> current = m_clusteringCenterHistory->at(m_step-1);
         QVector<QVector2D*> prev = m_clusteringCenterHistory->at(m_step-2);
 
-        //qDebug() << " Current " << current;
-        //qDebug() << " Prev " << prev;
         for (int i = 0; i < current.size(); i++) {
           if ( (current[i]->x() != prev[i]->x()) ||
                (current[i]->y() != prev[i]->y())) {
@@ -547,8 +533,10 @@ void k_means::detectConvergence()
         }
         qDebug() << "Converged? " << m_converged;
       } else {
-        QVector<QVector<float>> current = m_clusteringCenterHistoryND->at(m_step-1);
-        QVector<QVector<float>> prev = m_clusteringCenterHistoryND->at(m_step-2);
+        QVector<QVector<float>> current =
+            m_clusteringCenterHistoryND->at(m_step-1);
+        QVector<QVector<float>> prev =
+            m_clusteringCenterHistoryND->at(m_step-2);
 
         for (int i = 0; i < current.size(); i++) {
 
@@ -562,12 +550,12 @@ void k_means::detectConvergence()
             }
           }
         }
-        qDebug() << "Converged? " << m_converged;
       }
+    } else if (m_step == m_iter) {
+      m_converged = true;
     }
-  }/* else { // We assume the clustering does not converge in first steps
-    m_converged = false;
-  }*/
+    qDebug() << "Converged? " << m_converged;
+  }
 }
 
 float k_means::calculateEnergy(QString metric)
@@ -692,7 +680,6 @@ void k_means::clusterPointsND(int num_iterations)
  */
 void k_means::moveOneStepND()
 {
-  qDebug() << "move one step";
   // Point assignment
   setPointsND();
 
@@ -765,9 +752,7 @@ void k_means::setPointsND()
 void k_means::clearClusterPointsND()
 {
   for (k_means::ClusterND* cluster : m_clustersND) {
-    //qDebug() << "PREV CLUSTER CLEAR:" << cluster->cluster_points.size();
     cluster->cluster_points.clear();
-    //qDebug() << "AFTER CLUSTER CLEAR:" << cluster->cluster_points.size();
   }
 }
 
@@ -793,7 +778,7 @@ void k_means::updateCentersND()
   int ind = 0;
   for (k_means::ClusterND* cluster : m_clustersND) {
     // new center = mean of all points assigned to that cluster
-    if (cluster->cluster_points.size() != 0){ // check if cluster has any points
+    if (cluster->cluster_points.size() != 0){ // check cluster has any points?
       QVector<float> p(m_dim, 0.0);
       for (QVector<float> cluster_point : cluster->cluster_points) {
         for (int i = 0; i < m_dim; i++) {
@@ -806,7 +791,6 @@ void k_means::updateCentersND()
       }
 
       m_clustersND[ind]->center = p;
-      //m_clustersND[ind]->cluster_points.clear();
     }
     ind += 1;
   }
