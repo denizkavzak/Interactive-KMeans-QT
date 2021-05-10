@@ -21,15 +21,18 @@ void Scatter3DVis::init()
   font.setPointSize(m_pointSize);
   m_graph->activeTheme()->setFont(font);
   m_graph->setShadowQuality(QAbstract3DGraph::ShadowQualitySoftLow);
-  m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetFront);
+  m_graph->scene()->activeCamera()->setCameraPreset(
+        Q3DCamera::CameraPresetFront);
 
   m_graph->setActiveInputHandler(m_inputHandlerPanning);
-  m_inputHandlerPanning->setAxes(m_graph->axisX(), m_graph->axisZ(), m_graph->axisY());
+  m_inputHandlerPanning->setAxes(m_graph->axisX(), m_graph->axisZ(),
+                                 m_graph->axisY());
 
   // Add one series that will store all points
   QScatterDataProxy *proxy = new QScatterDataProxy;
   QScatter3DSeries *series = new QScatter3DSeries(proxy);
-  series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
+  series->setItemLabelFormat(
+        QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
   //series->setMeshSmooth(m_smooth);
   m_graph->addSeries(series);
 }
@@ -81,8 +84,6 @@ void Scatter3DVis::addData(k_means &k_m)
  */
 void Scatter3DVis::addDataCenters(k_means &k_m)
 {
-  qDebug() << "Inside add centers";
-  qDebug() << "size of clusters nd: " << k_m.getClustersND().size();
   int ind = 1;
   for (k_means::ClusterND* cluster : k_m.getClustersND()) {
     QScatterDataArray *dataArray = new QScatterDataArray;
@@ -107,7 +108,6 @@ void Scatter3DVis::addDataCenters(k_means &k_m)
 
     ind++;
   }
-  qDebug() << "end of add Centers" ;
 }
 
 /**
@@ -122,7 +122,8 @@ void Scatter3DVis::addSeriesForEachCluster(k_means &k_m)
   {
     QScatterDataProxy *proxy = new QScatterDataProxy;
     QScatter3DSeries *series = new QScatter3DSeries(proxy);
-    series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
+    series->setItemLabelFormat(
+          QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
     //series->setMeshSmooth(m_smooth);
     m_graph->addSeries(series);
   }
@@ -143,7 +144,8 @@ void Scatter3DVis::addSeriesForEachClusterPoints(k_means &k_m)
   {
     QScatterDataProxy *proxy = new QScatterDataProxy;
     QScatter3DSeries *series = new QScatter3DSeries(proxy);
-    series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
+    series->setItemLabelFormat(
+          QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
     //series->setMeshSmooth(m_smooth);
     m_graph->addSeries(series);
   }
@@ -186,8 +188,10 @@ void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
         ptrToDataArray++;
       }
 
-      m_graph->seriesList().at(ind + k_m.getK())->dataProxy()->resetArray(dataArray);
-      m_graph->seriesList().at(ind + k_m.getK())->setBaseColor(*(cluster->color));
+      m_graph->seriesList().at(ind + k_m.getK())->dataProxy()->resetArray(
+            dataArray);
+      m_graph->seriesList().at(ind + k_m.getK())->setBaseColor(
+            *(cluster->color));
 
       ind++;
     }
@@ -203,7 +207,6 @@ void Scatter3DVis::updateSeriesForEachCluster(k_means &k_m)
 void Scatter3DVis::clearAllPointsSeriesFromGraph()
 {
   m_graph->seriesList().at(0)->setVisible(false);
-  //m_graph->seriesList().removeAt(0);
 }
 
 /**
@@ -218,7 +221,6 @@ void Scatter3DVis::clearAllPointsSeriesFromGraph()
  */
 void Scatter3DVis::updatePointSize(int pointSize)
 {
-  //qDebug() << "current item size: " << m_graph->seriesList().at(0)->itemSize();
   for (int i = 0; i < m_graph->seriesList().size(); i++) {
     m_graph->seriesList().at(i)->setItemSize(float(pointSize)/100.0f);
   }

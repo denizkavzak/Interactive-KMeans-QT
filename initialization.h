@@ -32,8 +32,6 @@ public:
   void generateRandomPoints(float min, float max, k_means& k_means);
   void generateNormalDistributionPoints(float min, float max, k_means& k_means);
 
-  void initSpecialCases(k_means& k_means);
-
   //
   // ND functions
   //
@@ -45,7 +43,8 @@ public:
 
   // Point generation and initialization
   void generateRandomPointsND(float min, float max, k_means& k_means);
-  void generateNormalDistributionPointsND(float min, float max, k_means& k_means);
+  void generateNormalDistributionPointsND(float min, float max,
+                                          k_means& k_means);
 
 };
 

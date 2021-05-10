@@ -7,9 +7,8 @@
 #include <QSize>
 #include <QScreen>
 
-Scatter3DWidget::Scatter3DWidget(QWidget *parent) : //, Qt::WindowFlags f) :
+Scatter3DWidget::Scatter3DWidget(QWidget *parent) :
   QWidget(parent),
-  //QOpenGLWidget(parent, f),
   ui(new Ui::Scatter3DWidget)
 {
   ui->setupUi(this);
@@ -30,7 +29,6 @@ Scatter3DWidget::~Scatter3DWidget()
  */
 void Scatter3DWidget::paintPoints(k_means &k_m)
 {
-  qDebug() << "inside scatter3Dwidget paint points";
   m_scatter3Dvis->addData(k_m);
 }
 
@@ -50,7 +48,8 @@ void Scatter3DWidget::createContainer()
   m_container = QWidget::createWindowContainer(m_graph);
 
   QSize screenSize = m_graph->screen()->size();
-  m_container->setMinimumSize(QSize(screenSize.width() / 2, screenSize.height() / 1.5));
+  m_container->setMinimumSize(QSize(screenSize.width() / 2,
+                                    screenSize.height() / 1.5));
   m_container->setMaximumSize(screenSize);
   m_container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   m_container->setFocusPolicy(Qt::StrongFocus);
@@ -178,7 +177,6 @@ int Scatter3DWidget::getManualInitCount()
  */
 void Scatter3DWidget::selectClusterCenter()
 {
-  qDebug() << "select cluster center scatter3dwidget" ;
   emit clusterCenterSelected();
 }
 
@@ -194,7 +192,6 @@ void Scatter3DWidget::selectClusterCenter()
  */
 void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
 {
-  qDebug() << "set cluster center scatter3dwidget";
   if (m_manualInitCount != k_m.getK()) {
     k_means::ClusterColor* color = new k_means::ClusterColor();
     k_means::ClusterND *cluster = new k_means::ClusterND();
@@ -242,7 +239,6 @@ void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
  */
 void Scatter3DWidget::mousePressEvent(QMouseEvent *event)
 {
-  qDebug() << "mouse press event scatter3dwidget";
   if (event->button() == Qt::LeftButton) {
     if (!m_initialized) {
       QScatter3DSeries* series = m_scatter3Dvis->getGraph()->seriesList().at(0);

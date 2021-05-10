@@ -14,8 +14,6 @@ public:
   float getDistance(QVector3D p1, QVector3D p2, QString metric);
   float getDistance(QString binary1, QString binary2);
   // for ND
-//  float getDistance(std::vector<float> p1, std::vector<float> p2,
-//                      QString metric);
   float getDistance(QVector<float> p1, QVector<float> p2,
                       QString metric);
 };

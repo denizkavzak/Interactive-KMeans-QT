@@ -11,13 +11,13 @@ namespace Ui {
 class Scatter3DWidget;
 }
 
-class Scatter3DWidget : public QWidget //QOpenGLWidget
+class Scatter3DWidget : public QWidget
 {
   Q_OBJECT
 
 public:
   explicit Scatter3DWidget(QWidget *parent = nullptr);
-                           //Qt::WindowFlags f = Qt::WindowFlags());
+
   ~Scatter3DWidget();
 
   void createContainer();

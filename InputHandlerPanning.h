@@ -20,15 +20,20 @@ class InputHandlerPanning : public Q3DInputHandler
 
 
 public:
-  explicit InputHandlerPanning(QAbstract3DGraph *graph, QObject *parent = nullptr);
+  explicit InputHandlerPanning(QAbstract3DGraph *graph,
+                               QObject *parent = nullptr);
 
-  void setAxes(QValue3DAxis *axisX, QValue3DAxis *axisY, QValue3DAxis *axisZ);
+  void setAxes(QValue3DAxis *axisX, QValue3DAxis *axisY,
+               QValue3DAxis *axisZ);
 
   void setDragSpeedModifier(float modifier);
 
-  virtual void mousePressEvent(QMouseEvent *event, const QPoint &mousePos) override;
-  virtual void mouseMoveEvent(QMouseEvent *event, const QPoint &mousePos) override;
-  virtual void mouseReleaseEvent(QMouseEvent *event, const QPoint &mousePos) override;
+  virtual void mousePressEvent(QMouseEvent *event,
+                               const QPoint &mousePos) override;
+  virtual void mouseMoveEvent(QMouseEvent *event,
+                              const QPoint &mousePos) override;
+  virtual void mouseReleaseEvent(QMouseEvent *event,
+                                 const QPoint &mousePos) override;
 
 private:
   void handleElementSelected(QAbstract3DGraph::ElementType type);

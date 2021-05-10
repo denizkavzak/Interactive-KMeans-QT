@@ -84,7 +84,6 @@ void initialization::initKMeansPp(k_means &k_means)
   set.insert(c);
   QVector2D* center = k_means.getAllPoints().at(c);
 
-  qDebug() << "first center index: " << c;
   qDebug() << "CENTER: " << *center;
   // Create cluster
   k_means::Cluster* cluster = new k_means::Cluster();
@@ -98,10 +97,9 @@ void initialization::initKMeansPp(k_means &k_means)
   float sum;
   QVector<float> d = getPairwiseDistances(k_means, *center, k_means.getMetric(),
                                           min, min_ind, sum);
-  qDebug() << "d is found";
+
   for (int i = 1; i < k_means.getK(); ++i) {
     QVector<float> prob = getProbs(d, sum);
-    qDebug() << "probs: " << prob;
 
     int ind = choseWithProb(prob);
     // since we prohibited cases k > number of points, no problem
@@ -109,7 +107,6 @@ void initialization::initKMeansPp(k_means &k_means)
       ind = choseWithProb(prob);
     }
     set.insert(ind);
-    qDebug() << "selected ind: " << ind;
 
     // Get new center point
     center = k_means.getAllPoints().at(ind);
@@ -176,27 +173,6 @@ void initialization::generateNormalDistributionPoints(float min, float max,
     QVector2D* point = new QVector2D(distr(eng), distr(eng));
     k_means.addPoint(point);
   }
-}
-
-
-/**
- * @brief initialization::initSpecialCases
- * @param k_means
- * Include checks for degenerate conditions defined in the slides
- * including Slide 15 (K=0, K=1, N=0, K>N, N identical points,
- * sets of identical points).
- */
-void initialization::initSpecialCases(k_means& k_means)
-{
-  // k cannot be 0
-  if (k_means.getK() > 0) {
-    if (k_means.getK() == 1) {
-
-
-
-    }
-  }
-
 }
 
 /**
@@ -412,12 +388,12 @@ void initialization::initRandomSampleND(k_means &k_means)
   for (int i = 0; i < k_means.getK(); ++i) {
     int c = rand() % k_means.getNumOfPoints();
     // since we prohibited cases k > number of points, no problem
-    while (set.contains(c)) {   // Make sure no two selected points are the same
+    while (set.contains(c)) { // Make sure no two selected points are the same
       c = rand() % k_means.getNumOfPoints();
     }
     set.insert(c);
     QVector<float> * center = k_means.getAllPointsND().at(c);
-    //QVector2D* center = k_means.getAllPoints().at(c);
+
     qDebug() << "CENTER: " << *center;
     // Create cluster
     k_means::ClusterND* cluster = new k_means::ClusterND();
@@ -439,9 +415,7 @@ void initialization::initKMeansPpND(k_means &k_means)
   int c = rand() % k_means.getNumOfPoints();
   set.insert(c);
   QVector<float> *center = k_means.getAllPointsND().at(c);
-  //QVector2D* center = k_means.getAllPoints().at(c);
 
-  qDebug() << "first center index: " << c;
   qDebug() << "CENTER: " << center;
   // Create cluster
   k_means::ClusterND* cluster = new k_means::ClusterND();
@@ -456,10 +430,9 @@ void initialization::initKMeansPpND(k_means &k_means)
   QVector<float> d = getPairwiseDistancesND(k_means, *center,
                                             k_means.getMetric(),
                                           min, min_ind, sum);
-  qDebug() << "d is found";
+
   for (int i = 1; i < k_means.getK(); ++i) {
     QVector<float> prob = getProbs(d, sum);
-    qDebug() << "probs: " << prob;
 
     int ind = choseWithProb(prob);
     // since we prohibited cases k > number of points, no problem
@@ -467,7 +440,6 @@ void initialization::initKMeansPpND(k_means &k_means)
       ind = choseWithProb(prob);
     }
     set.insert(ind);
-    qDebug() << "selected ind: " << ind;
 
     // Get new center point
     center = k_means.getAllPointsND().at(ind);
@@ -502,7 +474,6 @@ QVector<float> initialization::getPairwiseDistancesND(k_means &k_means,
                                  QVector<float> center, QString metric,
                                      float &min, int &min_ind, float &sum)
 {
-  qDebug() << "In get pairwise distance nd";
   metrics m;
   // Create an array to store the distances between center and all points
   QVector<float> d(k_means.getNumOfPoints());

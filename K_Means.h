@@ -44,8 +44,6 @@ public:
                                   Qt::gray, Qt::cyan, Qt::darkBlue, Qt::darkRed,
                                   Qt::darkGreen, Qt::darkCyan, Qt::darkYellow,
                                   Qt::darkMagenta, Qt::darkGray, Qt::yellow};
-    // QColor a(255,0,255,0); // Can have random color but will it be distinctive?
-
 
     QColor* operator()(int i){
       // modulo for making repeated pattern when pattern image is smaller
@@ -141,8 +139,10 @@ private:
   // for ND
   QVector<QVector<float>*> m_allPointsND;
   QVector<ClusterND*> m_clustersND;
-  QVector<QVector<QVector2D*>> *m_clusteringCenterHistory; // store all clustering history
-  QVector<QVector<QVector<float>>> *m_clusteringCenterHistoryND; // store all clustering history
+  // store all clustering history
+  QVector<QVector<QVector2D*>> *m_clusteringCenterHistory;
+  // store all clustering history
+  QVector<QVector<QVector<float>>> *m_clusteringCenterHistoryND;
   // <#iteration<#cluster<N dimensional point vector
   // each iteration < each cluster < center point > >
   QString m_metric;

@@ -53,7 +53,8 @@ void KMeansDialog::applyClustering()
  */
 QString KMeansDialog::getSelectedMetric()
 {
-  QString metric = ui->metricComboBox->itemText(ui->metricComboBox->currentIndex());
+  QString metric = ui->metricComboBox->itemText(
+        ui->metricComboBox->currentIndex());
   if (metric == "Manhattan (L1)") {
     return QString("manhattan");
   } else if (metric == "Hamming") {
@@ -70,7 +71,6 @@ QString KMeansDialog::getSelectedMetric()
  */
 void KMeansDialog::getNextStep()
 {
-  qDebug() << "getNextStep in dialog";
   emit stepUpdated();
 }
 
@@ -118,7 +118,6 @@ void KMeansDialog::updatePointSize()
  */
 void KMeansDialog::getPrevStep()
 {
-  qDebug() << "getPrevStep in dialog";
   emit stepPrevUpdated();
 }
 
@@ -211,7 +210,8 @@ void KMeansDialog::stop()
  * @param iter
  * Get initialization parameters from the ui and pass them back by reference
  */
-void KMeansDialog::getInitializationParameters(int &k, QString &metric, int &iter)
+void KMeansDialog::getInitializationParameters(int &k, QString &metric,
+                                               int &iter)
 {
   k = ui->kSpinBox->value();
   iter = ui->iterSpinBox->value();
