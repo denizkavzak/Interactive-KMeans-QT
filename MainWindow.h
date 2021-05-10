@@ -6,7 +6,6 @@
 #include "k_means.h"
 #include <initialization.h>
 #include <limits>
-#include <QtDataVisualization/Q3DScatter>
 #include <QTimer>
 
 namespace Ui {
@@ -37,7 +36,6 @@ public slots:
   void importPoints();
   void selectClusterCenter();
   void setParamsForManualInit();
-  void getMinMax(float &min, float &max);
 
 private:
   Ui::MainWindow *ui;
@@ -45,7 +43,6 @@ private:
   k_means m_k_means;
   int m_step;
   bool m_back_clicked = false;
-  QtDataVisualization::Q3DScatter* m_graph;
   QTimer* m_timer;
   bool m_playing = false;
   bool m_converged = false;

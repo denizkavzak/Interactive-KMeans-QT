@@ -7,8 +7,6 @@
 #include <QSize>
 #include <QScreen>
 
-using namespace QtDataVisualization;
-
 Scatter3DWidget::Scatter3DWidget(QWidget *parent) : //, Qt::WindowFlags f) :
   QWidget(parent),
   //QOpenGLWidget(parent, f),
@@ -36,11 +34,22 @@ void Scatter3DWidget::paintPoints(k_means &k_m)
   m_scatter3Dvis->addData(k_m);
 }
 
-void Scatter3DWidget::createContainer(Q3DScatter& graph)
+void Scatter3DWidget::createContainer()
 {
-  m_container = QWidget::createWindowContainer(&graph);
+  m_graph = new Q3DScatter();
 
-  QSize screenSize = graph.screen()->size();
+  if (!m_graph->hasContext()) {
+    QMessageBox msgBox;
+    msgBox.setText("Couldn't initialize the OpenGL context.");
+    msgBox.exec();
+    return;
+  } else {
+    qDebug() << " Scatter graph is created ";
+  }
+
+  m_container = QWidget::createWindowContainer(m_graph);
+
+  QSize screenSize = m_graph->screen()->size();
   m_container->setMinimumSize(QSize(screenSize.width() / 2, screenSize.height() / 1.5));
   m_container->setMaximumSize(screenSize);
   m_container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -52,8 +61,8 @@ void Scatter3DWidget::createContainer(Q3DScatter& graph)
   hLayout->addWidget(m_container, 1);
   hLayout->addLayout(vLayout);
 
-  m_scatter3Dvis = new Scatter3DVis(&graph);
-  //paintPoints();
+  m_scatter3Dvis = new Scatter3DVis(m_graph);
+
   widget->show();
 }
 
@@ -234,9 +243,8 @@ void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
 void Scatter3DWidget::mousePressEvent(QMouseEvent *event)
 {
   qDebug() << "mouse press event scatter3dwidget";
-  if (!m_initialized) {
-    if (event->button() == Qt::LeftButton)
-    {
+  if (event->button() == Qt::LeftButton) {
+    if (!m_initialized) {
       QScatter3DSeries* series = m_scatter3Dvis->getGraph()->seriesList().at(0);
       m_selectedPointID = series->selectedItem();
       qDebug() << "ID " << m_selectedPointID;

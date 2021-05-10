@@ -5,6 +5,8 @@
 #include <QOpenGLWidget>
 #include "Scatter3DVis.h"
 
+using namespace QtDataVisualization;
+
 namespace Ui {
 class Scatter3DWidget;
 }
@@ -18,7 +20,7 @@ public:
                            //Qt::WindowFlags f = Qt::WindowFlags());
   ~Scatter3DWidget();
 
-  void createContainer(Q3DScatter& graph);
+  void createContainer();
   void paintPoints(k_means &k_m);
   void paintCenters(k_means &k_m);
   void paintClusters(k_means &k_m);
@@ -39,7 +41,6 @@ signals:
 
 protected:
   virtual void mousePressEvent(QMouseEvent *event) override;
-  virtual void keyPressEvent(QKeyEvent *event) override;
 
 private:
   Ui::Scatter3DWidget *ui;
@@ -50,7 +51,7 @@ private:
 
   bool m_initialized = false;
   int m_manualInitCount = 0;
-  //bool selected = false;
+  Q3DScatter* m_graph;
 };
 
 #endif // SCATTER3DWIDGET_H

@@ -108,23 +108,9 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
         m_kMeansDialog->updatePointInfoLabel("Points Generated");
       } else if (dim  == 3) {
         in.generateRandomPointsND(min, max, m_k_means);
-        //ui->ndViewWidget->addPoints(&m_k_means);
+
         m_kMeansDialog->updatePointInfoLabel("Points Generated");
-        m_graph = new Q3DScatter();
-        if (!m_graph->hasContext()) {
-          QMessageBox msgBox;
-          msgBox.setText("Couldn't initialize the OpenGL context.");
-          msgBox.exec();
-          return;
-        } else {
-          qDebug() << " Scatter graph is created ";
-        }
-        float min, max;
-        getMinMax(min, max);
-        m_graph->axisX()->setRange(-min,max);
-        m_graph->axisY()->setRange(-min,max);
-        m_graph->axisZ()->setRange(-min,max);
-        ui->scatter3DWidget->createContainer(*m_graph);
+        ui->scatter3DWidget->createContainer();
         ui->scatter3DWidget->paintPoints(m_k_means);
       } else { // No visualization available for N > 3 or N < 2
         in.generateRandomPointsND(min, max, m_k_means);
@@ -562,21 +548,7 @@ void MainWindow::importPoints()
       if (dimension == 2) {
         ui->chartViewWidget->paintPoints(m_k_means.getAllPoints());
       } else if (dimension == 3) {
-        m_graph = new Q3DScatter();
-        if (!m_graph->hasContext()) {
-          QMessageBox msgBox;
-          msgBox.setText("Couldn't initialize the OpenGL context.");
-          msgBox.exec();
-          return;
-        } else {
-          qDebug() << " Scatter graph is created ";
-        }
-        float min, max;
-        getMinMax(min, max);
-        m_graph->axisX()->setRange(-min,max);
-        m_graph->axisY()->setRange(-min,max);
-        m_graph->axisZ()->setRange(-min,max);
-        ui->scatter3DWidget->createContainer(*m_graph);
+        ui->scatter3DWidget->createContainer();
         ui->scatter3DWidget->paintPoints(m_k_means);
       }
       m_kMeansDialog->updatePointInfoLabel("Points Imported");
@@ -621,9 +593,5 @@ void MainWindow::setParamsForManualInit()
   m_k_means.setMetric(metric);
 }
 
-void MainWindow::getMinMax(float &min, float &max)
-{
-  min = m_kMeansDialog->getMin();
-  max = m_kMeansDialog->getMax();
-}
+
 
