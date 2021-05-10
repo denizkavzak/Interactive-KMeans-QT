@@ -18,6 +18,7 @@ public:
   void paintClusters(QVector<k_means::Cluster*> clusters);
   void paintCenters(k_means k_m);
   void setPointSize(int pointSize, int step);
+  void clearAll();
 
 protected:
   virtual void mousePressEvent(QMouseEvent *event) override;

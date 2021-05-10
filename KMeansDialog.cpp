@@ -199,6 +199,16 @@ void KMeansDialog::stop()
   emit stopTriggered();
 }
 
+void KMeansDialog::reset()
+{
+  m_step = 0;
+  ui->convergenceStepValueLabel->clear();
+  ui->convergenceTimeValueLabel->clear();
+  ui->stepNoLabel->setText("0");
+  ui->pointsInfoLabel->setText("Reset Points");
+  emit resetTriggered();
+}
+
 /**
  * @brief KMeansDialog::getInitializationParameters
  * @param k

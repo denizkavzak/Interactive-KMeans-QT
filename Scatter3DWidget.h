@@ -33,6 +33,8 @@ public:
   int getManualInitCount();
   void setDataGenerated(bool val);
 
+  void clearScatter();
+
 public slots:
   void selectClusterCenter();
   void setClusterCenter(k_means &k_m, int ind);
@@ -49,6 +51,7 @@ private:
   QWidget *m_container;
   int m_selectedPointID;
   QPointF m_lastMousePos;
+  QWidget *m_widget;
 
   bool m_initialized = false;
   bool m_dataGenerated = false;

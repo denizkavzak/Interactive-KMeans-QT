@@ -104,6 +104,17 @@ void ChartView::setPointSize(int pointSize, int step)
   }
 }
 
+void ChartView::clearAll()
+{
+  m_series = new QScatterSeries();
+  m_series->setName("points");
+  m_series->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+  m_series->setMarkerSize(m_pointSize);
+  chart()->removeAllSeries();
+  m_clusterSeries.clear();
+  m_clusterCenterSeries.clear();
+}
+
 /**
  * @brief ChartView::mousePressEvent
  * @param event

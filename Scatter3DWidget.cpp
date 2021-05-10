@@ -54,15 +54,15 @@ void Scatter3DWidget::createContainer()
   m_container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   m_container->setFocusPolicy(Qt::StrongFocus);
 
-  QWidget *widget = new QWidget;
-  QHBoxLayout *hLayout = new QHBoxLayout(widget);
+  m_widget = new QWidget;
+  QHBoxLayout *hLayout = new QHBoxLayout(m_widget);
   QVBoxLayout *vLayout = new QVBoxLayout();
   hLayout->addWidget(m_container, 1);
   hLayout->addLayout(vLayout);
 
   m_scatter3Dvis = new Scatter3DVis(m_graph);
 
-  widget->show();
+  m_widget->show();
 }
 
 /**
@@ -171,6 +171,16 @@ int Scatter3DWidget::getManualInitCount()
 void Scatter3DWidget::setDataGenerated(bool val)
 {
   m_dataGenerated = val;
+}
+
+void Scatter3DWidget::clearScatter()
+{
+  m_scatter3Dvis->clearAll();
+  m_initialized = false;
+  m_dataGenerated = false;
+  m_manualInitCount = 0;
+  delete(m_container);
+  delete(m_widget);
 }
 
 /**

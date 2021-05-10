@@ -226,3 +226,8 @@ void Scatter3DVis::updatePointSize(int pointSize)
   }
 }
 
+void Scatter3DVis::clearAll()
+{
+  m_graph->seriesList().clear();
+}
+

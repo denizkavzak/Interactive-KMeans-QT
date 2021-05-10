@@ -139,3 +139,9 @@ void ChartViewWidget::updatePointSize(int pointSize)
     ui->chartView->setPointSize(pointSize, m_step);
   }
 }
+
+void ChartViewWidget::clearChart()
+{
+  ui->chartView->clearAll();
+  //ui->chartView->chart()->removeAllSeries();
+}

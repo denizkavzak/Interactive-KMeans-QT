@@ -51,6 +51,8 @@ public:
     }
   };
 
+  void clearKMeans();
+
   // common getters
   int getNumOfPoints();
   int getK();

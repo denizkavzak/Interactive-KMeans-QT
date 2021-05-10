@@ -75,6 +75,33 @@ k_means::k_means(QVector<QVector<float>*> points, int k)
   m_metric = "euclidean";
 }
 
+void k_means::clearKMeans()
+{
+  if (m_dim == 2) {
+    qDebug() << "Clearing all points";
+    m_allPoints.clear();
+    qDebug() << "Clearing clusters";
+    m_clusters.clear();
+    // store all clustering history
+    qDebug() << "Clearing story";
+    m_clusteringCenterHistory->clear();
+  } else {
+    qDebug() << "Clearing all pointsnd";
+    // for ND
+    m_allPointsND.clear();
+    qDebug() << "Clearing clustersnd";
+    m_clustersND.clear();
+    // store all clustering history
+    qDebug() << "Clearing storynd";
+    m_clusteringCenterHistoryND->clear();
+  }
+  m_step = 0;
+  m_initialized = false;
+  m_pointsSet = false;
+  m_back_clicked = false;
+  m_converged = false;
+}
+
 /**
  * @brief k_means::printClusters
  * This function prints the clusters by printing the

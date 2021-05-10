@@ -23,6 +23,7 @@ public:
   void paintClusters(k_means k_m);
   void paintCenters(k_means k_m);
   void updatePointSize(int pointSize);
+  void clearChart();
 
 public slots:
   void zoomIn();

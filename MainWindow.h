@@ -29,6 +29,7 @@ public slots:
   void getPrevStep();
   void play(int ms_value);
   void stop();
+  void reset();
 
   void zoomIn();
   void zoomOut();

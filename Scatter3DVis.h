@@ -25,6 +25,8 @@ public:
   void clearAllPointsSeriesFromGraph();
   void updatePointSize(int pointSize);
 
+  void clearAll();
+
 private:
   Q3DScatter *m_graph;
   float m_pointSize;

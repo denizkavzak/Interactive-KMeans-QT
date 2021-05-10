@@ -52,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->scatter3DWidget, &Scatter3DWidget::clusterCenterSelected,
           this, &MainWindow::selectClusterCenter);
 
+  connect(m_kMeansDialog, &KMeansDialog::resetTriggered,
+          this, &MainWindow::reset);
+
   m_timer = new QTimer(this);
   m_timer->callOnTimeout(this, &MainWindow::getNextStep);
 
@@ -431,6 +434,24 @@ void MainWindow::stop()
     msgBox.exec();
   }
 
+}
+
+void MainWindow::reset()
+{
+  qDebug() << "Clearing chart";
+  if (m_k_means.getDimension() == 2) {
+    ui->chartViewWidget->clearChart();
+  } else if (m_k_means.getDimension() == 3) {
+    ui->scatter3DWidget->clearScatter();
+  }
+
+  qDebug() << "Clearing kmeans";
+  m_k_means.clearKMeans();
+
+  m_step = 0;
+  m_back_clicked = false;
+  m_playing = false;
+  m_converged = false;
 }
 
 /**

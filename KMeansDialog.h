@@ -32,6 +32,7 @@ public slots:
   void updateConvergenceStepLabel(int step);
   void play();
   void stop();
+  void reset();
 
   void getInitializationParameters(int&, QString&, int&);
   void getMinMax(float &min, float &max);
@@ -46,6 +47,7 @@ signals:
   void importFileSelected();
   void playTriggered(int ms_value);
   void stopTriggered();
+  void resetTriggered();
 
 private:
   Ui::KMeansDialog *ui;
