@@ -34,6 +34,7 @@ public slots:
   void stop();
 
   void getInitializationParameters(int&, QString&, int&);
+  void getMinMax(float &min, float &max);
 
 signals:
   void pointsParametersChanged(int, float, float, int);

@@ -271,7 +271,9 @@ void MainWindow::initializeClustering(int k, QString metric, int iter,
             if (initMethod == "Random Sample") {
               in.initRandomSample(m_k_means);
             } else if (initMethod == "Random Real") {
-              in.initRandomReal(m_k_means);
+              float min, max;
+              m_kMeansDialog->getMinMax(min, max);
+              in.initRandomReal(m_k_means, min, max);
             } else { // kmeans++
               in.initKMeansPp(m_k_means);
             }
@@ -285,7 +287,9 @@ void MainWindow::initializeClustering(int k, QString metric, int iter,
             if (initMethod == "Random Sample") {
               in.initRandomSampleND(m_k_means);
             } else if (initMethod == "Random Real") {
-              in.initRandomRealND(m_k_means);
+              float min, max;
+              m_kMeansDialog->getMinMax(min, max);
+              in.initRandomRealND(m_k_means, min, max);
             } else { // kmeans++
               in.initKMeansPpND(m_k_means);
             }

@@ -46,7 +46,7 @@ private:
   k_means m_k_means;
   int m_step;
   bool m_back_clicked = false;
-  QTimer* m_timer;
+  QTimer *m_timer;
   bool m_playing = false;
   bool m_converged = false;
 };

@@ -217,3 +217,9 @@ void KMeansDialog::getInitializationParameters(int &k, QString &metric,
   iter = ui->iterSpinBox->value();
   metric = getSelectedMetric();
 }
+
+void KMeansDialog::getMinMax(float &min, float &max)
+{
+  min = ui->minDoubleSpinBox->value();
+  max = ui->maxDoubleSpinBox->value();
+}

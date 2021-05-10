@@ -24,27 +24,27 @@ public:
   initialization();
 
   // Center initialization
-  void initRandomReal(k_means& k_means);
-  void initRandomSample(k_means& k_means);
-  void initKMeansPp(k_means& k_means);
+  void initRandomReal(k_means &k_means, float min, float max);
+  void initRandomSample(k_means &k_means);
+  void initKMeansPp(k_means &k_means);
 
   // Point generation and initialization
-  void generateRandomPoints(float min, float max, k_means& k_means);
-  void generateNormalDistributionPoints(float min, float max, k_means& k_means);
+  void generateRandomPoints(float min, float max, k_means &k_means);
+  void generateNormalDistributionPoints(float min, float max, k_means &k_means);
 
   //
   // ND functions
   //
 
   // Center initialization
-  void initRandomRealND(k_means& k_means);
-  void initRandomSampleND(k_means& k_means);
-  void initKMeansPpND(k_means& k_means);
+  void initRandomRealND(k_means &k_means, float min, float max);
+  void initRandomSampleND(k_means &k_means);
+  void initKMeansPpND(k_means &k_means);
 
   // Point generation and initialization
-  void generateRandomPointsND(float min, float max, k_means& k_means);
+  void generateRandomPointsND(float min, float max, k_means &k_means);
   void generateNormalDistributionPointsND(float min, float max,
-                                          k_means& k_means);
+                                          k_means &k_means);
 
 };
 
