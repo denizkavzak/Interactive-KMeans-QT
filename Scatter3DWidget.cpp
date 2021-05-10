@@ -168,6 +168,11 @@ int Scatter3DWidget::getManualInitCount()
   return m_manualInitCount;
 }
 
+void Scatter3DWidget::setDataGenerated(bool val)
+{
+  m_dataGenerated = val;
+}
+
 /**
  * @brief Scatter3DWidget::selectClusterCenter
  * Slot to trigger clusterCenterSelected signal
@@ -240,7 +245,7 @@ void Scatter3DWidget::setClusterCenter(k_means &k_m, int ind)
 void Scatter3DWidget::mousePressEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton) {
-    if (!m_initialized) {
+    if (!m_initialized && m_dataGenerated) {
       QScatter3DSeries *series = m_scatter3Dvis->getGraph()->seriesList().at(0);
       m_selectedPointID = series->selectedItem();
       qDebug() << "ID " << m_selectedPointID;

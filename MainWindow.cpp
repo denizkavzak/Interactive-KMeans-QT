@@ -97,6 +97,7 @@ void MainWindow::generatePoints(int noOfPoints, float min, float max, int dim)
         m_kMeansDialog->updatePointInfoLabel("Points Generated");
         ui->scatter3DWidget->createContainer();
         ui->scatter3DWidget->paintPoints(m_k_means);
+        ui->scatter3DWidget->setDataGenerated(true);
       } else { // No visualization available for N > 3 or N < 2
         in.generateRandomPointsND(min, max, m_k_means);
         m_kMeansDialog->updatePointInfoLabel("Points Generated");
@@ -524,8 +525,7 @@ void MainWindow::importPoints()
           p->append(s.toFloat());
           if (s.toFloat() < min) {
             min = s.toFloat();
-          }
-          if (s.toFloat() > max){
+          } else if (s.toFloat() > max){
             max = s.toFloat();
           }
         }
@@ -543,6 +543,7 @@ void MainWindow::importPoints()
       } else if (dimension == 3) {
         ui->scatter3DWidget->createContainer();
         ui->scatter3DWidget->paintPoints(m_k_means);
+        ui->scatter3DWidget->setDataGenerated(true);
       }
       m_kMeansDialog->updatePointInfoLabel("Points Imported");
       m_kMeansDialog->updateImportedPointParameters(numOfPoints, dimension,

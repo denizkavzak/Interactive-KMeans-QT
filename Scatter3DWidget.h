@@ -31,6 +31,7 @@ public:
   void getPrevStep(k_means &k_m);
   int getSelectedPointID();
   int getManualInitCount();
+  void setDataGenerated(bool val);
 
 public slots:
   void selectClusterCenter();
@@ -50,6 +51,7 @@ private:
   QPointF m_lastMousePos;
 
   bool m_initialized = false;
+  bool m_dataGenerated = false;
   int m_manualInitCount = 0;
   Q3DScatter *m_graph;
 };
