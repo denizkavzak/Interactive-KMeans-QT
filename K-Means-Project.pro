@@ -9,7 +9,8 @@ CONFIG -= app_bundle
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
+# disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
         ChartView.cpp \
@@ -18,7 +19,6 @@ SOURCES += \
         KMeansDialog.cpp \
         K_Means.cpp \
         MainWindow.cpp \
-        NDViewWidget.cpp \
         Scatter3DVis.cpp \
         Scatter3DWidget.cpp \
         initialization.cpp \
@@ -37,7 +37,6 @@ HEADERS += \
     KMeansDialog.h \
     K_Means.h \
     MainWindow.h \
-    NDViewWidget.h \
     Scatter3DVis.h \
     Scatter3DWidget.h \
     initialization.h \
@@ -47,5 +46,4 @@ FORMS += \
     ChartViewWidget.ui \
     KMeansDialog.ui \
     MainWindow.ui \
-    NDViewWidget.ui \
     Scatter3DWidget.ui
