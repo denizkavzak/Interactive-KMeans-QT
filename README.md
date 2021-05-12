@@ -1,8 +1,17 @@
-## Interactive-KMeans-QT
+# Interactive-KMeans-QT
 
 This repository consists of an interactive K-Means Clustering implemented in C++ with QT. 
 The K-means implementation can work for any dimensions greater than or equal to 1.
-Visualization of the clustering process is done for 2D and 3D cases.
+Visualization of the clustering process is done for 2D and 3D cases. 
+
+# Running the code:
+
+This implementation is done using QTCreator. 
+Project can be opened and run using QTCreator and provided K-Means-Project.pro file. 
+
+Project has following dependencies in QT:
+QT Charts and 
+QT Data Visualization. 
 
 # Implemented tool allows user to:
 1. Generate/Import data vectors with any dimension
